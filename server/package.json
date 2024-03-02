@@ -5,10 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "dev": "nodemon index.js",
-    "migration:generate": "npx sequelize-cli migration:generate --name",
-    "migration:undo": "npx sequelize-cli db:migrate:undo",
-    "migrate": "npx sequelize-cli db:migrate"
+    "dev": "nodemon index.js"
   },
   "author": "",
   "license": "ISC",
@@ -27,7 +24,6 @@
     "uuid": "^9.0.1"
   },
   "devDependencies": {
-    "nodemon": "^3.1.0",
-    "sequelize-cli": "^6.6.2"
+    "nodemon": "^3.1.0"
   }
 }

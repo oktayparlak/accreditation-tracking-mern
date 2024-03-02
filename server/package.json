@@ -4,7 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "migration:generate": "npx sequelize-cli migration:generate --name",
+    "migration:undo": "npx sequelize-cli db:migrate:undo",
+    "migrate": "npx sequelize-cli db:migrate"
   },
   "author": "",
   "license": "ISC",
@@ -23,6 +27,7 @@
     "uuid": "^9.0.1"
   },
   "devDependencies": {
-    "nodemon": "^3.1.0"
+    "nodemon": "^3.1.0",
+    "sequelize-cli": "^6.6.2"
   }
 }

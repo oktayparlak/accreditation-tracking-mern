@@ -31,6 +31,12 @@ app.get('/', (req, res) => {
 
 routes(app);
 
+/** Error Handler */
+app.use((err, req, res, next) => {
+  console.error(err);
+  res.status(500).send('Something went wrong!');
+});
+
 /** Database Connection and Starting Server */
 sequelize.sync({ force: false }).then(() => {
   /** Server */

@@ -2,33 +2,32 @@ const { DataTypes } = require('sequelize');
 
 const sequelize = require('../configs/database');
 
-const User = sequelize.define('User', {
+const Course = sequelize.define('Course', {
   id: {
     type: DataTypes.UUID,
     defaultValue: DataTypes.UUIDV4,
     primaryKey: true,
     allowNull: false,
   },
-  firstName: {
+  code: {
     type: DataTypes.STRING(30),
     allowNull: false,
   },
-  lastName: {
+  name: {
     type: DataTypes.STRING(30),
     allowNull: false,
   },
-  username: {
-    type: DataTypes.STRING(30),
-    allowNull: false,
-    unique: true,
-  },
-  password: {
-    type: DataTypes.STRING,
+  credit: {
+    type: DataTypes.INTEGER,
     allowNull: false,
   },
-  role: {
-    type: DataTypes.ENUM('ROOT_ADMIN', 'SUPER_ADMIN', 'DEPARTMENT_ADMIN', 'COURSE_ADMIN'),
+  ects: {
+    type: DataTypes.INTEGER,
     allowNull: false,
+  },
+  compulsory: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: true,
   },
   isDeleted: {
     type: DataTypes.BOOLEAN,
@@ -36,4 +35,4 @@ const User = sequelize.define('User', {
   },
 });
 
-module.exports = User;
+module.exports = Course;

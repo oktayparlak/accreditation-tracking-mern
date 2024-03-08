@@ -1,6 +1,7 @@
 const { DataTypes } = require('sequelize');
 
 const sequelize = require('../configs/database');
+const roles = require('../helpers/roles');
 
 const User = sequelize.define('User', {
   id: {
@@ -27,7 +28,7 @@ const User = sequelize.define('User', {
     allowNull: false,
   },
   role: {
-    type: DataTypes.ENUM('ROOT_ADMIN', 'SUPER_ADMIN', 'DEPARTMENT_ADMIN', 'COURSE_ADMIN'),
+    type: DataTypes.ENUM(roles.ROOT_ADMIN, roles.SUPER_ADMIN, roles.DEPARTMENT_ADMIN, roles.COURSE_ADMIN),
     allowNull: false,
   },
   isDeleted: {

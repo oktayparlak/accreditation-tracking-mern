@@ -12,7 +12,7 @@ class UserService {
     return user;
   }
 
-  async findUserByPk(id) {
+  async findUserById(id) {
     return await User.findByPk({ where: { id, isDeleted: false } }, { attributes: { exclude: excludeColums } });
   }
 

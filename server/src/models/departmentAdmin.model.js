@@ -23,3 +23,5 @@ const DepartmentAdmin = sequelize.define('DepartmentAdmin', {
     defaultValue: false,
   },
 });
+
+module.exports = DepartmentAdmin;

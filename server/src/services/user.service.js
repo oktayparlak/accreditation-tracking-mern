@@ -1,5 +1,5 @@
 const User = require('../models/user.model');
-const { hashPassword } = require('../helpers/password');
+const { hashPassword } = require('../utilities/password');
 
 let excludeColums = ['password', 'isDeleted', 'createdAt', 'updatedAt'];
 
@@ -16,11 +16,11 @@ class UserService {
     return await User.findByPk({ where: { id, isDeleted: false } }, { attributes: { exclude: excludeColums } });
   }
 
-  async findUserWithData(data) {
-    return await User.findOne({ where: data, isDeleted: false }, { attributes: { exclude: excludeColums } });
+  async findUserByUsername(username) {
+    return await User.findOne({ where: { username: username }, isDeleted: false }, { attributes: { exclude: excludeColums } });
   }
 
-  async findAllUser() {
+  async findAllUsers() {
     return await User.findAll({ where: { isDeleted: false } }, { attributes: { exclude: excludeColums } });
   }
 

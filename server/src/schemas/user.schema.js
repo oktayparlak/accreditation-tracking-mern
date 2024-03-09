@@ -1,9 +1,19 @@
 const Joi = require('joi');
+const roles = require('../helpers/roles');
 
-const createUser = Joi.object({});
+const create = Joi.object({
+  firstName: Joi.string().required(),
+  lastName: Joi.string().required(),
+  username: Joi.string().required(),
+  password: Joi.string().required(),
+  role: Joi.string().required().valid(roles.ROOT_ADMIN, roles.SUPER_ADMIN, roles.DEPARTMENT_ADMIN, roles.COURSE_ADMIN),
+});
 
-const updateUser = Joi.object({});
+const update = Joi.object({
+  firstName: Joi.string().required(),
+  lastName: Joi.string().required(),
+  username: Joi.string().required(),
+  password: Joi.string().required(),
+});
 
-const deleteUser = Joi.object({});
-
-module.exports = { createUser, updateUser, deleteUser };
+module.exports = { create, update };

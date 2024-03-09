@@ -23,4 +23,4 @@ const CourseAdmin = sequelize.define('CourseAdmin', {
   },
 });
 
-module.exports = DepartmentAdmin;
+module.exports = CourseAdmin;

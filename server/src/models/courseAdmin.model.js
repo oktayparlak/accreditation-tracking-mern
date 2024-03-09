@@ -2,7 +2,7 @@ const { DataTypes } = require('sequelize');
 
 const sequelize = require('../configs/database');
 
-const DepartmentAdmin = sequelize.define('DepartmentAdmin', {
+const CourseAdmin = sequelize.define('CourseAdmin', {
   id: {
     type: DataTypes.UUID,
     defaultValue: DataTypes.UUIDV4,

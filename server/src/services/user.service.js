@@ -30,7 +30,9 @@ class UserService {
 
   async deleteUser(id) {
     const user = await User.update({ where: { id } }, { isDeleted: true });
-    user.password = undefined;
+    excludeColums.map((column) => {
+      user[column] = undefined;
+    });
     return user;
   }
 }

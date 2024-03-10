@@ -5,11 +5,12 @@ const excludeColums = ['password', 'isDeleted', 'createdAt', 'updatedAt'];
 
 class UserService {
   async createUser(data) {
-    const user = await User.create({
+    const user = User.build({
       ...data,
       password: hashPassword(data.password),
     });
-    excludeColums.map((column) => {
+    await user.save();
+    excludeColums.forEach((column) => {
       user[column] = undefined;
     });
     return user;
@@ -39,7 +40,7 @@ class UserService {
 
   async updateUser(id, data) {
     const user = await User.update({ where: { id } }, data);
-    excludeColums.map((column) => {
+    excludeColums.forEach((column) => {
       user[column] = undefined;
     });
     return user;

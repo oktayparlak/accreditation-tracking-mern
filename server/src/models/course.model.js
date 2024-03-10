@@ -12,6 +12,7 @@ const Course = sequelize.define('Course', {
   code: {
     type: DataTypes.STRING(30),
     allowNull: false,
+    unique: true,
   },
   name: {
     type: DataTypes.STRING(50),

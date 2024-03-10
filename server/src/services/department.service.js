@@ -4,7 +4,8 @@ const excludeColums = ['isDeleted', 'createdAt', 'updatedAt'];
 
 class DepartmentService {
   async createDepartment(data) {
-    const department = await Department.create(data);
+    const department = Department.build(data);
+    await department.save();
     excludeColums.map((column) => {
       department[column] = undefined;
     });

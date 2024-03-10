@@ -12,6 +12,7 @@ const Department = sequelize.define('Department', {
   name: {
     type: DataTypes.STRING(50),
     allowNull: false,
+    unique: true,
   },
   isDeleted: {
     type: DataTypes.BOOLEAN,

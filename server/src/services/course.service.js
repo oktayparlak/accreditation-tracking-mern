@@ -4,8 +4,9 @@ const excludeColums = ['isDeleted', 'createdAt', 'updatedAt'];
 
 class CourseService {
   async createCourse(data) {
-    const course = await Course.create(data);
-    excludeColums.map((column) => {
+    const course = Course.build(data);
+    await course.save();
+    excludeColums.forEach((column) => {
       course[column] = undefined;
     });
     return course;
@@ -27,7 +28,7 @@ class CourseService {
 
   async updateCourse(id, data) {
     const course = await Course.update({ where: { id } }, data);
-    excludeColums.map((column) => {
+    excludeColums.forEach((column) => {
       course[column] = undefined;
     });
     return course;

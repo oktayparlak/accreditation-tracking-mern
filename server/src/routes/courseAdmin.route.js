@@ -8,6 +8,8 @@ const validate = require('../middlewares/validateSchema');
 const validateId = require('../middlewares/validateId');
 const allowedRoles = require('../middlewares/checkRole');
 
+const roles = require('../helpers/roles');
+
 /** Get */
 router.get(
   '/:id',

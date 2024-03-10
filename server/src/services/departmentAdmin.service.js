@@ -17,7 +17,7 @@ class DepartmentAdminService {
     return await DepartmentAdmin.create({ userId, departmentId });
   }
 
-  async getDepartmentAdminById(id) {
+  async findDepartmentAdminById(id) {
     return await DepartmentAdmin.findOne({
       where: { id, isDeleted: false },
       include: [
@@ -27,7 +27,7 @@ class DepartmentAdminService {
     });
   }
 
-  async getDepartmentAdminsByUserId(userId) {
+  async findDepartmentAdminsByUserId(userId) {
     return await DepartmentAdmin.findOne({
       where: { userId, isDeleted: false },
       include: [
@@ -37,7 +37,7 @@ class DepartmentAdminService {
     });
   }
 
-  async getDepartmentAdminsByDepartmentId(departmentId) {
+  async findDepartmentAdminsByDepartmentId(departmentId) {
     return await DepartmentAdmin.findOne({
       where: { departmentId, isDeleted: false },
       include: [
@@ -47,7 +47,7 @@ class DepartmentAdminService {
     });
   }
 
-  async getDepartmentAdmins() {
+  async findAllDepartmentAdmins() {
     return await DepartmentAdmin.findAll({
       where: { isDeleted: false },
       include: [

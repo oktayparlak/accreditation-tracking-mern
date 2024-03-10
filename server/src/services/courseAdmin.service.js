@@ -17,7 +17,7 @@ class CourseAdminService {
     return await CourseAdmin.create({ userId, courseId });
   }
 
-  async getCourseAdminById(id) {
+  async findCourseAdminById(id) {
     return await CourseAdmin.findOne({
       where: { id, isDeleted: false },
       include: [
@@ -27,7 +27,7 @@ class CourseAdminService {
     });
   }
 
-  async getCourseAdminsByUserId(userId) {
+  async findCourseAdminsByUserId(userId) {
     return await CourseAdmin.findOne({
       where: { userId, isDeleted: false },
       include: [
@@ -37,7 +37,7 @@ class CourseAdminService {
     });
   }
 
-  async getCourseAdminsByCourseId(courseId) {
+  async findCourseAdminsByCourseId(courseId) {
     return await CourseAdmin.findOne({
       where: { courseId, isDeleted: false },
       include: [
@@ -47,7 +47,7 @@ class CourseAdminService {
     });
   }
 
-  async getCourseAdmins() {
+  async findAllCourseAdmins() {
     return await CourseAdmin.findAll({
       where: { isDeleted: false },
       include: [

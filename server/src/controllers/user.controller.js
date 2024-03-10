@@ -1,7 +1,16 @@
 const UserService = require('../services/user.service');
 
-exports.create = async (req, res, next) => {};
+/** Create */
+exports.create = async (req, res, next) => {
+  try {
+    const user = await UserService.createUser(req.body);
+    return res.status(201).json(user);
+  } catch (error) {
+    next(error);
+  }
+};
 
+/** Read */
 exports.getAll = async (req, res, next) => {
   try {
     const users = await UserService.findAllUsers();
@@ -22,6 +31,7 @@ exports.getById = async (req, res, next) => {
   }
 };
 
+/** Update */
 exports.update = async (req, res, next) => {
   try {
     const user = await UserService.updateUser(req.params.id, req.body);
@@ -32,6 +42,7 @@ exports.update = async (req, res, next) => {
   }
 };
 
+/** Delete */
 exports.delete = (req, res, next) => {
   try {
     const user = UserService.deleteUser(req.params.id);

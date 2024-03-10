@@ -1,11 +1,11 @@
 const User = require('../models/user.model');
 const { hashPassword } = require('../utilities/password');
 
-let excludeColums = ['password', 'isDeleted', 'createdAt', 'updatedAt'];
+const excludeColums = ['password', 'isDeleted', 'createdAt', 'updatedAt'];
 
 class UserService {
   async createUser(data) {
-    const user = await User.create({ password: hashPassword(data.password), ...data });
+    const user = await User.create({ ...data, password: hashPassword(data.password) });
     excludeColums.map((column) => {
       user[column] = undefined;
     });
@@ -13,7 +13,7 @@ class UserService {
   }
 
   async findUserById(id) {
-    return await User.findByPk({ where: { id, isDeleted: false } }, { attributes: { exclude: excludeColums } });
+    return await User.findOne({ where: { id, isDeleted: false } }, { attributes: { exclude: excludeColums } });
   }
 
   async findUserByUsername(username) {

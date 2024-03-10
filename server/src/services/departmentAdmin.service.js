@@ -2,6 +2,7 @@ const Department = require('../models/department.model');
 const User = require('../models/user.model');
 const DepartmentAdmin = require('../models/departmentAdmin.model');
 
+const AppError = require('../utilities/AppError');
 const excludeColums = ['isDeleted', 'createdAt', 'updatedAt'];
 
 class DepartmentAdminService {
@@ -9,11 +10,11 @@ class DepartmentAdminService {
     const user = await User.findOne({
       where: { id: userId, isDeleted: false },
     });
-    if (!user) throw new Error('User not found');
+    if (!user) throw new AppError('User not found', 404);
     const department = await Department.findOne({
       where: { id: departmentId, isDeleted: false },
     });
-    if (!department) throw new Error('Department not found');
+    if (!department) throw new AppError('Department not found', 404);
     return await DepartmentAdmin.create({ userId, departmentId });
   }
 

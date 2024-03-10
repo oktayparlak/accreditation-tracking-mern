@@ -14,7 +14,7 @@ class CourseAdminService {
     const course = await Course.findOne({
       where: { id: courseId, isDeleted: false },
     });
-    if (!course) throw new Error('Course not found');
+    if (!course) throw new AppError('Course not found', 404);
     return await CourseAdmin.create({ userId, courseId });
   }
 

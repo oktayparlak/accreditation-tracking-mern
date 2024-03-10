@@ -25,15 +25,21 @@ class UserService {
   }
 
   async updateUser(id, data) {
-    return await User.update({ where: { id } }, data);
-  }
-
-  async deleteUser(id) {
-    const user = await User.update({ where: { id } }, { isDeleted: true });
+    const user = await User.update({ where: { id } }, data);
     excludeColums.map((column) => {
       user[column] = undefined;
     });
     return user;
+  }
+
+  deleteUser(id) {
+    User.update({ where: { id } }, { isDeleted: true })
+      .then(() => {
+        return true;
+      })
+      .catch((error) => {
+        throw error;
+      });
   }
 }
 

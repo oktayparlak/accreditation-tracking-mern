@@ -8,7 +8,7 @@ exports.getAll = async (req, res, next) => {
     if (!users || users.length === 0) return res.status(404).json({ error: { message: 'Users not found' } });
     return res.status(200).json(users);
   } catch (error) {
-    return res.status(500).json(error.message);
+    next(error);
   }
 };
 
@@ -18,10 +18,26 @@ exports.getById = async (req, res, next) => {
     if (!user) return res.status(404).json({ error: { message: 'User not found' } });
     return res.status(200).json(user);
   } catch (error) {
-    return res.status(500).json(error.message);
+    next(error);
   }
 };
 
-exports.update = async (req, res, next) => {};
+exports.update = async (req, res, next) => {
+  try {
+    const user = await UserService.updateUser(req.params.id, req.body);
+    if (!user) return res.status(404).json({ error: { message: 'User not found' } });
+    return res.status(200).json(user);
+  } catch (error) {
+    next(error);
+  }
+};
 
-exports.delete = async (req, res, next) => {};
+exports.delete = (req, res, next) => {
+  try {
+    const user = UserService.deleteUser(req.params.id);
+    if (!user) return res.status(404).json({ error: { message: 'User not found' } });
+    return res.status(200).json(user);
+  } catch (error) {
+    next(error);
+  }
+};

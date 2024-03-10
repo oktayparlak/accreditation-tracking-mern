@@ -34,11 +34,11 @@ routes(app);
 /** Error Handler */
 app.use((err, req, res, next) => {
   console.error(err);
-  res.status(500).send('Something went wrong!');
+  res.status(err.statusCode).send(err);
 });
 
 /** Database Connection and Starting Server */
-sequelize.sync({ force: true }).then(() => {
+sequelize.sync({ force: false }).then(() => {
   /** Server */
   app.listen(PORT, () => {
     console.log(`Server listening on port http://localhost:${PORT}`);

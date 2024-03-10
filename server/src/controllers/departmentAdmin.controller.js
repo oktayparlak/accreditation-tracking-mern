@@ -1,7 +1,5 @@
 const DepartmentAdminService = require('../services/departmentAdmin.service');
 
-const AppError = require('../utilities/AppError');
-
 /** Create */
 exports.create = async (req, res, next) => {
   try {
@@ -10,7 +8,7 @@ exports.create = async (req, res, next) => {
     );
     res.status(201).json(departmentAdmin);
   } catch (error) {
-    throw new AppError(error.message, 500);
+    next(error);
   }
 };
 
@@ -21,7 +19,7 @@ exports.getAll = async (req, res, next) => {
       await DepartmentAdminService.findAllDepartmentAdmins();
     res.status(200).json(departmentAdmins);
   } catch (error) {
-    throw new AppError(error.message, 500);
+    next(error);
   }
 };
 
@@ -36,7 +34,7 @@ exports.getById = async (req, res, next) => {
     }
     res.status(200).json(departmentAdmin);
   } catch (error) {
-    throw new AppError(error.message, 500);
+    next(error);
   }
 };
 
@@ -51,7 +49,7 @@ exports.getByUserId = async (req, res, next) => {
     }
     res.status(200).json(departmentAdmin);
   } catch (error) {
-    throw new AppError(error.message, 500);
+    next(error);
   }
 };
 
@@ -68,7 +66,7 @@ exports.getByDepartmentId = async (req, res, next) => {
     }
     res.status(200).json(departmentAdmins);
   } catch (error) {
-    throw new AppError(error.message, 500);
+    next(error);
   }
 };
 

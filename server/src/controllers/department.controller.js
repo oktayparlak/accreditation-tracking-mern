@@ -1,14 +1,12 @@
 const DepartmentService = require('../services/department.service');
 
-const AppError = require('../utilities/AppError');
-
 /** Create */
 exports.create = async (req, res, next) => {
   try {
     const department = await DepartmentService.createDepartment(req.body);
     res.status(201).json(department);
   } catch (error) {
-    throw new AppError(error.message, 500);
+    next(error);
   }
 };
 
@@ -20,7 +18,7 @@ exports.getAll = async (req, res, next) => {
       return res.status(404).json({ message: 'Departments not found' });
     res.status(200).json(departments);
   } catch (error) {
-    throw new AppError(error.message, 500);
+    next(error);
   }
 };
 
@@ -33,7 +31,7 @@ exports.getById = async (req, res, next) => {
       return res.status(404).json({ message: 'Department not found' });
     res.status(200).json(department);
   } catch (error) {
-    throw new AppError(error.message, 500);
+    next(error);
   }
 };
 
@@ -46,7 +44,7 @@ exports.update = async (req, res, next) => {
     );
     res.status(200).json(department);
   } catch (error) {
-    throw new AppError(error.message, 500);
+    next(error);
   }
 };
 
@@ -56,6 +54,6 @@ exports.delete = (req, res, next) => {
     const department = DepartmentService.deleteDepartment(req.params.id);
     res.status(200).json(department);
   } catch (error) {
-    throw new AppError(error.message, 500);
+    next(error);
   }
 };

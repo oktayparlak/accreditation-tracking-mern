@@ -1,14 +1,12 @@
 const UserService = require('../services/user.service');
 
-const AppError = require('../utilities/AppError');
-
 /** Create */
 exports.create = async (req, res, next) => {
   try {
     const user = await UserService.createUser(req.body);
     return res.status(201).json(user);
   } catch (error) {
-    throw new AppError(error.message, 500);
+    next(error);
   }
 };
 
@@ -20,7 +18,7 @@ exports.getAll = async (req, res, next) => {
       return res.status(404).json({ error: { message: 'Users not found' } });
     return res.status(200).json(users);
   } catch (error) {
-    throw new AppError(error.message, 500);
+    next(error);
   }
 };
 
@@ -31,7 +29,7 @@ exports.getById = async (req, res, next) => {
       return res.status(404).json({ error: { message: 'User not found' } });
     return res.status(200).json(user);
   } catch (error) {
-    throw new AppError(error.message, 500);
+    next(error);
   }
 };
 
@@ -43,7 +41,7 @@ exports.update = async (req, res, next) => {
       return res.status(404).json({ error: { message: 'User not found' } });
     return res.status(200).json(user);
   } catch (error) {
-    throw new AppError(error.message, 500);
+    next(error);
   }
 };
 
@@ -55,6 +53,6 @@ exports.delete = (req, res, next) => {
       return res.status(404).json({ error: { message: 'User not found' } });
     return res.status(200).json(user);
   } catch (error) {
-    throw new AppError(error.message, 500);
+    next(error);
   }
 };

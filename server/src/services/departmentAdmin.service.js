@@ -5,7 +5,7 @@ const DepartmentAdmin = require('../models/departmentAdmin.model');
 const excludeColums = ['isDeleted', 'createdAt', 'updatedAt'];
 
 class DepartmentAdminService {
-  async createDepartmentAdmin(userId, departmentId) {
+  async createDepartmentAdmin({ userId, departmentId }) {
     const user = await User.findOne({
       where: { id: userId, isDeleted: false },
     });

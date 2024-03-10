@@ -32,10 +32,9 @@ app.get('/', (req, res) => {
 routes(app);
 
 /** Error Handler */
-app.use((err, req, res, next) => {
-  console.error(err);
-  res.status(err.statusCode).send(err);
-});
+app.use((err, req, res, next) =>
+  res.status(err.status || 500).json({ message: err?.message })
+);
 
 /** Database Connection and Starting Server */
 sequelize.sync({ force: false }).then(() => {

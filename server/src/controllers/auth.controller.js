@@ -2,6 +2,8 @@ const UserService = require('../services/user.service');
 const { generateLoginToken } = require('../utilities/token');
 const { comparePassword } = require('../utilities/password');
 
+const AppError = require('../utilities/AppError');
+
 exports.login = async (req, res, next) => {
   try {
     const user = await UserService.findUserByUsername(req.body.username);
@@ -11,6 +13,6 @@ exports.login = async (req, res, next) => {
     user.password = undefined;
     return res.status(200).json({ token: generateLoginToken(user) });
   } catch (error) {
-    next(error);
+    throw new AppError(error.message, 500);
   }
 };

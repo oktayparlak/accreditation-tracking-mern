@@ -2,14 +2,15 @@ const Course = require('../models/course.model');
 const User = require('../models/user.model');
 const CourseAdmin = require('../models/courseAdmin.model');
 
+const AppError = require('../utilities/AppError');
 const excludeColums = ['isDeleted', 'createdAt', 'updatedAt'];
 
 class CourseAdminService {
-  async createCourseAdmin(userId, courseId) {
+  async createCourseAdmin({ userId, courseId }) {
     const user = await User.findOne({
       where: { id: userId, isDeleted: false },
     });
-    if (!user) throw new Error('User not found');
+    if (!user) throw new AppError('User not found', 404);
     const course = await Course.findOne({
       where: { id: courseId, isDeleted: false },
     });

@@ -1,12 +1,14 @@
 const CourseAdminService = require('../services/courseAdmin.service');
 
+const AppError = require('../utilities/AppError');
+
 /** Create */
 exports.create = async (req, res, next) => {
   try {
     const courseAdmin = await CourseAdminService.createCourseAdmin(req.body);
     res.status(201).json(courseAdmin);
   } catch (error) {
-    next(error);
+    throw new AppError(error.message, 500);
   }
 };
 
@@ -16,7 +18,7 @@ exports.getAll = async (req, res, next) => {
     const courseAdmins = await CourseAdminService.findAllCourseAdmins();
     res.status(200).json(courseAdmins);
   } catch (error) {
-    next(error);
+    throw new AppError(error.message, 500);
   }
 };
 
@@ -32,7 +34,7 @@ exports.getById = async (req, res, next) => {
     }
     res.status(200).json(courseAdmin);
   } catch (error) {
-    next(error);
+    throw new AppError(error.message, 500);
   }
 };
 
@@ -48,7 +50,7 @@ exports.getByUserId = async (req, res, next) => {
     }
     res.status(200).json(courseAdmin);
   } catch (error) {
-    next(error);
+    throw new AppError(error.message, 500);
   }
 };
 
@@ -64,7 +66,7 @@ exports.getByCourseId = async (req, res, next) => {
     }
     res.status(200).json(courseAdmins);
   } catch (error) {
-    next(error);
+    throw new AppError(error.message, 500);
   }
 };
 

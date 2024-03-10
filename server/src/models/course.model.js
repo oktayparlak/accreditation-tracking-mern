@@ -14,7 +14,7 @@ const Course = sequelize.define('Course', {
     allowNull: false,
   },
   name: {
-    type: DataTypes.STRING(30),
+    type: DataTypes.STRING(50),
     allowNull: false,
   },
   credit: {

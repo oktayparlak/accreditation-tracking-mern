@@ -12,11 +12,17 @@ class CourseService {
   }
 
   async findCourseById(id) {
-    return await Course.findOne({ where: { id, isDeleted: false } }, { attributes: { exclude: excludeColums } });
+    return await Course.findOne({
+      where: { id, isDeleted: false },
+      attributes: { exclude: excludeColums },
+    });
   }
 
   async findAllCourses() {
-    return await Course.findAll({ where: { isDeleted: false } }, { attributes: { exclude: excludeColums } });
+    return await Course.findAll({
+      where: { isDeleted: false },
+      attributes: { exclude: excludeColums },
+    });
   }
 
   async updateCourse(id, data) {

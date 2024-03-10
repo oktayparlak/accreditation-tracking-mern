@@ -5,7 +5,10 @@ const excludeColums = ['password', 'isDeleted', 'createdAt', 'updatedAt'];
 
 class UserService {
   async createUser(data) {
-    const user = await User.create({ ...data, password: hashPassword(data.password) });
+    const user = await User.create({
+      ...data,
+      password: hashPassword(data.password),
+    });
     excludeColums.map((column) => {
       user[column] = undefined;
     });
@@ -13,15 +16,25 @@ class UserService {
   }
 
   async findUserById(id) {
-    return await User.findOne({ where: { id, isDeleted: false } }, { attributes: { exclude: excludeColums } });
+    return await User.findOne({
+      where: { id, isDeleted: false },
+      attributes: { exclude: excludeColums },
+    });
   }
 
   async findUserByUsername(username) {
-    return await User.findOne({ where: { username: username }, isDeleted: false }, { attributes: { exclude: excludeColums } });
+    return await User.findOne({
+      where: { username: username },
+      attributes: { exclude: excludeColums },
+      isDeleted: false,
+    });
   }
 
   async findAllUsers() {
-    return await User.findAll({ where: { isDeleted: false } }, { attributes: { exclude: excludeColums } });
+    return await User.findAll({
+      where: { isDeleted: false },
+      attributes: { exclude: excludeColums },
+    });
   }
 
   async updateUser(id, data) {

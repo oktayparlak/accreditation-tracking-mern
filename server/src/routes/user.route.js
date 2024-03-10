@@ -5,12 +5,24 @@ const userController = require('../controllers/user.controller');
 const userSchema = require('../schemas/user.schema');
 const verify = require('../middlewares/verify');
 const validate = require('../middlewares/validateSchema');
+const validateId = require('../middlewares/validateId');
 const allowedRoles = require('../middlewares/checkRole');
 
 const roles = require('../helpers/roles');
 
 /** Get */
-router.get('/:id', verify, userController.getById);
+router.get(
+  '/:id',
+  verify,
+  allowedRoles([
+    roles.ROOT_ADMIN,
+    roles.SUPER_ADMIN,
+    roles.DEPARTMENT_ADMIN,
+    roles.COURSE_ADMIN,
+  ]),
+  validateId,
+  userController.getById
+);
 
 router.get(
   '/',
@@ -33,6 +45,7 @@ router.patch(
   '/:id',
   verify,
   allowedRoles([roles.ROOT_ADMIN, roles.SUPER_ADMIN]),
+  validateId,
   validate(userSchema.update),
   userController.update
 );
@@ -42,6 +55,7 @@ router.delete(
   '/:id',
   verify,
   allowedRoles([roles.ROOT_ADMIN, roles.SUPER_ADMIN]),
+  validateId,
   userController.delete
 );
 

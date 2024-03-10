@@ -10,7 +10,7 @@ const Department = sequelize.define('Department', {
     allowNull: false,
   },
   name: {
-    type: DataTypes.STRING(30),
+    type: DataTypes.STRING(50),
     allowNull: false,
   },
   isDeleted: {

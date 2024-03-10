@@ -5,6 +5,7 @@ const courseController = require('../controllers/course.controller');
 const courseSchema = require('../schemas/course.schema');
 const verify = require('../middlewares/verify');
 const validate = require('../middlewares/validateSchema');
+const validateId = require('../middlewares/validateId');
 const allowedRoles = require('../middlewares/checkRole');
 
 const roles = require('../helpers/roles');
@@ -19,6 +20,7 @@ router.get(
     roles.DEPARTMENT_ADMIN,
     roles.COURSE_ADMIN,
   ]),
+  validateId,
   courseController.getById
 );
 
@@ -48,6 +50,7 @@ router.patch(
   '/:id',
   verify,
   allowedRoles([roles.ROOT_ADMIN, roles.SUPER_ADMIN, roles.DEPARTMENT_ADMIN]),
+  validateId,
   validate(courseSchema.update),
   courseController.update
 );
@@ -57,6 +60,7 @@ router.delete(
   '/:id',
   verify,
   allowedRoles([roles.ROOT_ADMIN, roles.SUPER_ADMIN, roles.DEPARTMENT_ADMIN]),
+  validateId,
   courseController.delete
 );
 

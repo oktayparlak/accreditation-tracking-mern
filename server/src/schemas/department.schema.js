@@ -1,7 +1,11 @@
 const Joi = require('joi');
 
-const create = Joi.object({});
+const create = Joi.object({
+  name: Joi.string().required(),
+});
 
-const update = Joi.object({});
+const update = Joi.object({
+  name: Joi.string().required(),
+});
 
 module.exports = { create, update };

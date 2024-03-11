@@ -2,6 +2,7 @@ const Course = require('./course.model');
 const CourseAdmin = require('./courseAdmin.model');
 const Department = require('./department.model');
 const DepartmentAdmin = require('./departmentAdmin.model');
+const LearningMaterial = require('./learningMaterial.model');
 const User = require('./user.model');
 
 module.exports = () => {
@@ -16,4 +17,7 @@ module.exports = () => {
 
   Course.hasOne(CourseAdmin, { foreignKey: 'courseId' });
   Department.hasOne(DepartmentAdmin, { foreignKey: 'departmentId' });
+
+  LearningMaterial.belongsTo(User, { foreignKey: 'userId' });
+  User.hasMany(LearningMaterial, { foreignKey: 'userId' });
 };

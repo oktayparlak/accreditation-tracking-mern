@@ -5,4 +5,5 @@ module.exports = (app) => {
   app.use('/api/users', require('./user.route'));
   app.use('/api/course-admins', require('./courseAdmin.route'));
   app.use('/api/department-admins', require('./departmentAdmin.route'));
+  app.use('/api/learning-materials', require('./learningMaterial.route'));
 };

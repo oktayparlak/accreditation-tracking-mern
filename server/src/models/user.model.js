@@ -32,7 +32,8 @@ const User = sequelize.define('User', {
       roles.ROOT_ADMIN,
       roles.FACULTY_ADMIN,
       roles.DEPARTMENT_ADMIN,
-      roles.COURSE_ADMIN
+      roles.COURSE_ADMIN,
+      roles.COURSE_SUPERVISOR
     ),
     allowNull: false,
   },

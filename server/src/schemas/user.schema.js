@@ -8,7 +8,13 @@ const create = Joi.object({
   password: Joi.string().required(),
   role: Joi.string()
     .required()
-    .valid(roles.ROOT_ADMIN, roles.FACULTY_ADMIN, roles.DEPARTMENT_ADMIN, roles.COURSE_ADMIN),
+    .valid(
+      roles.ROOT_ADMIN,
+      roles.FACULTY_ADMIN,
+      roles.DEPARTMENT_ADMIN,
+      roles.COURSE_ADMIN,
+      roles.COURSE_SUPERVISOR
+    ),
 });
 
 const update = Joi.object({
@@ -16,6 +22,13 @@ const update = Joi.object({
   lastName: Joi.string().required(),
   username: Joi.string().required(),
   password: Joi.string().required(),
+  role: Joi.string().valid(
+    roles.ROOT_ADMIN,
+    roles.FACULTY_ADMIN,
+    roles.DEPARTMENT_ADMIN,
+    roles.COURSE_ADMIN,
+    roles.COURSE_SUPERVISOR
+  ),
 });
 
 module.exports = { create, update };

@@ -1,8 +1,8 @@
 const router = require('express').Router();
 
-const userController = require('../controllers/user.controller');
+const facultyController = require('../controllers/faculty.controller');
 
-const userSchema = require('../schemas/user.schema');
+const facultySchema = require('../schemas/faculty.schema');
 const verify = require('../middlewares/verify');
 const validate = require('../middlewares/validateSchema');
 const validateId = require('../middlewares/validateId');
@@ -14,16 +14,16 @@ const roles = require('../helpers/roles');
 router.get(
   '/:id',
   verify,
-  allowedRoles([roles.ROOT_ADMIN, roles.FACULTY_ADMIN, roles.DEPARTMENT_ADMIN, roles.COURSE_ADMIN]),
+  allowedRoles([roles.ROOT_ADMIN, roles.FACULTY_ADMIN]),
   validateId,
-  userController.getById
+  facultyController.getById
 );
 
 router.get(
   '/',
   verify,
-  allowedRoles([roles.ROOT_ADMIN, roles.FACULTY_ADMIN, roles.DEPARTMENT_ADMIN]),
-  userController.getAll
+  allowedRoles([roles.ROOT_ADMIN, roles.FACULTY_ADMIN]),
+  facultyController.getAll
 );
 
 /** Post */
@@ -31,8 +31,8 @@ router.post(
   '/',
   verify,
   allowedRoles([roles.ROOT_ADMIN]),
-  validate(userSchema.create),
-  userController.create
+  validate(facultySchema.create),
+  facultyController.create
 );
 
 /** Patch */
@@ -41,11 +41,17 @@ router.patch(
   verify,
   allowedRoles([roles.ROOT_ADMIN]),
   validateId,
-  validate(userSchema.update),
-  userController.update
+  validate(facultySchema.update),
+  facultyController.update
 );
 
 /** Delete */
-router.delete('/:id', verify, allowedRoles([roles.ROOT_ADMIN]), validateId, userController.delete);
+router.delete(
+  '/:id',
+  verify,
+  allowedRoles([roles.ROOT_ADMIN]),
+  validateId,
+  facultyController.delete
+);
 
 module.exports = router;

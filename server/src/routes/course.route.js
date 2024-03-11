@@ -14,12 +14,7 @@ const roles = require('../helpers/roles');
 router.get(
   '/:id',
   verify,
-  allowedRoles([
-    roles.ROOT_ADMIN,
-    roles.SUPER_ADMIN,
-    roles.DEPARTMENT_ADMIN,
-    roles.COURSE_ADMIN,
-  ]),
+  allowedRoles([roles.ROOT_ADMIN, roles.FACULTY_ADMIN, roles.DEPARTMENT_ADMIN, roles.COURSE_ADMIN]),
   validateId,
   courseController.getById
 );
@@ -27,12 +22,7 @@ router.get(
 router.get(
   '/',
   verify,
-  allowedRoles([
-    roles.ROOT_ADMIN,
-    roles.SUPER_ADMIN,
-    roles.DEPARTMENT_ADMIN,
-    roles.COURSE_ADMIN,
-  ]),
+  allowedRoles([roles.ROOT_ADMIN, roles.FACULTY_ADMIN, roles.DEPARTMENT_ADMIN, roles.COURSE_ADMIN]),
   courseController.getAll
 );
 
@@ -40,7 +30,7 @@ router.get(
 router.post(
   '/',
   verify,
-  allowedRoles([roles.ROOT_ADMIN, roles.SUPER_ADMIN, roles.DEPARTMENT_ADMIN]),
+  allowedRoles([roles.ROOT_ADMIN, roles.FACULTY_ADMIN, roles.DEPARTMENT_ADMIN]),
   validate(courseSchema.create),
   courseController.create
 );
@@ -49,7 +39,7 @@ router.post(
 router.patch(
   '/:id',
   verify,
-  allowedRoles([roles.ROOT_ADMIN, roles.SUPER_ADMIN, roles.DEPARTMENT_ADMIN]),
+  allowedRoles([roles.ROOT_ADMIN, roles.FACULTY_ADMIN, roles.DEPARTMENT_ADMIN]),
   validateId,
   validate(courseSchema.update),
   courseController.update
@@ -59,7 +49,7 @@ router.patch(
 router.delete(
   '/:id',
   verify,
-  allowedRoles([roles.ROOT_ADMIN, roles.SUPER_ADMIN, roles.DEPARTMENT_ADMIN]),
+  allowedRoles([roles.ROOT_ADMIN, roles.FACULTY_ADMIN, roles.DEPARTMENT_ADMIN]),
   validateId,
   courseController.delete
 );

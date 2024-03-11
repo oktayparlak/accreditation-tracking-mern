@@ -14,7 +14,7 @@ const roles = require('../helpers/roles');
 router.get(
   '/:id',
   verify,
-  allowedRoles([roles.ROOT_ADMIN, roles.SUPER_ADMIN, roles.DEPARTMENT_ADMIN]),
+  allowedRoles([roles.ROOT_ADMIN, roles.FACULTY_ADMIN, roles.DEPARTMENT_ADMIN]),
   validateId,
   departmentAdminController.getById
 );
@@ -22,14 +22,14 @@ router.get(
 router.get(
   '/',
   verify,
-  allowedRoles([roles.ROOT_ADMIN, roles.SUPER_ADMIN, roles.DEPARTMENT_ADMIN]),
+  allowedRoles([roles.ROOT_ADMIN, roles.FACULTY_ADMIN, roles.DEPARTMENT_ADMIN]),
   departmentAdminController.getAll
 );
 
 router.get(
   '/user/:userId',
   verify,
-  allowedRoles([roles.ROOT_ADMIN, roles.SUPER_ADMIN, roles.DEPARTMENT_ADMIN]),
+  allowedRoles([roles.ROOT_ADMIN, roles.FACULTY_ADMIN, roles.DEPARTMENT_ADMIN]),
   validateId,
   departmentAdminController.getByUserId
 );
@@ -37,7 +37,7 @@ router.get(
 router.get(
   '/department/:departmentId',
   verify,
-  allowedRoles([roles.ROOT_ADMIN, roles.SUPER_ADMIN, roles.DEPARTMENT_ADMIN]),
+  allowedRoles([roles.ROOT_ADMIN, roles.FACULTY_ADMIN, roles.DEPARTMENT_ADMIN]),
   validateId,
   departmentAdminController.getByDepartmentId
 );
@@ -46,7 +46,7 @@ router.get(
 router.post(
   '/',
   verify,
-  allowedRoles([roles.ROOT_ADMIN, roles.SUPER_ADMIN]),
+  allowedRoles([roles.ROOT_ADMIN, roles.FACULTY_ADMIN]),
   validate(departmentAdminSchema.create),
   departmentAdminController.create
 );
@@ -55,7 +55,7 @@ router.post(
 router.patch(
   '/:id',
   verify,
-  allowedRoles([roles.ROOT_ADMIN, roles.SUPER_ADMIN]),
+  allowedRoles([roles.ROOT_ADMIN, roles.FACULTY_ADMIN]),
   validateId,
   validate(departmentAdminSchema.update),
   departmentAdminController.update
@@ -65,7 +65,7 @@ router.patch(
 router.delete(
   '/:id',
   verify,
-  allowedRoles([roles.ROOT_ADMIN, roles.SUPER_ADMIN]),
+  allowedRoles([roles.ROOT_ADMIN, roles.FACULTY_ADMIN]),
   validateId,
   departmentAdminController.delete
 );

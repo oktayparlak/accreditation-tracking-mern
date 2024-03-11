@@ -28,7 +28,12 @@ const User = sequelize.define('User', {
     allowNull: false,
   },
   role: {
-    type: DataTypes.ENUM(roles.ROOT_ADMIN, roles.SUPER_ADMIN, roles.DEPARTMENT_ADMIN, roles.COURSE_ADMIN),
+    type: DataTypes.ENUM(
+      roles.ROOT_ADMIN,
+      roles.FACULTY_ADMIN,
+      roles.DEPARTMENT_ADMIN,
+      roles.COURSE_ADMIN
+    ),
     allowNull: false,
   },
   isDeleted: {

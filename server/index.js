@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const morgan = require('morgan');
+const morganBody = require('morgan-body');
 require('dotenv').config();
 
 const sequelize = require('./src/configs/database');
@@ -11,7 +11,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 /** Middlewares */
-app.use(morgan('common'));
+morganBody(app);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(
@@ -33,7 +33,7 @@ routes(app);
 
 /** Error Handler */
 app.use((err, req, res, next) =>
-  res.status(err.status || 500).json({ message: err?.message })
+  res.status(err.status || 500).json({ error: { message: err?.message } })
 );
 
 /** Database Connection and Starting Server */

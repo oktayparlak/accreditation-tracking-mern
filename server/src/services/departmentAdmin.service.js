@@ -3,7 +3,7 @@ const User = require('../models/user.model');
 const DepartmentAdmin = require('../models/departmentAdmin.model');
 
 const AppError = require('../utilities/AppError');
-const excludeColums = ['isDeleted', 'createdAt', 'updatedAt'];
+const excludeColums = ['isDeleted', 'createdAt', 'updatedAt', 'password'];
 
 class DepartmentAdminService {
   async createDepartmentAdmin({ userId, departmentId }) {
@@ -21,6 +21,7 @@ class DepartmentAdminService {
   async findDepartmentAdminById(id) {
     return await DepartmentAdmin.findOne({
       where: { id, isDeleted: false },
+      attributes: { exclude: excludeColums },
       include: [
         { model: User, attributes: { exclude: excludeColums } },
         { model: Department, attributes: { exclude: excludeColums } },
@@ -31,6 +32,7 @@ class DepartmentAdminService {
   async findDepartmentAdminsByUserId(userId) {
     return await DepartmentAdmin.findOne({
       where: { userId, isDeleted: false },
+      attributes: { exclude: excludeColums },
       include: [
         { model: User, attributes: { exclude: excludeColums } },
         { model: Department, attributes: { exclude: excludeColums } },
@@ -41,6 +43,7 @@ class DepartmentAdminService {
   async findDepartmentAdminsByDepartmentId(departmentId) {
     return await DepartmentAdmin.findOne({
       where: { departmentId, isDeleted: false },
+      attributes: { exclude: excludeColums },
       include: [
         { model: User, attributes: { exclude: excludeColums } },
         { model: Department, attributes: { exclude: excludeColums } },
@@ -51,6 +54,7 @@ class DepartmentAdminService {
   async findAllDepartmentAdmins() {
     return await DepartmentAdmin.findAll({
       where: { isDeleted: false },
+      attributes: { exclude: excludeColums },
       include: [
         { model: User, attributes: { exclude: excludeColums } },
         { model: Department, attributes: { exclude: excludeColums } },

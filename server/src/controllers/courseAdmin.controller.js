@@ -39,7 +39,7 @@ exports.getById = async (req, res, next) => {
 exports.getByUserId = async (req, res, next) => {
   try {
     const courseAdmin = await CourseAdminService.findCourseAdminsByUserId(
-      req.params.id
+      req.params.userId
     );
     if (!courseAdmin) {
       return res.status(404).json({
@@ -55,7 +55,7 @@ exports.getByUserId = async (req, res, next) => {
 exports.getByCourseId = async (req, res, next) => {
   try {
     const courseAdmins = await CourseAdminService.findCourseAdminsByCourseId(
-      req.params.id
+      req.params.courseId
     );
     if (!courseAdmins) {
       return res.status(404).json({

@@ -3,7 +3,7 @@ const User = require('../models/user.model');
 const CourseAdmin = require('../models/courseAdmin.model');
 
 const AppError = require('../utilities/AppError');
-const excludeColums = ['isDeleted', 'createdAt', 'updatedAt'];
+const excludeColums = ['isDeleted', 'createdAt', 'updatedAt', 'password'];
 
 class CourseAdminService {
   async createCourseAdmin({ userId, courseId }) {
@@ -21,6 +21,7 @@ class CourseAdminService {
   async findCourseAdminById(id) {
     return await CourseAdmin.findOne({
       where: { id, isDeleted: false },
+      attributes: { exclude: excludeColums },
       include: [
         { model: User, attributes: { exclude: excludeColums } },
         { model: Course, attributes: { exclude: excludeColums } },
@@ -31,6 +32,7 @@ class CourseAdminService {
   async findCourseAdminsByUserId(userId) {
     return await CourseAdmin.findOne({
       where: { userId, isDeleted: false },
+      attributes: { exclude: excludeColums },
       include: [
         { model: User, attributes: { exclude: excludeColums } },
         { model: Course, attributes: { exclude: excludeColums } },
@@ -41,6 +43,7 @@ class CourseAdminService {
   async findCourseAdminsByCourseId(courseId) {
     return await CourseAdmin.findOne({
       where: { courseId, isDeleted: false },
+      attributes: { exclude: excludeColums },
       include: [
         { model: User, attributes: { exclude: excludeColums } },
         { model: Course, attributes: { exclude: excludeColums } },
@@ -51,6 +54,7 @@ class CourseAdminService {
   async findAllCourseAdmins() {
     return await CourseAdmin.findAll({
       where: { isDeleted: false },
+      attributes: { exclude: excludeColums },
       include: [
         { model: User, attributes: { exclude: excludeColums } },
         { model: Course, attributes: { exclude: excludeColums } },

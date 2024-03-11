@@ -23,9 +23,9 @@ class UserService {
     });
   }
 
-  async findUserByUsername(username) {
+  async findUserByUsername(username, role) {
     return await User.findOne({
-      where: { username: username },
+      where: { username, role, isDeleted: false },
       attributes: { exclude: excludeColums },
       isDeleted: false,
     });

@@ -38,6 +38,7 @@ app.use((err, req, res, next) =>
 
 /** Database Connection and Starting Server */
 sequelize.sync({ force: true }).then(() => {
+  console.log('Database connected!');
   /** Server */
   app.listen(PORT, () => {
     console.log(`Server listening on port http://localhost:${PORT}`);

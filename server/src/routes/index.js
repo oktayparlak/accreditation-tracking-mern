@@ -8,4 +8,5 @@ module.exports = (app) => {
   app.use('/api/learning-materials', require('./learningMaterial.route'));
   app.use('/api/faculties', require('./faculty.route'));
   app.use('/api/faculty-admins', require('./facultyAdmin.route'));
+  app.use('/api/measuring-tools', require('./measuringTool.route'));
 };

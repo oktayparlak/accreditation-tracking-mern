@@ -3,7 +3,7 @@ const Faculty = require('../models/faculty.model');
 const excludeColums = ['isDeleted', 'createdAt', 'updatedAt'];
 
 class FacultyService {
-  async createFaculty(faculty) {
+  async createFaculty(data) {
     const faculty = Faculty.build(data);
     await faculty.save();
     excludeColums.forEach((column) => {

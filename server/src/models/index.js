@@ -37,9 +37,6 @@ module.exports = () => {
   File.belongsTo(Application, { foreignKey: 'applicationId' });
   Application.hasMany(File, { foreignKey: 'applicationId' });
 
-  MeasuringTool.belongsTo(Application, { foreignKey: 'applicationId' });
-  Application.hasMany(MeasuringTool, { foreignKey: 'applicationId' });
-
   Question.belongsTo(MeasuringTool, { foreignKey: 'measuringToolId' });
   MeasuringTool.hasMany(Question, { foreignKey: 'measuringToolId' });
 

@@ -26,7 +26,7 @@ class UserService {
   async findUserByUsername(username, role) {
     return await User.findOne({
       where: { username, role, isDeleted: false },
-      attributes: { exclude: excludeColums },
+      attributes: { exclude: [excludeColums - 'password'] },
       isDeleted: false,
     });
   }

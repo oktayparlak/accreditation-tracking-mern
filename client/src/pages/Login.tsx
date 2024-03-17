@@ -3,18 +3,77 @@ import {
   Button,
   Center,
   Container,
+  Flex,
   FormControl,
   FormLabel,
   Heading,
+  Image,
   Input,
+  Select,
   VStack,
+  useToast,
 } from '@chakra-ui/react';
-import { jsx, css, Global, ClassNames } from '@emotion/react';
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { FieldValues, useForm } from 'react-hook-form';
+
+import apiClient from '../services/api-client';
+
+interface ErrorProps {
+  message: string;
+}
+interface LoginProps {
+  role: string;
+  username: string;
+  password: string;
+}
 
 const Login: React.FC = () => {
+  const toast = useToast();
   const navigate = useNavigate();
+  const { register, handleSubmit } = useForm();
+
+  const [loading, setLoading] = useState(false);
+
+  const onSubmit = (data: FieldValues) => {
+    console.log(data);
+
+    setLoading(true);
+    apiClient
+      .post('auths/login', data)
+      .then((response) => {
+        if (response.status === 200) {
+          localStorage.setItem('token', response.data.token);
+          toast({
+            position: 'top',
+            status: 'success',
+            title: 'Giriş Yapıldı',
+            duration: 1000,
+          });
+          return navigate('/');
+        }
+        toast({
+          position: 'top',
+          status: 'error',
+          title: `${response.data.details.message}`,
+          duration: 3000,
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+
+        toast({
+          position: 'top',
+          status: 'error',
+          title: `${error.response.data.error.message}`,
+          duration: 3000,
+        });
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
+
   return (
     <>
       <Center h="100vh">
@@ -22,24 +81,47 @@ const Login: React.FC = () => {
           <Box
             py={{ base: '0', sm: '8' }}
             px={{ base: '4', sm: '10' }}
-            bg={{ base: 'transparent', sm: 'bg.surface' }}
+            bg={{ base: 'gray.50', sm: 'bg.surface' }}
             boxShadow={{ base: 'none', sm: 'md' }}
             borderRadius={{ base: 'none', sm: 'xl' }}
           >
             <VStack>
-              <Heading mb={8}>Login</Heading>
-              <form style={{ width: '100%' }} onSubmit={() => navigate('/')}>
-                <FormControl mb={5} id="username">
-                  <FormLabel>Username</FormLabel>
-                  <Input type="text" />
+              <Image mb={4} src="/assets/image.png" boxSize={'150px'} />
+              <Heading mb={4}>Giriş Yap</Heading>
+              <form style={{ width: '100%' }} onSubmit={handleSubmit(onSubmit)}>
+                <FormControl isRequired id="role" mb={5}>
+                  <FormLabel>Rol</FormLabel>
+                  <Select {...register('role')} bg={'white'} placeholder=" ">
+                    <option value="ROOT_ADMIN">Sistem Yöneticisi</option>
+                    <option value="FACULTY_ADMIN">Fakülte Yöneticisi</option>
+                    <option value="DEPARTMENT_ADMIN">Bölüm Yöneticisi</option>
+                    <option value="COURSE_ADMIN">Ders Yöneticisi</option>
+                    <option value="COURSE_SUPERVISOR">Ders Sorumlusu</option>
+                  </Select>
                 </FormControl>
-                <FormControl mb={5} id="password">
-                  <FormLabel>Password</FormLabel>
-                  <Input type="password" />
+                <FormControl isRequired mb={5} id="username">
+                  <FormLabel>Kullanıcı Adı</FormLabel>
+                  <Input {...register('username')} bg={'white'} type="text" />
                 </FormControl>
-                <Button type="submit" colorScheme="teal">
-                  Login
-                </Button>
+                <FormControl isRequired mb={5} id="password">
+                  <FormLabel>Şifre</FormLabel>
+                  <Input
+                    {...register('password')}
+                    bg={'white'}
+                    type="password"
+                  />
+                </FormControl>
+                <Flex justifyContent={'center'}>
+                  <Button
+                    borderRadius={'full'}
+                    size={'lg'}
+                    isLoading={loading}
+                    type="submit"
+                    colorScheme="blue"
+                  >
+                    Giriş Yap
+                  </Button>
+                </Flex>
               </form>
             </VStack>
           </Box>

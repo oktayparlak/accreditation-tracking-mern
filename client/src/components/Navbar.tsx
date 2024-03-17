@@ -1,55 +1,66 @@
-import {
-  Box,
-  Container,
-  Flex,
-  HStack,
-  Stack,
-  useColorModeValue,
-} from '@chakra-ui/react';
 import React from 'react';
+import { Box, Flex, Image, Link, Stack } from '@chakra-ui/react';
+import { useNavigate } from 'react-router-dom';
 
-interface Props {
-  children: React.ReactNode;
+interface NavItemProps {
+  key: string;
+  title: string;
+  to: string;
+  marginLeft?: number;
 }
 
-const Links = ['Dashboard', 'Projects', 'Team'];
+const Links: NavItemProps[] = [
+  { key: 'kisi_olustur', title: 'Kişi Oluştur', to: '/dashboard' },
+  { key: 'Profile', title: 'Profile', to: '/profile' },
+];
 
-const NavLink = ({ children }: Props) => {
+const NavLink = ({ key, title, to, marginLeft }: NavItemProps) => {
+  const navigate = useNavigate();
   return (
-    <Box
+    <Link
+      marginLeft={marginLeft}
       as="a"
+      key={key}
       px={2}
       py={1}
       rounded={'md'}
       _hover={{
         textDecoration: 'none',
-        bg: useColorModeValue('gray.200', 'gray.700'),
+        bg: 'white',
       }}
-      href={'#'}
+      cursor={'pointer'}
+      onClick={() => navigate(to)}
     >
-      {children}
-    </Box>
+      {title}
+    </Link>
   );
 };
 
-const Navbar = () => {
+const Navbar: React.FC = () => {
+  const navigate = useNavigate();
   return (
     <>
-      <Box bg={useColorModeValue('teal.100', 'green.900')} px={4} fontSize={20}>
+      <Box bg={'gray.50'} px={4} fontSize={20} color={'black'}>
         <Flex
-          h={16}
+          h={20}
           alignItems={'center'}
           justifyContent={'space-between'}
           padding={4}
         >
-          <Box marginRight={10}>Logo</Box>
+          <Box
+            marginRight={10}
+            onClick={() => navigate('/')}
+            cursor={'pointer'}
+          >
+            <Image src="/assets/image.png" boxSize={'75px'} />
+          </Box>
           <Stack direction={'row'} spacing={5}>
             {Links.map((link) => (
-              <NavLink key={link}>{link}</NavLink>
+              <NavLink key={link.key} to={link.to} title={link.title} />
             ))}
           </Stack>
           <Stack>
-            <NavLink>Login</NavLink>
+            <NavLink marginLeft={10} key="Login" to="/login" title="Login" />
           </Stack>
         </Flex>
       </Box>

@@ -1,7 +1,8 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom';
+import './App.css';
 import Home from './pages/Home';
 import Login from './pages/Login';
-import './App.css';
+import CreateUser from './pages/CreateUser';
 
 const App = () => {
   return (
@@ -9,6 +10,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/create-user" element={<CreateUser />} />
       </Routes>
     </BrowserRouter>
   );

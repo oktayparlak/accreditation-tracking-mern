@@ -36,8 +36,6 @@ const Login: React.FC = () => {
   const [loading, setLoading] = useState(false);
 
   const onSubmit = (data: FieldValues) => {
-    console.log(data);
-
     setLoading(true);
     apiClient
       .post('auths/login', data)
@@ -60,8 +58,6 @@ const Login: React.FC = () => {
         });
       })
       .catch((error) => {
-        console.log(error);
-
         toast({
           position: 'top',
           status: 'error',

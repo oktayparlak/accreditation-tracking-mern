@@ -1,37 +1,18 @@
 import React from 'react';
-import { Box, Flex, Image, Link, Stack } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  Flex,
+  Image,
+  Link,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+  Stack,
+} from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
-
-interface NavItemProps {
-  key: string;
-  title: string;
-  to: string;
-}
-
-const Links: NavItemProps[] = [
-  { key: 'kisi_olustur', title: 'Kişi Oluştur', to: '/create-user' },
-];
-
-const NavLink = ({ key, title, to }: NavItemProps) => {
-  const navigate = useNavigate();
-  return (
-    <Link
-      as="a"
-      key={key}
-      px={2}
-      py={1}
-      rounded={'md'}
-      _hover={{
-        textDecoration: 'none',
-        bg: 'white',
-      }}
-      cursor={'pointer'}
-      onClick={() => navigate(to)}
-    >
-      {title}
-    </Link>
-  );
-};
+import { ChevronDownIcon } from '@chakra-ui/icons';
 
 const Navbar: React.FC = () => {
   const navigate = useNavigate();
@@ -44,27 +25,81 @@ const Navbar: React.FC = () => {
           justifyContent={'space-between'}
           padding={4}
         >
-          <Box marginRight={10} onClick={() => navigate('/')}>
+          <Box
+            as="a"
+            marginRight={10}
+            cursor={'pointer'}
+            onClick={() => navigate('/')}
+          >
             <Image src="/assets/image.png" boxSize={'75px'} />
           </Box>
+          {/* ROOT_ADMIN */}
           <Stack direction={'row'} spacing={5}>
-            {Links.map((link) => (
-              <NavLink key={link.key} to={link.to} title={link.title} />
-            ))}
+            {/* Kullancı */}
+            <Menu isLazy>
+              <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
+                Kullanıcılar
+              </MenuButton>
+              <MenuList>
+                <MenuItem
+                  as={'a'}
+                  cursor={'pointer'}
+                  onClick={() => navigate('/create-user')}
+                >
+                  Kullanıcı Oluştur
+                </MenuItem>
+                <MenuItem
+                  as={'a'}
+                  cursor={'pointer'}
+                  onClick={() => navigate('/users')}
+                >
+                  Kullanıcılar
+                </MenuItem>
+              </MenuList>
+            </Menu>
+            {/* Yönetici */}
+            <Menu isLazy>
+              <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
+                Yöneticiler
+              </MenuButton>
+              <MenuList>
+                <MenuItem
+                  as={'a'}
+                  cursor={'pointer'}
+                  onClick={() => navigate('/create-user')}
+                >
+                  Yönetici Oluştur
+                </MenuItem>
+              </MenuList>
+            </Menu>
+            {/* Fakülte */}
+            <Menu isLazy>
+              <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
+                Fakülte
+              </MenuButton>
+              <MenuList>
+                <MenuItem
+                  as={'a'}
+                  cursor={'pointer'}
+                  onClick={() => navigate('/create-user')}
+                >
+                  Fakülte Oluştur
+                </MenuItem>
+                <MenuItem
+                  as={'a'}
+                  cursor={'pointer'}
+                  onClick={() => navigate('/users')}
+                >
+                  Fakülteler
+                </MenuItem>
+              </MenuList>
+            </Menu>
           </Stack>
           <Stack>
             <Link
-              // marginLeft={10}
-              as="a"
-              px={2}
-              py={1}
-              rounded={'md'}
-              _hover={{
-                textDecoration: 'none',
-                bg: 'white',
-              }}
+              as={Button}
               onClick={() => {
-                localStorage.removeItem('token');
+                localStorage.clear();
                 navigate('/login');
               }}
             >

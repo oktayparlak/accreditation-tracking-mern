@@ -42,10 +42,11 @@ const Login: React.FC = () => {
       .then((response) => {
         if (response.status === 200) {
           localStorage.setItem('token', response.data.token);
+          localStorage.setItem('user', JSON.stringify(response.data.user));
           toast({
             position: 'top',
             status: 'success',
-            title: 'Giriş Yapıldı',
+            title: `Giriş başarılı. Hoşgeldiniz ${response.data.user.firstName} ${response.data.user.lastName}`,
             duration: 1000,
           });
           return navigate('/');
@@ -61,7 +62,9 @@ const Login: React.FC = () => {
         toast({
           position: 'top',
           status: 'error',
-          title: `${error.response.data.error.message}`,
+          title: `${
+            error.response ? error.response.data.error.message : 'Sunucu Hatası'
+          }`,
           duration: 3000,
         });
       })

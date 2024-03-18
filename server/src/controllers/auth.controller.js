@@ -10,7 +10,7 @@ exports.login = async (req, res, next) => {
     const valid = comparePassword(req.body.password, user.password);
     if (!valid) throw new AppError('Geçersiz Şifre veya Kullanıcı Adı', 400);
     user.password = undefined;
-    return res.status(200).json({ token: generateLoginToken(user) });
+    return res.status(200).json({ token: generateLoginToken(user), user });
   } catch (error) {
     next(error);
   }

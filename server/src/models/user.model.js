@@ -35,7 +35,7 @@ const User = sequelize.define('User', {
       roles.COURSE_ADMIN,
       roles.COURSE_SUPERVISOR
     ),
-    allowNull: false,
+    allowNull: true,
   },
   isDeleted: {
     type: DataTypes.BOOLEAN,

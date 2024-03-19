@@ -51,24 +51,9 @@ const Navbar: React.FC = () => {
                 <MenuItem
                   as={'a'}
                   cursor={'pointer'}
-                  onClick={() => navigate('/users')}
-                >
-                  Kullanıcılar
-                </MenuItem>
-              </MenuList>
-            </Menu>
-            {/* Yönetici */}
-            <Menu isLazy>
-              <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
-                Yöneticiler
-              </MenuButton>
-              <MenuList>
-                <MenuItem
-                  as={'a'}
-                  cursor={'pointer'}
                   onClick={() => navigate('/create-user')}
                 >
-                  Yönetici Oluştur
+                  Yönetici Ata
                 </MenuItem>
               </MenuList>
             </Menu>

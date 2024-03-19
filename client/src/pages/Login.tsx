@@ -44,7 +44,7 @@ const Login: React.FC = () => {
           localStorage.setItem('token', response.data.token);
           localStorage.setItem('user', JSON.stringify(response.data.user));
           toast({
-            position: 'top',
+            position: 'bottom',
             status: 'success',
             title: `Giriş başarılı. Hoşgeldiniz ${response.data.user.firstName} ${response.data.user.lastName}`,
             duration: 1000,
@@ -90,7 +90,11 @@ const Login: React.FC = () => {
               <form style={{ width: '100%' }} onSubmit={handleSubmit(onSubmit)}>
                 <FormControl isRequired id="role" mb={5}>
                   <FormLabel>Rol</FormLabel>
-                  <Select {...register('role')} bg={'white'} placeholder=" ">
+                  <Select
+                    {...register('role')}
+                    bg={'white'}
+                    placeholder="Rol Seçiniz"
+                  >
                     <option value="ROOT_ADMIN">Sistem Yöneticisi</option>
                     <option value="FACULTY_ADMIN">Fakülte Yöneticisi</option>
                     <option value="DEPARTMENT_ADMIN">Bölüm Yöneticisi</option>

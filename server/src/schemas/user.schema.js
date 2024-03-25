@@ -8,11 +8,11 @@ const create = Joi.object({
   password: Joi.string().required(),
   role: Joi.string()
     .valid(
-      roles.ROOT_ADMIN,
       roles.FACULTY_ADMIN,
       roles.DEPARTMENT_ADMIN,
       roles.COURSE_ADMIN,
-      roles.COURSE_SUPERVISOR
+      roles.COURSE_SUPERVISOR,
+      ''
     )
     .allow(null),
 });
@@ -23,11 +23,11 @@ const update = Joi.object({
   username: Joi.string().required(),
   password: Joi.string().required(),
   role: Joi.string().valid(
-    roles.ROOT_ADMIN,
     roles.FACULTY_ADMIN,
     roles.DEPARTMENT_ADMIN,
     roles.COURSE_ADMIN,
-    roles.COURSE_SUPERVISOR
+    roles.COURSE_SUPERVISOR,
+    ''
   ),
 });
 

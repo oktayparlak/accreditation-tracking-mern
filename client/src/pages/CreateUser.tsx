@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { Table as AntTable } from 'antd';
 import Navbar from '../components/Navbar';
 import {
   Box,
@@ -9,29 +10,13 @@ import {
   FormLabel,
   Heading,
   Input,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
   Select,
-  Table,
-  TableContainer,
-  Tbody,
-  Td,
-  Tfoot,
-  Th,
-  Thead,
-  Tr,
   VStack,
   useToast,
 } from '@chakra-ui/react';
 import { FieldValues, useForm } from 'react-hook-form';
 import apiClient from '../services/api-client';
-import {
-  ArrowLeftIcon,
-  ArrowRightIcon,
-  ChevronDownIcon,
-} from '@chakra-ui/icons';
+import FeaturesMenu from '../components/FeaturesMenu';
 
 interface Roles {
   [key: string]: string;
@@ -58,20 +43,54 @@ interface User {
   lastName: string;
   username: string;
 }
+interface DataSource {
+  key: string;
+  role: string;
+  firstName: string;
+  lastName: string;
+  username: string;
+  inc: React.ReactNode;
+}
+
+const columns = [
+  {
+    title: 'Rol',
+    dataIndex: 'role',
+    key: 'role',
+  },
+  {
+    title: 'Ad',
+    dataIndex: 'firstName',
+    key: 'firstName',
+  },
+  {
+    title: 'Soyad',
+    dataIndex: 'lastName',
+    key: 'lastName',
+  },
+  {
+    title: 'Kullanıcı Adı',
+    dataIndex: 'username',
+    key: 'username',
+  },
+  {
+    title: 'İncele',
+    dataIndex: 'inc',
+    key: 'inc',
+  },
+];
 
 const CreateUser = () => {
   const toast = useToast();
   const { register, handleSubmit } = useForm();
 
-  const [users, setUsers] = useState<User[]>([]);
+  const [users, setUsers] = useState<DataSource[]>([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     apiClient
       .get('/users/')
       .then((response) => {
-        console.log(response.status);
-
         if (response.status === 200) {
           toast({
             position: 'bottom-right',
@@ -79,7 +98,17 @@ const CreateUser = () => {
             title: `Kullanıcılar başarıyla getirildi.`,
             duration: 1000,
           });
-          setUsers(response.data);
+          const data: DataSource[] = response.data.map((user: User) => {
+            return {
+              key: user.id,
+              role: roles[`${user.role}`] || '-',
+              firstName: user.firstName,
+              lastName: user.lastName,
+              username: user.username,
+              inc: <FeaturesMenu />,
+            };
+          });
+          setUsers(data);
         } else {
           toast({
             position: 'bottom-right',
@@ -113,7 +142,14 @@ const CreateUser = () => {
             title: `Kullanıcı başarıyla oluşturuldu.`,
             duration: 1500,
           });
-          setUsers([...users, response.data]);
+          setUsers([
+            ...users,
+            {
+              ...response.data,
+              inc: <FeaturesMenu />,
+              role: roles[`${response.data.role}`] || '-',
+            },
+          ]);
         } else {
           toast({
             position: 'bottom-left',
@@ -151,12 +187,16 @@ const CreateUser = () => {
             <form onSubmit={handleSubmit(onSubmit)}>
               <FormControl id="role" mb={3} isRequired>
                 <FormLabel>Rol</FormLabel>
-                <Select {...register('role')} bg={'white'} placeholder=" ">
-                  <option value="ROOT_ADMIN">Sistem Yöneticisi</option>
+                <Select
+                  {...register('role')}
+                  bg={'white'}
+                  placeholder="Seçiniz"
+                >
                   <option value="FACULTY_ADMIN">Fakülte Yöneticisi</option>
                   <option value="DEPARTMENT_ADMIN">Bölüm Yöneticisi</option>
                   <option value="COURSE_ADMIN">Ders Yöneticisi</option>
                   <option value="COURSE_SUPERVISOR">Ders Sorumlusu</option>
+                  <option value="">-</option>
                 </Select>
               </FormControl>
               <FormControl id="firstName" mb={3} isRequired>
@@ -205,64 +245,8 @@ const CreateUser = () => {
                 Kullanıcılar
               </Heading>
             </Center>
-            <TableContainer>
-              <Table variant="striped" colorScheme="gray">
-                <Thead>
-                  <Tr>
-                    <Th textAlign={'center'}>Rol</Th>
-                    <Th textAlign={'center'}>Ad</Th>
-                    <Th textAlign={'center'}>Soyad</Th>
-                    <Th textAlign={'center'}>Kullanıcı Adı</Th>
-                    <Th textAlign={'center'}>İncele</Th>
-                  </Tr>
-                </Thead>
-                <Tbody>
-                  {users.map((user) => {
-                    return (
-                      <Tr key={user.id}>
-                        <Td textAlign={'center'}>{roles[`${user.role}`]}</Td>
-                        <Td textAlign={'center'}>{user.firstName}</Td>
-                        <Td textAlign={'center'}>{user.lastName}</Td>
-                        <Td textAlign={'center'}>{user.username}</Td>
-                        <Td textAlign={'center'}>
-                          <Menu>
-                            <MenuButton
-                              as={Button}
-                              rightIcon={<ChevronDownIcon />}
-                              borderRadius={'full'}
-                              color={'white'}
-                              bg={'blue.500'}
-                              colorScheme="blue"
-                            >
-                              İncele
-                            </MenuButton>
-                            <MenuList>
-                              <MenuItem>Kullanıcıyı Düzenle</MenuItem>
-                              <MenuItem>Kullanıcıyı Sil</MenuItem>
-                            </MenuList>
-                          </Menu>
-                        </Td>
-                      </Tr>
-                    );
-                  })}
-                </Tbody>
-              </Table>
-            </TableContainer>
+            <AntTable dataSource={users} columns={columns}></AntTable>
           </Box>
-          {/* Pagination */}
-          <Flex justifyContent={'flex-end'}>
-            <Button
-              variant={'outline'}
-              leftIcon={<ArrowLeftIcon />}
-              colorScheme="blue"
-            ></Button>
-            <Button
-              variant={'outline'}
-              rightIcon={<ArrowRightIcon />}
-              colorScheme="blue"
-              ml={2}
-            ></Button>
-          </Flex>
         </Flex>
       </Flex>
     </>

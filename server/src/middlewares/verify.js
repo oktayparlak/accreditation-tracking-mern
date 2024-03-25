@@ -5,7 +5,6 @@ const AppError = require('../utilities/AppError');
 
 module.exports = (req, res, next) => {
   let token = req.header('Authorization');
-  console.log('token', token);
   if (!token) {
     throw new AppError('Token bulunamadı', 401);
   }

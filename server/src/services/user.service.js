@@ -1,4 +1,5 @@
 const User = require('../models/user.model');
+const AppError = require('../utilities/AppError');
 const { hashPassword } = require('../utilities/password');
 
 const excludeColums = ['password', 'isDeleted', 'createdAt', 'updatedAt'];
@@ -46,14 +47,12 @@ class UserService {
     return user;
   }
 
-  deleteUser(id) {
-    User.update({ where: { id } }, { isDeleted: true })
-      .then(() => {
-        return true;
-      })
-      .catch((error) => {
-        throw error;
-      });
+  async deleteUser(id) {
+    const user = await User.findOne({ where: { id } });
+    if (!user) throw new AppError('User not found', 404);
+    user.isDeleted = true;
+    await user.save();
+    return user;
   }
 }
 

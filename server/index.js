@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const morganBody = require('morgan-body');
+const morgan = require('morgan');
 require('dotenv').config();
 
 const sequelize = require('./src/configs/database');
@@ -11,7 +11,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 /** Middlewares */
-morganBody(app);
+app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(

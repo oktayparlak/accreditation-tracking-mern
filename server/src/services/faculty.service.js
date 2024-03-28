@@ -27,21 +27,18 @@ class FacultyService {
   }
 
   async updateFaculty(id, data) {
-    const faculty = await Faculty.update({ where: { id } }, data);
+    const faculty = await Faculty.update(data, { where: { id } });
     excludeColums.forEach((column) => {
       faculty[column] = undefined;
     });
     return faculty;
   }
 
-  deleteFaculty(id) {
-    Faculty.update({ where: { id } }, { isDeleted: true })
-      .then(() => {
-        return true;
-      })
-      .catch((error) => {
-        throw error;
-      });
+  async deleteFaculty(id) {
+    const faculty = await Faculty.findOne({ where: { id } });
+    faculty.isDeleted = true;
+    await faculty.save();
+    return faculty;
   }
 }
 

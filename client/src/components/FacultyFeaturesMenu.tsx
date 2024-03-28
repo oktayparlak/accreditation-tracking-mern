@@ -22,7 +22,7 @@ import {
 } from '@chakra-ui/react';
 import React from 'react';
 import apiClient from '../services/api-client';
-import { FieldValues, useForm } from 'react-hook-form';
+import { FieldValues, set, useForm } from 'react-hook-form';
 
 interface FeaturesMenuProps {
   dataId: string;
@@ -30,7 +30,11 @@ interface FeaturesMenuProps {
   setReset: React.Dispatch<React.SetStateAction<any>>;
 }
 
-const UserFeaturesMenu = ({ dataId, dataUrl, setReset }: FeaturesMenuProps) => {
+const FacultyFeaturesMenu = ({
+  dataId,
+  dataUrl,
+  setReset,
+}: FeaturesMenuProps) => {
   const toast = useToast();
 
   const { register, handleSubmit, setValue } = useForm();
@@ -43,7 +47,7 @@ const UserFeaturesMenu = ({ dataId, dataUrl, setReset }: FeaturesMenuProps) => {
   const deleteData = () => {
     apiClient
       .delete(`${dataUrl}/${dataId}`)
-      .then((response) => {
+      .then(() => {
         toast({
           position: 'top-right',
           status: 'success',
@@ -93,10 +97,7 @@ const UserFeaturesMenu = ({ dataId, dataUrl, setReset }: FeaturesMenuProps) => {
     apiClient
       .get(`${dataUrl}/${dataId}`)
       .then((response) => {
-        setValue('role', response.data.role);
-        setValue('firstName', response.data.firstName);
-        setValue('lastName', response.data.lastName);
-        setValue('username', response.data.username);
+        setValue('name', response.data.name);
       })
       .catch((error) => {
         toast({
@@ -147,44 +148,12 @@ const UserFeaturesMenu = ({ dataId, dataUrl, setReset }: FeaturesMenuProps) => {
             <ModalHeader>Düzenle</ModalHeader>
             <ModalCloseButton />
             <ModalBody pb={6}>
-              {dataUrl === '/users' && (
-                <Box>
-                  <FormControl id="role" mb={3}>
-                    <FormLabel>Rol</FormLabel>
-                    <Select {...register('role', {})} bg={'white'}>
-                      <option value="FACULTY_ADMIN">Fakülte Yöneticisi</option>
-                      <option value="DEPARTMENT_ADMIN">Bölüm Yöneticisi</option>
-                      <option value="COURSE_ADMIN">Ders Yöneticisi</option>
-                      <option value="COURSE_SUPERVISOR">Ders Sorumlusu</option>
-                      <option value="">-</option>
-                    </Select>
-                  </FormControl>
-                  <FormControl id="firstName" mb={3}>
-                    <FormLabel>Ad</FormLabel>
-                    <Input
-                      {...register('firstName')}
-                      bg={'white'}
-                      type="text"
-                    />
-                  </FormControl>
-                  <FormControl id="lastName" mb={3}>
-                    <FormLabel>Soyad</FormLabel>
-                    <Input {...register('lastName')} bg={'white'} type="text" />
-                  </FormControl>
-                  <FormControl id="username" mb={3}>
-                    <FormLabel>Kullanıcı Adı</FormLabel>
-                    <Input {...register('username')} bg={'white'} type="text" />
-                  </FormControl>
-                  <FormControl id="password" mb={1}>
-                    <FormLabel>Şifre</FormLabel>
-                    <Input
-                      {...register('password')}
-                      bg={'white'}
-                      type="password"
-                    />
-                  </FormControl>
-                </Box>
-              )}
+              <Box>
+                <FormControl id="name" mb={3}>
+                  <FormLabel>Ad</FormLabel>
+                  <Input {...register('name')} bg={'white'} type="text" />
+                </FormControl>
+              </Box>
             </ModalBody>
             <ModalFooter>
               <Button type="submit" colorScheme="blue" mr={3}>
@@ -199,4 +168,4 @@ const UserFeaturesMenu = ({ dataId, dataUrl, setReset }: FeaturesMenuProps) => {
   );
 };
 
-export default UserFeaturesMenu;
+export default FacultyFeaturesMenu;

@@ -51,4 +51,7 @@ module.exports = () => {
 
   FacultyAdmin.belongsTo(Faculty, { foreignKey: 'facultyId' });
   Faculty.hasOne(FacultyAdmin, { foreignKey: 'facultyId' });
+
+  Department.belongsTo(Faculty, { foreignKey: 'facultyId' });
+  Faculty.hasMany(Department, { foreignKey: 'facultyId' });
 };

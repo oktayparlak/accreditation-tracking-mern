@@ -66,9 +66,97 @@ const Navbar: React.FC = () => {
                 <MenuItem
                   as={'a'}
                   cursor={'pointer'}
-                  onClick={() => navigate('/create-user')}
+                  onClick={() => navigate('/faculties')}
                 >
                   Fakülte Oluştur
+                </MenuItem>
+                <MenuItem
+                  as={'a'}
+                  cursor={'pointer'}
+                  onClick={() => navigate('/users')}
+                >
+                  Fakülteler
+                </MenuItem>
+              </MenuList>
+            </Menu>
+            {/* Bölüm */}
+            <Menu isLazy>
+              <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
+                Bölüm
+              </MenuButton>
+              <MenuList>
+                <MenuItem
+                  as={'a'}
+                  cursor={'pointer'}
+                  onClick={() => navigate('/departments')}
+                >
+                  Bölüm Oluştur
+                </MenuItem>
+                <MenuItem
+                  as={'a'}
+                  cursor={'pointer'}
+                  onClick={() => navigate('/users')}
+                >
+                  Fakülteler
+                </MenuItem>
+              </MenuList>
+            </Menu>
+            {/* Ders */}
+            <Menu isLazy>
+              <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
+                Ders
+              </MenuButton>
+              <MenuList>
+                <MenuItem
+                  as={'a'}
+                  cursor={'pointer'}
+                  onClick={() => navigate('/courses')}
+                >
+                  Ders Oluştur
+                </MenuItem>
+                <MenuItem
+                  as={'a'}
+                  cursor={'pointer'}
+                  onClick={() => navigate('/users')}
+                >
+                  Fakülteler
+                </MenuItem>
+              </MenuList>
+            </Menu>
+            {/* Öğrenim Materyali */}
+            <Menu isLazy>
+              <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
+                Öğrenim Materyali
+              </MenuButton>
+              <MenuList>
+                <MenuItem
+                  as={'a'}
+                  cursor={'pointer'}
+                  onClick={() => navigate('/learning-materials')}
+                >
+                  Öğrenim Materyali Oluştur
+                </MenuItem>
+                <MenuItem
+                  as={'a'}
+                  cursor={'pointer'}
+                  onClick={() => navigate('/users')}
+                >
+                  Fakülteler
+                </MenuItem>
+              </MenuList>
+            </Menu>
+            {/* Ölçme Aracı */}
+            <Menu isLazy>
+              <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
+                Ölçme Aracı
+              </MenuButton>
+              <MenuList>
+                <MenuItem
+                  as={'a'}
+                  cursor={'pointer'}
+                  onClick={() => navigate('/measuring-tools')}
+                >
+                  Ölçme Aracı Oluştur
                 </MenuItem>
                 <MenuItem
                   as={'a'}

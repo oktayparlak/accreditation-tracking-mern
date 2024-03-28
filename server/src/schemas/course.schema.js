@@ -1,6 +1,7 @@
 const Joi = require('joi');
 
 const create = Joi.object({
+  departmentId: Joi.string().required(),
   code: Joi.string().required(),
   name: Joi.string().required(),
   credit: Joi.number().required(),
@@ -9,6 +10,7 @@ const create = Joi.object({
 });
 
 const update = Joi.object({
+  departmentId: Joi.string().required(),
   code: Joi.string().required(),
   name: Joi.string().required(),
   credit: Joi.number().required(),

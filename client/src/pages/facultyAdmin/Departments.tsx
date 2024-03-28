@@ -17,8 +17,14 @@ import { FieldValues, useForm } from 'react-hook-form';
 import apiClient from '../../services/api-client';
 import DepartmentFeaturesMenu from '../../components/DepartmentFeaturesMenu';
 
+interface Faculty {
+  id: string;
+  name: string;
+}
+
 interface Department {
   id: string;
+  Faculty: Faculty;
   name: string;
 }
 

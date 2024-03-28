@@ -3,7 +3,7 @@ import './App.css';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Users from './pages/rootAdmin/Users';
-import SetAdmin from './pages/SetAdmin';
+import SetAdmin from './pages/rootAdmin/SetAdmin';
 
 const App = () => {
   return (

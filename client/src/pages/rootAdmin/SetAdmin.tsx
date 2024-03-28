@@ -1,4 +1,4 @@
-import Navbar from '../components/Navbar';
+import Navbar from '../../components/Navbar';
 import {
   Box,
   Button,
@@ -13,8 +13,8 @@ import {
 import { Select, Form } from 'antd';
 import { FieldValues, useForm } from 'react-hook-form';
 import { useEffect, useState } from 'react';
-import apiClient from '../services/api-client';
-import { User } from './rootAdmin/Users';
+import apiClient from '../../services/api-client';
+import { User } from './Users';
 
 const filterOption = (
   input: string,

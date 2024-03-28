@@ -9,6 +9,10 @@ const Course = sequelize.define('Course', {
     primaryKey: true,
     allowNull: false,
   },
+  departmentId: {
+    type: DataTypes.UUID,
+    allowNull: false,
+  },
   code: {
     type: DataTypes.STRING(30),
     allowNull: false,

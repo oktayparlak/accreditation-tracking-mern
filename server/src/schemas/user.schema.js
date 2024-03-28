@@ -18,10 +18,10 @@ const create = Joi.object({
 });
 
 const update = Joi.object({
-  firstName: Joi.string().required(),
-  lastName: Joi.string().required(),
-  username: Joi.string().required(),
-  password: Joi.string().required(),
+  firstName: Joi.string(),
+  lastName: Joi.string(),
+  username: Joi.string(),
+  password: Joi.string().allow(''),
   role: Joi.string().valid(
     roles.FACULTY_ADMIN,
     roles.DEPARTMENT_ADMIN,

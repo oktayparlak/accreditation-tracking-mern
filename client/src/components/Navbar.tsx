@@ -44,14 +44,14 @@ const Navbar: React.FC = () => {
                 <MenuItem
                   as={'a'}
                   cursor={'pointer'}
-                  onClick={() => navigate('/create-user')}
+                  onClick={() => navigate('/users')}
                 >
                   Kullanıcı Oluştur
                 </MenuItem>
                 <MenuItem
                   as={'a'}
                   cursor={'pointer'}
-                  onClick={() => navigate('/create-user')}
+                  onClick={() => navigate('/set-admin')}
                 >
                   Yönetici Ata
                 </MenuItem>

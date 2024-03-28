@@ -1,10 +1,9 @@
-import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './App.css';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Users from './pages/Users';
-import CreateFaculty from './pages/CreateFaculty';
-import SetFacultyAdmin from './pages/SetFacultyAdmin';
+import SetAdmin from './pages/SetAdmin';
 
 const App = () => {
   return (
@@ -12,9 +11,9 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/create-user" element={<Users />} />
-        <Route path="/create-faculty" element={<CreateFaculty />} />
-        <Route path="/set-faculty-admin" element={<SetFacultyAdmin />} />
+        <Route path="/users" element={<Users />} />
+        <Route path="/set-admin" element={<SetAdmin />} />
+        <Route path="*" element={<Home />} />
       </Routes>
     </BrowserRouter>
   );

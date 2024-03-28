@@ -16,13 +16,13 @@ import {
 } from '@chakra-ui/react';
 import { FieldValues, useForm } from 'react-hook-form';
 import apiClient from '../services/api-client';
-import FeaturesMenu from '../components/FeaturesMenu';
+import UserFeaturesMenu from '../components/UserFeaturesMenu';
 
 interface Roles {
   [key: string]: string;
 }
 
-const roles: Roles = {
+export const roles: Roles = {
   ROOT_ADMIN: 'Sistem Yöneticisi',
   FACULTY_ADMIN: 'Fakülte Yöneticisi',
   DEPARTMENT_ADMIN: 'Bölüm Yöneticisi',
@@ -30,7 +30,7 @@ const roles: Roles = {
   COURSE_SUPERVISOR: 'Ders Sorumlusu',
 };
 
-interface User {
+export interface User {
   id: string;
   role: [
     | 'ROOT_ADMIN'
@@ -43,7 +43,7 @@ interface User {
   lastName: string;
   username: string;
 }
-export interface DataSource {
+interface DataSource {
   key: string;
   role: string;
   firstName: string;
@@ -80,7 +80,11 @@ const columns = [
   },
 ];
 
-const Users = () => {
+const UserModal = () => {
+  return <></>;
+};
+
+const Users: React.FC = () => {
   const toast = useToast();
   const { register, handleSubmit } = useForm();
 
@@ -103,7 +107,7 @@ const Users = () => {
               lastName: user.lastName,
               username: user.username,
               inc: (
-                <FeaturesMenu
+                <UserFeaturesMenu
                   dataId={user.id}
                   dataUrl="/users"
                   setReset={setReset}
@@ -149,11 +153,10 @@ const Users = () => {
             duration: 1500,
           });
           setUsers([
-            ...users,
             {
               ...response.data,
               inc: (
-                <FeaturesMenu
+                <UserFeaturesMenu
                   dataId={response.data.id}
                   dataUrl="/users"
                   setReset={setReset}
@@ -161,6 +164,7 @@ const Users = () => {
               ),
               role: roles[`${response.data.role}`] || '-',
             },
+            ...users,
           ]);
         } else {
           toast({
@@ -229,6 +233,7 @@ const Users = () => {
               </FormControl>
               <Flex justifyContent={'center'}>
                 <Button
+                  mt={3}
                   borderRadius={'full'}
                   size={'lg'}
                   type="submit"

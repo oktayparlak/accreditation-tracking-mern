@@ -36,11 +36,24 @@ class UserService {
     return await User.findAll({
       where: { isDeleted: false },
       attributes: { exclude: excludeColums },
+      order: [['updatedAt', 'DESC']],
+    });
+  }
+
+  async findUsersWithoutRole() {
+    return await User.findAll({
+      where: { role: '', isDeleted: false },
+      attributes: { exclude: excludeColums },
     });
   }
 
   async updateUser(id, data) {
-    const user = await User.update({ where: { id } }, data);
+    if (data.password !== '') {
+      data.password = hashPassword(data.password);
+    } else {
+      delete data.password;
+    }
+    const user = await User.update(data, { where: { id } });
     excludeColums.forEach((column) => {
       user[column] = undefined;
     });
@@ -50,6 +63,7 @@ class UserService {
   async deleteUser(id) {
     const user = await User.findOne({ where: { id } });
     if (!user) throw new AppError('User not found', 404);
+    user.username = `@deleted-${Date.now()}-${user.username}`;
     user.isDeleted = true;
     await user.save();
     return user;

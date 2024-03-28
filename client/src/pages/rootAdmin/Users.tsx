@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Table as AntTable } from 'antd';
-import Navbar from '../components/Navbar';
+import Navbar from '../../components/Navbar';
 import {
   Box,
   Button,
@@ -15,8 +15,8 @@ import {
   useToast,
 } from '@chakra-ui/react';
 import { FieldValues, useForm } from 'react-hook-form';
-import apiClient from '../services/api-client';
-import UserFeaturesMenu from '../components/UserFeaturesMenu';
+import apiClient from '../../services/api-client';
+import UserFeaturesMenu from '../../components/UserFeaturesMenu';
 
 interface Roles {
   [key: string]: string;

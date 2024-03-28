@@ -23,7 +23,7 @@ import {
 import React, { useEffect, useState } from 'react';
 import apiClient from '../services/api-client';
 import { FieldValues, set, useForm } from 'react-hook-form';
-import { roles, User } from '../pages/Users';
+import { roles, User } from '../pages/rootAdmin/Users';
 
 interface FeaturesMenuProps {
   dataId: string;

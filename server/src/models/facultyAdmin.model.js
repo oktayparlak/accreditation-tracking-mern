@@ -19,10 +19,6 @@ const FacultyAdmin = sequelize.define(
       type: DataTypes.UUID,
       allowNull: false,
     },
-    isDeleted: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: false,
-    },
   },
   { timestamps: false }
 );

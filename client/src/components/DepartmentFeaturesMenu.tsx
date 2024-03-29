@@ -20,9 +20,10 @@ import {
   useDisclosure,
   useToast,
 } from '@chakra-ui/react';
-import React from 'react';
+import React, { useState } from 'react';
 import apiClient from '../services/api-client';
 import { FieldValues, useForm } from 'react-hook-form';
+import { Faculty } from '../interfaces/types';
 
 interface FeaturesMenuProps {
   dataId: string;
@@ -36,6 +37,7 @@ const DepartmentFeaturesMenu = ({
   setReset,
 }: FeaturesMenuProps) => {
   const toast = useToast();
+  const [faculties, setFaculties] = useState<Faculty[]>([]);
 
   const { register, handleSubmit, setValue } = useForm();
 
@@ -69,34 +71,37 @@ const DepartmentFeaturesMenu = ({
   };
 
   const updateData = (newData: FieldValues) => {
-    apiClient
-      .patch(`${dataUrl}/${dataId}`, newData)
-      .then(() => {
-        toast({
-          position: 'top',
-          status: 'success',
-          title: `Güncelleme İşlemi Başarılı`,
-          duration: 1000,
-        });
-        setReset({});
-        onClose();
-      })
-      .catch((error) => {
-        toast({
-          position: 'top',
-          status: 'error',
-          title: `${
-            error.response ? error.response.data.error.message : 'Sunucu Hatası'
-          }`,
-          duration: 1500,
-        });
-      });
+    console.log(faculties);
+
+    // apiClient
+    //   .patch(`${dataUrl}/${dataId}`, newData)
+    //   .then(() => {
+    //     toast({
+    //       position: 'top',
+    //       status: 'success',
+    //       title: `Güncelleme İşlemi Başarılı`,
+    //       duration: 1000,
+    //     });
+    //     setReset({});
+    //     onClose();
+    //   })
+    //   .catch((error) => {
+    //     toast({
+    //       position: 'top',
+    //       status: 'error',
+    //       title: `${
+    //         error.response ? error.response.data.error.message : 'Sunucu Hatası'
+    //       }`,
+    //       duration: 1500,
+    //     });
+    //   });
   };
 
   const fetchData = () => {
     apiClient
       .get(`${dataUrl}/${dataId}`)
       .then((response) => {
+        setValue('faculty', response.data.facultyId);
         setValue('name', response.data.name);
       })
       .catch((error) => {
@@ -105,6 +110,23 @@ const DepartmentFeaturesMenu = ({
           status: 'error',
           title: `${
             error.response ? error.response.data.error.message : 'Sunucu Hatası'
+          }`,
+          duration: 1500,
+        });
+      });
+    apiClient
+      .get('/faculties')
+      .then((response) => {
+        setFaculties(response.data);
+      })
+      .catch((error) => {
+        toast({
+          position: 'bottom-right',
+          status: 'error',
+          title: `${
+            error.response
+              ? error.response.data?.error?.message
+              : 'Sunucu Hatası'
           }`,
           duration: 1500,
         });
@@ -149,6 +171,16 @@ const DepartmentFeaturesMenu = ({
             <ModalCloseButton />
             <ModalBody pb={6}>
               <Box>
+                <FormControl id="faculty" mb={3}>
+                  <FormLabel>Fakülte</FormLabel>
+                  <Select {...register('faculty')} bg={'white'}>
+                    {faculties.map((faculty: Faculty) => (
+                      <option key={faculty.id} value={faculty.id}>
+                        {faculty.name}
+                      </option>
+                    ))}
+                  </Select>
+                </FormControl>
                 <FormControl id="name" mb={3}>
                   <FormLabel>Ad</FormLabel>
                   <Input {...register('name')} bg={'white'} type="text" />

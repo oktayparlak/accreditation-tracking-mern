@@ -17,10 +17,6 @@ const MeasuringTool = sequelize.define('MeasuringTool', {
     type: DataTypes.DECIMAL(10, 2),
     allowNull: false,
   },
-  isDeleted: {
-    type: DataTypes.BOOLEAN,
-    defaultValue: false,
-  },
 });
 
 module.exports = MeasuringTool;

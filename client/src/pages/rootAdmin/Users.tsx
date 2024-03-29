@@ -17,32 +17,8 @@ import {
 import { FieldValues, useForm } from 'react-hook-form';
 import apiClient from '../../services/api-client';
 import UserFeaturesMenu from '../../components/UserFeaturesMenu';
+import { roles, User } from '../../interfaces/types';
 
-interface Roles {
-  [key: string]: string;
-}
-
-export const roles: Roles = {
-  ROOT_ADMIN: 'Sistem Yöneticisi',
-  FACULTY_ADMIN: 'Fakülte Yöneticisi',
-  DEPARTMENT_ADMIN: 'Bölüm Yöneticisi',
-  COURSE_ADMIN: 'Ders Yöneticisi',
-  COURSE_SUPERVISOR: 'Ders Sorumlusu',
-};
-
-export interface User {
-  id: string;
-  role: [
-    | 'ROOT_ADMIN'
-    | 'FACULTY_ADMIN'
-    | 'DEPARTMENT_ADMIN'
-    | 'COURSE_ADMIN'
-    | 'COURSE_SUPERVISOR'
-  ];
-  firstName: string;
-  lastName: string;
-  username: string;
-}
 interface DataSource {
   key: string;
   role: string;

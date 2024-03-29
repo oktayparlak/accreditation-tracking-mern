@@ -10,23 +10,14 @@ import {
   FormLabel,
   Heading,
   Input,
+  Select,
   VStack,
   useToast,
 } from '@chakra-ui/react';
 import { FieldValues, useForm } from 'react-hook-form';
 import apiClient from '../../services/api-client';
 import DepartmentFeaturesMenu from '../../components/DepartmentFeaturesMenu';
-
-interface Faculty {
-  id: string;
-  name: string;
-}
-
-interface Department {
-  id: string;
-  Faculty: Faculty;
-  name: string;
-}
+import { Department, Faculty } from '../../interfaces/types';
 
 interface DataSource {
   key: string;
@@ -35,6 +26,11 @@ interface DataSource {
 }
 
 const columns = [
+  {
+    title: 'Fakülte Adı',
+    dataIndex: 'Faculty',
+    key: 'Faculty',
+  },
   {
     title: 'Bölüm Adı',
     dataIndex: 'name',
@@ -52,9 +48,30 @@ const Departments: React.FC = () => {
   const { register, handleSubmit } = useForm();
 
   const [departments, setDepartments] = useState<DataSource[]>([]);
+  const [faculties, setFaculties] = useState<Faculty[]>([]);
   const [loading, setLoading] = useState(false);
   const [tableLoading, setTableLoading] = useState(false);
   const [reset, setReset] = useState({});
+
+  useEffect(() => {
+    apiClient
+      .get('/faculties')
+      .then((response) => {
+        setFaculties(response.data);
+      })
+      .catch((error) => {
+        toast({
+          position: 'bottom-right',
+          status: 'error',
+          title: `${
+            error.response
+              ? error.response.data?.error?.message
+              : 'Sunucu Hatası'
+          }`,
+          duration: 1500,
+        });
+      });
+  }, []);
 
   useEffect(() => {
     setTableLoading(true);
@@ -67,6 +84,7 @@ const Departments: React.FC = () => {
               return {
                 key: department.id,
                 name: department.name,
+                Faculty: department.Faculty.name,
                 inc: (
                   <DepartmentFeaturesMenu
                     dataId={department.id}
@@ -92,7 +110,9 @@ const Departments: React.FC = () => {
           position: 'bottom-right',
           status: 'error',
           title: `${
-            error.response ? error.response.data.error.message : 'Sunucu Hatası'
+            error.response
+              ? error.response.data?.error.message
+              : 'Sunucu Hatası'
           }`,
           duration: 1500,
         });
@@ -117,6 +137,7 @@ const Departments: React.FC = () => {
           setDepartments([
             {
               ...response.data,
+              Faculty: response.data.Faculty.name,
               inc: (
                 <DepartmentFeaturesMenu
                   dataId={response.data.id}
@@ -141,7 +162,9 @@ const Departments: React.FC = () => {
           position: 'bottom-left',
           status: 'error',
           title: `${
-            error.response ? error.response.data.error.message : 'Sunucu Hatası'
+            error.response
+              ? error.response.data?.error.message
+              : 'Sunucu Hatası'
           }`,
           duration: 1500,
         });
@@ -162,6 +185,16 @@ const Departments: React.FC = () => {
               </Heading>
             </Center>
             <form onSubmit={handleSubmit(onSubmit)}>
+              <FormControl id="facultyId" mb={3} isRequired>
+                <FormLabel>Fakülte</FormLabel>
+                <Select {...register('facultyId')} bg={'white'}>
+                  {faculties.map((faculty: Faculty) => (
+                    <option key={faculty.id} value={faculty.id}>
+                      {faculty.name}
+                    </option>
+                  ))}
+                </Select>
+              </FormControl>
               <FormControl id="name" mb={3} isRequired>
                 <FormLabel>Ad</FormLabel>
                 <Input {...register('name')} bg={'white'} type="text" />

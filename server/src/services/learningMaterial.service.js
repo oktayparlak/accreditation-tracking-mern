@@ -1,6 +1,6 @@
 const LearningMaterial = require('../models/learningMaterial.model');
 
-const excludeColums = ['isDeleted', 'createdAt', 'updatedAt'];
+const excludeColums = ['createdAt', 'updatedAt'];
 
 class LearningMaterialService {
   async createLearningMaterial(data) {
@@ -14,14 +14,13 @@ class LearningMaterialService {
 
   async findLearningMaterialById(id) {
     return await LearningMaterial.findOne({
-      where: { id, isDeleted: false },
+      where: { id },
       attributes: { exclude: excludeColums },
     });
   }
 
   async findAllLearningMaterials() {
     return await LearningMaterial.findAll({
-      where: { isDeleted: false },
       attributes: { exclude: excludeColums },
     });
   }
@@ -35,7 +34,7 @@ class LearningMaterialService {
   }
 
   deleteLearningMaterial(id) {
-    LearningMaterial.update({ where: { id } }, { isDeleted: true })
+    LearningMaterial.destroy({ where: { id } })
       .then(() => {
         return true;
       })

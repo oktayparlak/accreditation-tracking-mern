@@ -45,11 +45,6 @@ const LearningMaterial = sequelize.define('LearningMaterial', {
     allowNull: false,
     defaultValue: 0.0,
   },
-  isDeleted: {
-    type: DataTypes.BOOLEAN,
-    allowNull: false,
-    defaultValue: false,
-  },
 });
 
 module.exports = LearningMaterial;

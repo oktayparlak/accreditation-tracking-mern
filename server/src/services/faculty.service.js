@@ -1,6 +1,6 @@
 const Faculty = require('../models/faculty.model');
 
-const excludeColums = ['isDeleted', 'createdAt', 'updatedAt'];
+const excludeColums = ['createdAt', 'updatedAt'];
 
 class FacultyService {
   async createFaculty(data) {
@@ -14,14 +14,13 @@ class FacultyService {
 
   async findFacultyById(id) {
     return await Faculty.findOne({
-      where: { id, isDeleted: false },
+      where: { id },
       attributes: { exclude: excludeColums },
     });
   }
 
   async findAllFaculties() {
     return await Faculty.findAll({
-      where: { isDeleted: false },
       attributes: { exclude: excludeColums },
     });
   }
@@ -35,10 +34,13 @@ class FacultyService {
   }
 
   async deleteFaculty(id) {
-    const faculty = await Faculty.findOne({ where: { id } });
-    faculty.isDeleted = true;
-    await faculty.save();
-    return faculty;
+    await Faculty.destroy({ where: { id } })
+      .then(() => {
+        return true;
+      })
+      .catch((error) => {
+        throw error;
+      });
   }
 }
 

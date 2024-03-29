@@ -1,6 +1,6 @@
 const MeasuringTool = require('../models/measuringTool.model');
 
-const excludeColums = ['isDeleted', 'createdAt', 'updatedAt'];
+const excludeColums = ['createdAt', 'updatedAt'];
 
 class MeasuringToolService {
   async createMeasuringTool(data) {
@@ -14,7 +14,6 @@ class MeasuringToolService {
 
   async getMeasuringTools() {
     const measuringTools = await MeasuringTool.findAll({
-      where: { isDeleted: false },
       attributes: { exclude: excludeColums },
     });
     return measuringTools;
@@ -22,7 +21,7 @@ class MeasuringToolService {
 
   async getMeasuringToolById(id) {
     const measuringTool = await MeasuringTool.findOne({
-      where: { id, isDeleted: false },
+      where: { id },
       attributes: { exclude: excludeColums },
     });
     return measuringTool;
@@ -30,7 +29,7 @@ class MeasuringToolService {
 
   async updateMeasuringTool(id, data) {
     const measuringTool = await MeasuringTool.findOne({
-      where: { id, isDeleted: false },
+      where: { id },
     });
     measuringTool.update(data);
     excludeColums.forEach((column) => {
@@ -40,7 +39,7 @@ class MeasuringToolService {
   }
 
   deleteMeasuringTool(id) {
-    MeasuringTool.update({ where: { id } }, { isDeleted: true })
+    MeasuringTool.destroy({ where: { id } })
       .then(() => {
         return true;
       })

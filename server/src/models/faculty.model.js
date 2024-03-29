@@ -13,10 +13,6 @@ const Faculty = sequelize.define('Faculty', {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  isDeleted: {
-    type: DataTypes.BOOLEAN,
-    defaultValue: false,
-  },
 });
 
 module.exports = Faculty;

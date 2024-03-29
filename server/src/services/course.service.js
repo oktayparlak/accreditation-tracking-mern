@@ -1,6 +1,6 @@
 const Course = require('../models/course.model');
 
-const excludeColums = ['isDeleted', 'createdAt', 'updatedAt'];
+const excludeColums = ['createdAt', 'updatedAt'];
 
 class CourseService {
   async createCourse(data) {
@@ -14,14 +14,13 @@ class CourseService {
 
   async findCourseById(id) {
     return await Course.findOne({
-      where: { id, isDeleted: false },
+      where: { id },
       attributes: { exclude: excludeColums },
     });
   }
 
   async findAllCourses() {
     return await Course.findAll({
-      where: { isDeleted: false },
       attributes: { exclude: excludeColums },
     });
   }
@@ -35,7 +34,7 @@ class CourseService {
   }
 
   deleteCourse(id) {
-    Course.update({ where: { id } }, { isDeleted: true })
+    Course.destroy({ where: { id } })
       .then(() => {
         return true;
       })

@@ -18,10 +18,6 @@ const Department = sequelize.define('Department', {
     allowNull: false,
     unique: true,
   },
-  isDeleted: {
-    type: DataTypes.BOOLEAN,
-    defaultValue: false,
-  },
 });
 
 module.exports = Department;

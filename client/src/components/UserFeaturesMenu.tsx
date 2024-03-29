@@ -151,7 +151,7 @@ const UserFeaturesMenu = ({ dataId, dataUrl, setReset }: FeaturesMenuProps) => {
                 <Box>
                   <FormControl id="role" mb={3}>
                     <FormLabel>Rol</FormLabel>
-                    <Select {...register('role', {})} bg={'white'}>
+                    <Select {...register('role')} bg={'white'}>
                       <option value="FACULTY_ADMIN">Fakülte Yöneticisi</option>
                       <option value="DEPARTMENT_ADMIN">Bölüm Yöneticisi</option>
                       <option value="COURSE_ADMIN">Ders Yöneticisi</option>

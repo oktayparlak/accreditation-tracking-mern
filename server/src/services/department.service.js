@@ -1,10 +1,12 @@
 const Department = require('../models/department.model');
+const Faculty = require('../models/faculty.model');
 
-const excludeColums = ['isDeleted', 'createdAt', 'updatedAt'];
+const excludeColums = ['createdAt', 'updatedAt'];
 
 class DepartmentService {
   async createDepartment(data) {
-    const department = Department.build(data);
+    const department = Department.build(data, { include: [Faculty] });
+    console.log(department);
     await department.save();
     excludeColums.map((column) => {
       department[column] = undefined;
@@ -14,14 +16,15 @@ class DepartmentService {
 
   async findDepartmentById(id) {
     return await Department.findOne({
-      where: { id, isDeleted: false },
+      where: { id },
+      include: [{ model: Faculty, attributes: { exclude: excludeColums } }],
       attributes: { exclude: excludeColums },
     });
   }
 
   async findAllDepartments() {
     return await Department.findAll({
-      where: { isDeleted: false },
+      include: [{ model: Faculty, attributes: { exclude: excludeColums } }],
       attributes: { exclude: excludeColums },
     });
   }
@@ -35,7 +38,7 @@ class DepartmentService {
   }
 
   deleteDepartment(id) {
-    Department.update({ where: { id } }, { isDeleted: true })
+    Department.destroy({ where: { id } })
       .then(() => {
         return true;
       })

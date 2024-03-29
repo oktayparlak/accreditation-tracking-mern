@@ -17,10 +17,6 @@ const Application = sequelize.define('Application', {
     type: DataTypes.UUID,
     allowNull: false,
   },
-  isDeleted: {
-    type: DataTypes.BOOLEAN,
-    defaultValue: false,
-  },
 });
 
 module.exports = Application;

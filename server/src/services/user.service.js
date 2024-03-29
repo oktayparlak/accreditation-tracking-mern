@@ -2,7 +2,7 @@ const User = require('../models/user.model');
 const AppError = require('../utilities/AppError');
 const { hashPassword } = require('../utilities/password');
 
-const excludeColums = ['password', 'isDeleted', 'createdAt', 'updatedAt'];
+const excludeColums = ['password', 'createdAt', 'updatedAt'];
 
 class UserService {
   async createUser(data) {
@@ -19,22 +19,20 @@ class UserService {
 
   async findUserById(id) {
     return await User.findOne({
-      where: { id, isDeleted: false },
+      where: { id },
       attributes: { exclude: excludeColums },
     });
   }
 
   async findUserByUsername(username, role) {
     return await User.findOne({
-      where: { username, role, isDeleted: false },
+      where: { username, role },
       attributes: { exclude: [excludeColums - 'password'] },
-      isDeleted: false,
     });
   }
 
   async findAllUsers() {
     return await User.findAll({
-      where: { isDeleted: false },
       attributes: { exclude: excludeColums },
       order: [['updatedAt', 'DESC']],
     });
@@ -42,7 +40,7 @@ class UserService {
 
   async findUsersWithoutRole() {
     return await User.findAll({
-      where: { role: '', isDeleted: false },
+      where: { role: '' },
       attributes: { exclude: excludeColums },
     });
   }
@@ -61,12 +59,13 @@ class UserService {
   }
 
   async deleteUser(id) {
-    const user = await User.findOne({ where: { id } });
-    if (!user) throw new AppError('User not found', 404);
-    user.username = `@deleted-${Date.now()}-${user.username}`;
-    user.isDeleted = true;
-    await user.save();
-    return user;
+    await User.destroy({ where: { id } })
+      .then(() => {
+        return true;
+      })
+      .catch((error) => {
+        throw error;
+      });
   }
 }
 

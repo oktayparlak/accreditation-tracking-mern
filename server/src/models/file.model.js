@@ -21,10 +21,6 @@ const File = sequelize.define('File', {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  isDeleted: {
-    type: DataTypes.BOOLEAN,
-    defaultValue: false,
-  },
 });
 
 module.exports = File;

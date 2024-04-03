@@ -3,6 +3,7 @@ const FacultyAdmin = require('../models/facultyAdmin.model');
 const DepartmentAdmin = require('../models/departmentAdmin.model');
 const AppError = require('../utilities/AppError');
 const { hashPassword } = require('../utilities/password');
+const CourseAdmin = require('../models/courseAdmin.model');
 
 const excludeColums = ['password', 'createdAt', 'updatedAt'];
 
@@ -64,6 +65,16 @@ class UserService {
           where: { userId: user.dataValues.id },
         });
         if (!departmentAdmin) {
+          data.push(user);
+        }
+      }
+    }
+    if (role === 'COURSE_ADMIN') {
+      for (const user of users) {
+        const courseAdmin = await CourseAdmin.findOne({
+          where: { userId: user.dataValues.id },
+        });
+        if (!courseAdmin) {
           data.push(user);
         }
       }

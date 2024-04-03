@@ -11,6 +11,8 @@ const allowedRoles = require('../middlewares/checkRole');
 const roles = require('../helpers/roles');
 
 /** Get */
+router.get('/role', verify, allowedRoles([roles.ROOT_ADMIN]), courseAdminController.getAllWithRole);
+
 router.get(
   '/:id',
   verify,

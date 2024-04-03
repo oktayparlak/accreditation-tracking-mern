@@ -57,4 +57,7 @@ module.exports = () => {
 
   Course.belongsTo(Department, { foreignKey: 'departmentId' });
   Department.hasMany(Course, { foreignKey: 'departmentId' });
+
+  LearningMaterial.belongsTo(Course, { foreignKey: 'courseId' });
+  Course.hasMany(LearningMaterial, { foreignKey: 'courseId' });
 };

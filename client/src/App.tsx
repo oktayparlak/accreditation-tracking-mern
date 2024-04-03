@@ -10,6 +10,10 @@ import SetFacultyAdmin from './pages/rootAdmin/SetFacultyAdmin';
 import AuthGuard from './utils/components/AuthGuard';
 import SetDepartmentAdmin from './pages/facultyAdmin/SetDepartmentAdmin';
 import Courses from './pages/departmentAdmin/Courses';
+import SetCourseAdmin from './pages/departmentAdmin/SetCourseAdmin';
+import LearningMaterials from './pages/courseAdmin/LearningMaterials';
+import MeasuringTools from './pages/courseAdmin/MeasuringTools';
+import SetCourseSupervisor from './pages/courseAdmin/SetCourseSupervisor';
 
 const App = () => {
   return (
@@ -77,6 +81,38 @@ const App = () => {
           element={
             <AuthGuard>
               <Courses />
+            </AuthGuard>
+          }
+        />
+        <Route
+          path="/set-course-admin"
+          element={
+            <AuthGuard>
+              <SetCourseAdmin />
+            </AuthGuard>
+          }
+        />
+        <Route
+          path="/learning-materials"
+          element={
+            <AuthGuard>
+              <LearningMaterials />
+            </AuthGuard>
+          }
+        />
+        <Route
+          path="/measuring-tools"
+          element={
+            <AuthGuard>
+              <MeasuringTools />
+            </AuthGuard>
+          }
+        />
+        <Route
+          path="/set-course-supervisor"
+          element={
+            <AuthGuard>
+              <SetCourseSupervisor />
             </AuthGuard>
           }
         />

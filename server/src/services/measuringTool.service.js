@@ -1,10 +1,11 @@
+const Course = require('../models/course.model');
 const MeasuringTool = require('../models/measuringTool.model');
 
 const excludeColums = ['createdAt', 'updatedAt'];
 
 class MeasuringToolService {
   async createMeasuringTool(data) {
-    const measuringTool = MeasuringTool.build(data);
+    const measuringTool = MeasuringTool.build(data, { include: [Course] });
     await measuringTool.save();
     excludeColums.forEach((column) => {
       measuringTool[column] = undefined;

@@ -20,11 +20,20 @@ exports.getAll = async (req, res, next) => {
   }
 };
 
+exports.getAllWithRole = async (req, res, next) => {
+  try {
+    const courseAdmins = await CourseAdminService.findAllCourseAdminsWithRole();
+    if (!courseAdmins || courseAdmins.length === 0)
+      return res.status(404).json({ error: { message: 'Course Admins not found' } });
+    return res.status(200).json(courseAdmins);
+  } catch (error) {
+    next(error);
+  }
+};
+
 exports.getById = async (req, res, next) => {
   try {
-    const courseAdmin = await CourseAdminService.findCourseAdminById(
-      req.params.id
-    );
+    const courseAdmin = await CourseAdminService.findCourseAdminById(req.params.id);
     if (!courseAdmin) {
       return res.status(404).json({
         error: { message: 'CourseAdmin not found' },
@@ -38,9 +47,7 @@ exports.getById = async (req, res, next) => {
 
 exports.getByUserId = async (req, res, next) => {
   try {
-    const courseAdmin = await CourseAdminService.findCourseAdminsByUserId(
-      req.params.userId
-    );
+    const courseAdmin = await CourseAdminService.findCourseAdminsByUserId(req.params.userId);
     if (!courseAdmin) {
       return res.status(404).json({
         error: { message: 'CourseAdmin not found' },
@@ -54,9 +61,7 @@ exports.getByUserId = async (req, res, next) => {
 
 exports.getByCourseId = async (req, res, next) => {
   try {
-    const courseAdmins = await CourseAdminService.findCourseAdminsByCourseId(
-      req.params.courseId
-    );
+    const courseAdmins = await CourseAdminService.findCourseAdminsByCourseId(req.params.courseId);
     if (!courseAdmins) {
       return res.status(404).json({
         error: { message: 'CourseAdmin not found' },
@@ -72,4 +77,12 @@ exports.getByCourseId = async (req, res, next) => {
 exports.update = async (req, res, next) => {};
 
 /** Delete */
-exports.delete = async (req, res, next) => {};
+exports.delete = async (req, res, next) => {
+  try {
+    const courseAdmin = CourseAdminService.deleteCourseAdmin(req.params.id);
+    if (!courseAdmin) throw new AppError(401, 'Error! Course Admin not deleted');
+    return res.status(200).json(courseAdmin);
+  } catch (error) {
+    next(error);
+  }
+};

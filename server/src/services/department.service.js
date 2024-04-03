@@ -30,7 +30,7 @@ class DepartmentService {
   }
 
   async updateDepartment(id, data) {
-    const department = await Department.update({ where: { id } }, data);
+    const department = await Department.update(data, { where: { id } });
     excludeColums.map((column) => {
       department[column] = undefined;
     });

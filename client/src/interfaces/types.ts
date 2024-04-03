@@ -61,3 +61,21 @@ export interface CourseAdmin {
   User: User;
   Course: Course;
 }
+
+// export interface CourseSupervisor {
+//   id: string;
+//   User: User;
+//   Course: Course;
+// }
+
+export interface LearningMaterial {
+  id: string;
+  Course: Course;
+  number: number;
+  content: string;
+  contributionLevel: number;
+  impactSum?: number;
+  impactTotal?: number;
+  succesRate?: number;
+  succesPoint?: number;
+}

@@ -3,7 +3,10 @@ const LearningMaterialService = require('../services/learningMaterial.service');
 /** Create */
 exports.create = async (req, res, next) => {
   try {
-    const learningMaterial = await LearningMaterialService.createLearningMaterial(req.body);
+    const learningMaterial = await LearningMaterialService.createLearningMaterial({
+      ...req.body,
+      userId: req.user.id,
+    });
     res.status(201).json(learningMaterial);
   } catch (error) {
     next(error);
@@ -28,6 +31,17 @@ exports.getById = async (req, res, next) => {
     if (!learningMaterial)
       return res.status(404).json({ error: { message: 'Learning material not found' } });
     return res.status(200).json(learningMaterial);
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.getMyLearningMaterials = async (req, res, next) => {
+  try {
+    const learningMaterials = await LearningMaterialService.findMyLearningMaterials(req.user.id);
+    if (!learningMaterials || learningMaterials.length === 0)
+      return res.status(404).json({ error: { message: 'Learning materials not found' } });
+    return res.status(200).json(learningMaterials);
   } catch (error) {
     next(error);
   }

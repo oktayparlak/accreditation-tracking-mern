@@ -16,6 +16,11 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  NumberDecrementStepper,
+  NumberIncrementStepper,
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
   Select,
   useDisclosure,
   useToast,
@@ -23,7 +28,7 @@ import {
 import React, { useState } from 'react';
 import apiClient from '../services/api-client';
 import { FieldValues, useForm } from 'react-hook-form';
-import { Department, Faculty } from '../interfaces/types';
+import { Course, Department, Faculty } from '../interfaces/types';
 
 interface FeaturesMenuProps {
   dataId: string;
@@ -31,13 +36,13 @@ interface FeaturesMenuProps {
   setReset: React.Dispatch<React.SetStateAction<any>>;
 }
 
-const CourseFeaturesMenu = ({
+const LearningMaterialFeaturesMenu = ({
   dataId,
   dataUrl,
   setReset,
 }: FeaturesMenuProps) => {
   const toast = useToast();
-  const [departments, setDepartments] = useState<Department[]>([]);
+  const [courses, setCourses] = useState<Course[]>([]);
 
   const { register, handleSubmit, setValue } = useForm();
 
@@ -99,12 +104,9 @@ const CourseFeaturesMenu = ({
     apiClient
       .get(`${dataUrl}/${dataId}`)
       .then((response) => {
-        setValue('departmentId', response.data.departmentId);
-        setValue('code', response.data.code);
-        setValue('name', response.data.name);
-        setValue('credit', response.data.credit);
-        setValue('ects', response.data.ects);
-        setValue('compulsory', response.data.compulsory);
+        setValue('number', response.data.number);
+        setValue('content', response.data.content);
+        setValue('contributionLevel', response.data.contributionLevel);
       })
       .catch((error) => {
         toast({
@@ -117,9 +119,9 @@ const CourseFeaturesMenu = ({
         });
       });
     apiClient
-      .get('/departments')
+      .get('/courses')
       .then((response) => {
-        setDepartments(response.data);
+        setCourses(response.data);
       })
       .catch((error) => {
         toast({
@@ -173,38 +175,33 @@ const CourseFeaturesMenu = ({
             <ModalCloseButton />
             <ModalBody pb={6}>
               <Box>
-                <FormControl id="departmentId" mb={3}>
-                  <FormLabel>Bölüm</FormLabel>
-                  <Select {...register('departmentId')} bg={'white'}>
-                    {departments.map((department: Department) => (
-                      <option key={department.id} value={department.id}>
-                        {department.name}
+                <FormControl id="courseId" mb={3}>
+                  <FormLabel>Ders</FormLabel>
+                  <Select isDisabled bg={'white'}>
+                    {courses.map((course: Course) => (
+                      <option key={course.id} value={course.id}>
+                        {course.name}
                       </option>
                     ))}
                   </Select>
                 </FormControl>
-                <FormControl id="code" mb={3}>
-                  <FormLabel>Kod</FormLabel>
-                  <Input {...register('code')} bg={'white'} type="text" />
+                <FormControl id="number" mb={3} isRequired>
+                  <FormLabel>Numara</FormLabel>
+                  <Input {...register('number')} type="number" bg={'white'} />
                 </FormControl>
-                <FormControl id="name" mb={3}>
-                  <FormLabel>Ad</FormLabel>
-                  <Input {...register('name')} bg={'white'} type="text" />
+                <FormControl id="content" mb={3} isRequired>
+                  <FormLabel>İçerik</FormLabel>
+                  <Input {...register('content')} type="text" bg={'white'} />
                 </FormControl>
-                <FormControl id="credit" mb={3}>
-                  <FormLabel>Kredi</FormLabel>
-                  <Input {...register('credit')} bg={'white'} type="number" />
-                </FormControl>
-                <FormControl id="ects" mb={3}>
-                  <FormLabel>AKTS</FormLabel>
-                  <Input {...register('ects')} bg={'white'} type="number" />
-                </FormControl>
-                <FormControl id="compulsory" mb={3}>
-                  <FormLabel>Zorunlu</FormLabel>
-                  <Select {...register('compulsory')} bg={'white'}>
-                    <option value="true">Evet</option>
-                    <option value="false">Hayır</option>
-                  </Select>
+                <FormControl id="contributionLevel" mb={3} isRequired>
+                  <FormLabel>Katkı Düzeyi</FormLabel>
+                  <NumberInput defaultValue={1} min={1} max={5} bg={'white'}>
+                    <NumberInputField {...register('contributionLevel')} />
+                    <NumberInputStepper>
+                      <NumberIncrementStepper />
+                      <NumberDecrementStepper />
+                    </NumberInputStepper>
+                  </NumberInput>
                 </FormControl>
               </Box>
             </ModalBody>
@@ -221,4 +218,4 @@ const CourseFeaturesMenu = ({
   );
 };
 
-export default CourseFeaturesMenu;
+export default LearningMaterialFeaturesMenu;

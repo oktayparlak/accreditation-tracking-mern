@@ -29,7 +29,7 @@ class CourseService {
   }
 
   async updateCourse(id, data) {
-    const course = await Course.update({ where: { id } }, data);
+    const course = await Course.update(data, { where: { id } });
     excludeColums.forEach((column) => {
       course[column] = undefined;
     });

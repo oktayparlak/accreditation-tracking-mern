@@ -102,16 +102,16 @@ const RootAdminMenu: React.FC = () => {
             <MenuItem
               as={'a'}
               cursor={'pointer'}
-              onClick={() => navigate('/users')}
+              onClick={() => navigate('/set-course-admin')}
             >
               Ders Yöneticisi Belirle
             </MenuItem>
           </MenuList>
         </Menu>
-        {/* Öğrenim Materyali */}
+        {/* Öğrenim Çıktısı */}
         <Menu isLazy>
           <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
-            Öğrenim Materyali
+            Öğrenim Çıktısı
           </MenuButton>
           <MenuList>
             <MenuItem
@@ -119,12 +119,12 @@ const RootAdminMenu: React.FC = () => {
               cursor={'pointer'}
               onClick={() => navigate('/learning-materials')}
             >
-              Öğrenim Materyali Oluştur
+              Öğrenim Çıktısı Oluştur
             </MenuItem>
             <MenuItem
               as={'a'}
               cursor={'pointer'}
-              onClick={() => navigate('/learning-materials')}
+              onClick={() => navigate('/set-course-supervisor')}
             >
               Ders Sorumlusu Belirle
             </MenuItem>
@@ -141,7 +141,7 @@ const RootAdminMenu: React.FC = () => {
               cursor={'pointer'}
               onClick={() => navigate('/measuring-tools')}
             >
-              Ölçme Aracı Oluştur
+              Ölçme Araçları
             </MenuItem>
           </MenuList>
         </Menu>
@@ -151,6 +151,13 @@ const RootAdminMenu: React.FC = () => {
             Başvuru
           </MenuButton>
           <MenuList>
+            <MenuItem
+              as={'a'}
+              cursor={'pointer'}
+              onClick={() => navigate('/measuring-tools')}
+            >
+              Başvurular
+            </MenuItem>
             <MenuItem
               as={'a'}
               cursor={'pointer'}
@@ -218,7 +225,7 @@ const DepartmentAdminMenu: React.FC = () => {
             <MenuItem
               as={'a'}
               cursor={'pointer'}
-              onClick={() => navigate('/users')}
+              onClick={() => navigate('/set-course-admin')}
             >
               Bölüm Başkanı Belirle
             </MenuItem>
@@ -256,10 +263,10 @@ const CourseAdminMenu: React.FC = () => {
             </MenuItem>
           </MenuList>
         </Menu>
-        {/* Öğrenim Materyali */}
+        {/* Öğrenim Çıktısı */}
         <Menu isLazy>
           <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
-            Öğrenim Materyali
+            Öğrenim Çıktısı
           </MenuButton>
           <MenuList>
             <MenuItem
@@ -267,12 +274,12 @@ const CourseAdminMenu: React.FC = () => {
               cursor={'pointer'}
               onClick={() => navigate('/learning-materials')}
             >
-              Öğrenim Materyali Oluştur
+              Öğrenim Çıktısı Oluştur
             </MenuItem>
             <MenuItem
               as={'a'}
               cursor={'pointer'}
-              onClick={() => navigate('/learning-materials')}
+              onClick={() => navigate('/set-course-supervisor')}
             >
               Ders Sorumlusu Belirle
             </MenuItem>
@@ -289,7 +296,7 @@ const CourseAdminMenu: React.FC = () => {
               cursor={'pointer'}
               onClick={() => navigate('/measuring-tools')}
             >
-              Ölçme Aracı Oluştur
+              Ölçme Araçları
             </MenuItem>
           </MenuList>
         </Menu>
@@ -309,6 +316,13 @@ const CourseSupervisorMenu: React.FC = () => {
             Başvuru
           </MenuButton>
           <MenuList>
+            <MenuItem
+              as={'a'}
+              cursor={'pointer'}
+              onClick={() => navigate('/measuring-tools')}
+            >
+              Başvurular
+            </MenuItem>
             <MenuItem
               as={'a'}
               cursor={'pointer'}

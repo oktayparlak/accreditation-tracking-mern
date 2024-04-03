@@ -13,6 +13,10 @@ const LearningMaterial = sequelize.define('LearningMaterial', {
     type: DataTypes.UUID,
     allowNull: false,
   },
+  courseId: {
+    type: DataTypes.UUID,
+    allowNull: false,
+  },
   number: {
     type: DataTypes.INTEGER,
     allowNull: false,

@@ -62,7 +62,7 @@ const columns = [
   },
 ];
 
-const Courses: React.FC = () => {
+const MeasuringTools: React.FC = () => {
   const toast = useToast();
   const { register, handleSubmit } = useForm();
 
@@ -283,4 +283,4 @@ const Courses: React.FC = () => {
   );
 };
 
-export default Courses;
+export default MeasuringTools;

@@ -15,8 +15,14 @@ router.get(
   '/',
   verify,
   allowedRoles([roles.ROOT_ADMIN, roles.FACULTY_ADMIN, roles.DEPARTMENT_ADMIN, roles.COURSE_ADMIN]),
-  validate(learningMaterialSchema.create),
   learningMaterialController.getAll
+);
+
+router.get(
+  '/my',
+  verify,
+  allowedRoles([roles.ROOT_ADMIN, roles.FACULTY_ADMIN, roles.DEPARTMENT_ADMIN, roles.COURSE_ADMIN]),
+  learningMaterialController.getMyLearningMaterials
 );
 
 router.get(

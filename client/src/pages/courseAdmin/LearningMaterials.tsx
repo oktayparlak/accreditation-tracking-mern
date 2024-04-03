@@ -10,50 +10,48 @@ import {
   FormLabel,
   Heading,
   Input,
+  NumberDecrementStepper,
+  NumberIncrementStepper,
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
   Select,
   VStack,
   useToast,
 } from '@chakra-ui/react';
 import { FieldValues, useForm } from 'react-hook-form';
 import apiClient from '../../services/api-client';
-import CourseFeaturesMenu from '../../components/CourseFeaturesMenu';
-import { Course, Department } from '../../interfaces/types';
+import { Course, LearningMaterial } from '../../interfaces/types';
+import LearningMaterialFeaturesMenu from '../../components/LearningMaterialFeaturesMenu';
 
 interface DataSource {
   key: string;
-  Department: string;
-  name: string;
-  credit: number;
-  ects: number;
-  compulsory: boolean;
-  inc: React.ReactNode;
+  courseId: string;
+  number: number;
+  content: string;
+  contributionLevel: number;
 }
 
 const columns = [
   {
-    title: 'Bölüm Adı',
-    dataIndex: 'Department',
-    key: 'Department',
-  },
-  {
     title: 'Ders Adı',
-    dataIndex: 'name',
-    key: 'name',
+    dataIndex: 'Course',
+    key: 'Course',
   },
   {
-    title: 'Kredi',
-    dataIndex: 'credit',
-    key: 'credit',
+    title: 'Numara',
+    dataIndex: 'number',
+    key: 'number',
   },
   {
-    title: 'AKTS',
-    dataIndex: 'ects',
-    key: 'ects',
+    title: 'İçerik',
+    dataIndex: 'content',
+    key: 'content',
   },
   {
-    title: 'Zorunluluk',
-    dataIndex: 'compulsory',
-    key: 'compulsory',
+    title: 'Katkı Düzeyi',
+    dataIndex: 'contributionLevel',
+    key: 'contributionLevel',
   },
   {
     title: 'İncele',
@@ -62,12 +60,12 @@ const columns = [
   },
 ];
 
-const Courses: React.FC = () => {
+const LearningMaterials: React.FC = () => {
   const toast = useToast();
   const { register, handleSubmit } = useForm();
 
-  const [courses, setCourses] = useState<DataSource[]>([]);
-  const [departments, setDepartments] = useState<Department[]>([]);
+  const [learningMaterials, setLearningMaterials] = useState<DataSource[]>([]);
+  const [courses, setCourses] = useState<Course[]>([]);
   const [loading, setLoading] = useState(false);
   const [tableLoading, setTableLoading] = useState(false);
   const [reset, setReset] = useState({});
@@ -75,9 +73,9 @@ const Courses: React.FC = () => {
   /* For Form Selection */
   useEffect(() => {
     apiClient
-      .get('/departments')
+      .get('/courses')
       .then((response) => {
-        setDepartments(response.data);
+        setCourses(response.data);
       })
       .catch((error) => {
         toast({
@@ -93,31 +91,32 @@ const Courses: React.FC = () => {
       });
   }, []);
 
-  /** Courses */
+  /** Learning Materials */
   useEffect(() => {
     setTableLoading(true);
     apiClient
-      .get('/courses')
+      .get('/learning-materials/my')
       .then((response) => {
         if (response.status === 200) {
-          const data: DataSource[] = response.data.map((course: Course) => {
-            return {
-              key: course.id,
-              Department: course.Department.name,
-              name: course.name,
-              credit: course.credit,
-              ects: course.ects,
-              compulsory: course.compulsory ? 'Evet' : 'Hayır',
-              inc: (
-                <CourseFeaturesMenu
-                  dataId={course.id}
-                  dataUrl="/courses"
-                  setReset={setReset}
-                />
-              ),
-            };
-          });
-          setCourses(data);
+          const data: DataSource[] = response.data.map(
+            (learningMaterial: LearningMaterial) => {
+              return {
+                key: learningMaterial.id,
+                Course: learningMaterial.Course.name,
+                number: learningMaterial.number,
+                content: learningMaterial.content,
+                contributionLevel: learningMaterial.contributionLevel,
+                inc: (
+                  <LearningMaterialFeaturesMenu
+                    dataId={learningMaterial.id}
+                    dataUrl="/learning-materials"
+                    setReset={setReset}
+                  />
+                ),
+              };
+            }
+          );
+          setLearningMaterials(data);
         } else {
           toast({
             position: 'bottom-right',
@@ -147,28 +146,28 @@ const Courses: React.FC = () => {
   const onSubmit = (data: FieldValues) => {
     setLoading(true);
     apiClient
-      .post('/courses', data)
+      .post('/learning-materials', data)
       .then((response) => {
         if (response.status === 201) {
           toast({
             position: 'bottom-left',
             status: 'success',
-            title: `Ders başarıyla oluşturuldu.`,
+            title: `Öğrenim Çıktısı oluşturuldu.`,
             duration: 1500,
           });
-          setCourses([
+          setLearningMaterials([
             {
               ...response.data,
-              Department: response.data.Faculty.name,
+              Course: response.data.Course.name,
               inc: (
-                <CourseFeaturesMenu
+                <LearningMaterialFeaturesMenu
                   dataId={response.data.id}
-                  dataUrl="/departments"
+                  dataUrl="/learning-materials"
                   setReset={setReset}
                 />
               ),
             },
-            ...courses,
+            ...learningMaterials,
           ]);
         } else {
           toast({
@@ -202,43 +201,38 @@ const Courses: React.FC = () => {
         <Box flex={1} bg={'gray.100'} borderRadius={5} margin={4} padding={4}>
           <VStack>
             <Center>
-              <Heading size="lg" mb={4}>
-                Ders Oluştur
+              <Heading fontSize={26} textAlign={'center'} mb={4}>
+                Öğrenim Çıktısı Oluştur
               </Heading>
             </Center>
             <form onSubmit={handleSubmit(onSubmit)}>
-              <FormControl id="departmentId" mb={3} isRequired>
-                <FormLabel>Bölüm</FormLabel>
-                <Select {...register('departmentId')} bg={'white'}>
-                  {departments.map((department: Department) => (
-                    <option key={department.id} value={department.id}>
-                      {department.name}
+              <FormControl id="courseId" mb={3} isRequired>
+                <FormLabel>Ders</FormLabel>
+                <Select {...register('courseId')} bg={'white'}>
+                  {courses.map((courses: Course) => (
+                    <option key={courses.id} value={courses.id}>
+                      {courses.name}
                     </option>
                   ))}
                 </Select>
               </FormControl>
-              <FormControl id="code" mb={3} isRequired>
-                <FormLabel>Kod</FormLabel>
-                <Input {...register('code')} bg={'white'} type="text" />
+              <FormControl id="number" mb={3} isRequired>
+                <FormLabel>Numara</FormLabel>
+                <Input {...register('number')} type="number" bg={'white'} />
               </FormControl>
-              <FormControl id="name" mb={3} isRequired>
-                <FormLabel>Ad</FormLabel>
-                <Input {...register('name')} bg={'white'} type="text" />
+              <FormControl id="content" mb={3} isRequired>
+                <FormLabel>İçerik</FormLabel>
+                <Input {...register('content')} type="text" bg={'white'} />
               </FormControl>
-              <FormControl id="credit" mb={3} isRequired>
-                <FormLabel>Kredi</FormLabel>
-                <Input {...register('credit')} bg={'white'} type="number" />
-              </FormControl>
-              <FormControl id="ects" mb={3} isRequired>
-                <FormLabel>AKTS</FormLabel>
-                <Input {...register('ects')} bg={'white'} type="number" />
-              </FormControl>
-              <FormControl id="compulsory" mb={3} isRequired>
-                <FormLabel>Zorunlu</FormLabel>
-                <Select {...register('compulsory')} bg={'white'}>
-                  <option value="true">Evet</option>
-                  <option value="false">Hayır</option>
-                </Select>
+              <FormControl id="contributionLevel" mb={3} isRequired>
+                <FormLabel>Katkı Düzeyi</FormLabel>
+                <NumberInput defaultValue={1} min={1} max={5} bg={'white'}>
+                  <NumberInputField {...register('contributionLevel')} />
+                  <NumberInputStepper>
+                    <NumberIncrementStepper />
+                    <NumberDecrementStepper />
+                  </NumberInputStepper>
+                </NumberInput>
               </FormControl>
               <Flex justifyContent={'center'}>
                 <Button
@@ -268,12 +262,12 @@ const Courses: React.FC = () => {
           <Box>
             <Center>
               <Heading size={'lg'} mb={4}>
-                Dersler
+                Öğrenme Çıktıları
               </Heading>
             </Center>
             <AntTable
               loading={tableLoading}
-              dataSource={courses}
+              dataSource={learningMaterials}
               columns={columns}
             ></AntTable>
           </Box>
@@ -283,4 +277,4 @@ const Courses: React.FC = () => {
   );
 };
 
-export default Courses;
+export default LearningMaterials;

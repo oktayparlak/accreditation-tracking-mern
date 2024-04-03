@@ -61,9 +61,34 @@ class CourseAdminService {
     });
   }
 
+  async findAllCourseAdminsWithRole() {
+    const courseAdmins = await CourseAdmin.findAll({
+      include: [
+        {
+          model: User,
+          attributes: { exclude: excludeColums },
+          where: { role: 'COURSE_ADMIN' },
+        },
+        {
+          model: Course,
+          attributes: { exclude: excludeColums },
+        },
+      ],
+    });
+    return courseAdmins;
+  }
+
   async updateCourseAdmin(id, userId, courseId) {}
 
-  async deleteCourseAdmin(id) {}
+  async deleteCourseAdmin(id) {
+    await CourseAdmin.destroy({ where: { id } })
+      .then(() => {
+        return true;
+      })
+      .catch(() => {
+        return false;
+      });
+  }
 }
 
 module.exports = new CourseAdminService();

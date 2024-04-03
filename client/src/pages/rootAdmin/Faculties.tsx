@@ -44,7 +44,7 @@ const Faculties: React.FC = () => {
   const [faculties, setFaculties] = useState<DataSource[]>([]);
   const [loading, setLoading] = useState(false);
   const [tableLoading, setTableLoading] = useState(false);
-  const [reset, setReset] = useState({});
+  const [reset, setReset] = useState(false);
 
   useEffect(() => {
     setTableLoading(true);

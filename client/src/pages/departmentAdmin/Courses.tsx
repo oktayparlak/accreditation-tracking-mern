@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Table as AntTable } from 'antd';
 import Navbar from '../../components/Navbar';
 import {
@@ -16,38 +16,25 @@ import {
 } from '@chakra-ui/react';
 import { FieldValues, useForm } from 'react-hook-form';
 import apiClient from '../../services/api-client';
-import UserFeaturesMenu from '../../components/UserFeaturesMenu';
-import { roles, User } from '../../interfaces/types';
+import DepartmentFeaturesMenu from '../../components/DepartmentFeaturesMenu';
+import { Department, Faculty } from '../../interfaces/types';
 
 interface DataSource {
   key: string;
-  role: string;
-  firstName: string;
-  lastName: string;
-  username: string;
+  name: string;
   inc: React.ReactNode;
 }
 
 const columns = [
   {
-    title: 'Rol',
-    dataIndex: 'role',
-    key: 'role',
+    title: 'Fakülte Adı',
+    dataIndex: 'Faculty',
+    key: 'Faculty',
   },
   {
-    title: 'Ad',
-    dataIndex: 'firstName',
-    key: 'firstName',
-  },
-  {
-    title: 'Soyad',
-    dataIndex: 'lastName',
-    key: 'lastName',
-  },
-  {
-    title: 'Kullanıcı Adı',
-    dataIndex: 'username',
-    key: 'username',
+    title: 'Bölüm Adı',
+    dataIndex: 'name',
+    key: 'name',
   },
   {
     title: 'İncele',
@@ -56,38 +43,59 @@ const columns = [
   },
 ];
 
-const Users: React.FC = () => {
+const Courses: React.FC = () => {
   const toast = useToast();
   const { register, handleSubmit } = useForm();
 
-  const [users, setUsers] = useState<DataSource[]>([]);
+  const [departments, setDepartments] = useState<DataSource[]>([]);
+  const [faculties, setFaculties] = useState<Faculty[]>([]);
   const [loading, setLoading] = useState(false);
   const [tableLoading, setTableLoading] = useState(false);
   const [reset, setReset] = useState({});
 
   useEffect(() => {
+    apiClient
+      .get('/faculties')
+      .then((response) => {
+        setFaculties(response.data);
+      })
+      .catch((error) => {
+        toast({
+          position: 'bottom-right',
+          status: 'error',
+          title: `${
+            error.response
+              ? error.response.data?.error?.message
+              : 'Sunucu Hatası'
+          }`,
+          duration: 1500,
+        });
+      });
+  }, []);
+
+  useEffect(() => {
     setTableLoading(true);
     apiClient
-      .get('/users/')
+      .get('/departments')
       .then((response) => {
         if (response.status === 200) {
-          const data: DataSource[] = response.data.map((user: User) => {
-            return {
-              key: user.id,
-              role: roles[`${user.role}`] || '-',
-              firstName: user.firstName,
-              lastName: user.lastName,
-              username: user.username,
-              inc: (
-                <UserFeaturesMenu
-                  dataId={user.id}
-                  dataUrl="/users"
-                  setReset={setReset}
-                />
-              ),
-            };
-          });
-          setUsers(data);
+          const data: DataSource[] = response.data.map(
+            (department: Department) => {
+              return {
+                key: department.id,
+                name: department.name,
+                Faculty: department.Faculty.name,
+                inc: (
+                  <DepartmentFeaturesMenu
+                    dataId={department.id}
+                    dataUrl="/departments"
+                    setReset={setReset}
+                  />
+                ),
+              };
+            }
+          );
+          setDepartments(data);
         } else {
           toast({
             position: 'bottom-right',
@@ -102,7 +110,9 @@ const Users: React.FC = () => {
           position: 'bottom-right',
           status: 'error',
           title: `${
-            error.response ? error.response.data.error.message : 'Sunucu Hatası'
+            error.response
+              ? error.response.data?.error.message
+              : 'Sunucu Hatası'
           }`,
           duration: 1500,
         });
@@ -115,28 +125,28 @@ const Users: React.FC = () => {
   const onSubmit = (data: FieldValues) => {
     setLoading(true);
     apiClient
-      .post('/users/', data)
+      .post('/departments', data)
       .then((response) => {
         if (response.status === 201) {
           toast({
             position: 'bottom-left',
             status: 'success',
-            title: `Kullanıcı başarıyla oluşturuldu.`,
+            title: `Bölüm başarıyla oluşturuldu.`,
             duration: 1500,
           });
-          setUsers([
+          setDepartments([
             {
               ...response.data,
+              Faculty: response.data.Faculty.name,
               inc: (
-                <UserFeaturesMenu
+                <DepartmentFeaturesMenu
                   dataId={response.data.id}
-                  dataUrl="/users"
+                  dataUrl="/departments"
                   setReset={setReset}
                 />
               ),
-              role: roles[`${response.data.role}`] || '-',
             },
-            ...users,
+            ...departments,
           ]);
         } else {
           toast({
@@ -152,7 +162,9 @@ const Users: React.FC = () => {
           position: 'bottom-left',
           status: 'error',
           title: `${
-            error.response ? error.response.data.error.message : 'Sunucu Hatası'
+            error.response
+              ? error.response.data?.error.message
+              : 'Sunucu Hatası'
           }`,
           duration: 1500,
         });
@@ -169,39 +181,23 @@ const Users: React.FC = () => {
           <VStack>
             <Center>
               <Heading size="lg" mb={4}>
-                Kullanıcı Oluştur
+                Bölüm Oluştur
               </Heading>
             </Center>
             <form onSubmit={handleSubmit(onSubmit)}>
-              <FormControl id="role" mb={3} isRequired>
-                <FormLabel>Rol</FormLabel>
-                <Select
-                  {...register('role')}
-                  bg={'white'}
-                  placeholder="Seçiniz"
-                >
-                  <option value="FACULTY_ADMIN">Fakülte Yöneticisi</option>
-                  <option value="DEPARTMENT_ADMIN">Bölüm Yöneticisi</option>
-                  <option value="COURSE_ADMIN">Ders Yöneticisi</option>
-                  <option value="COURSE_SUPERVISOR">Ders Sorumlusu</option>
-                  <option value="">-</option>
+              <FormControl id="facultyId" mb={3} isRequired>
+                <FormLabel>Fakülte</FormLabel>
+                <Select {...register('facultyId')} bg={'white'}>
+                  {faculties.map((faculty: Faculty) => (
+                    <option key={faculty.id} value={faculty.id}>
+                      {faculty.name}
+                    </option>
+                  ))}
                 </Select>
               </FormControl>
-              <FormControl id="firstName" mb={3} isRequired>
+              <FormControl id="name" mb={3} isRequired>
                 <FormLabel>Ad</FormLabel>
-                <Input {...register('firstName')} bg={'white'} type="text" />
-              </FormControl>
-              <FormControl id="lastName" mb={3} isRequired>
-                <FormLabel>Soyad</FormLabel>
-                <Input {...register('lastName')} bg={'white'} type="text" />
-              </FormControl>
-              <FormControl id="username" mb={3} isRequired>
-                <FormLabel>Kullanıcı Adı</FormLabel>
-                <Input {...register('username')} bg={'white'} type="text" />
-              </FormControl>
-              <FormControl id="password" mb={3} isRequired>
-                <FormLabel>Şifre</FormLabel>
-                <Input {...register('password')} bg={'white'} type="password" />
+                <Input {...register('name')} bg={'white'} type="text" />
               </FormControl>
               <Flex justifyContent={'center'}>
                 <Button
@@ -231,12 +227,12 @@ const Users: React.FC = () => {
           <Box>
             <Center>
               <Heading size={'lg'} mb={4}>
-                Kullanıcılar
+                Bölümler
               </Heading>
             </Center>
             <AntTable
               loading={tableLoading}
-              dataSource={users}
+              dataSource={departments}
               columns={columns}
             ></AntTable>
           </Box>
@@ -246,4 +242,4 @@ const Users: React.FC = () => {
   );
 };
 
-export default Users;
+export default Courses;

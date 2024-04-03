@@ -14,7 +14,7 @@ import { Select, Form } from 'antd';
 import { FieldValues, useForm } from 'react-hook-form';
 import { useEffect, useState } from 'react';
 import apiClient from '../../services/api-client';
-import { User } from './Users';
+import { User } from '../../interfaces/types';
 
 const filterOption = (
   input: string,

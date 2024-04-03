@@ -40,3 +40,21 @@ export interface Course {
   Department: Department;
   name: string;
 }
+
+export interface FacultyAdmin {
+  id: string;
+  User: User;
+  Faculty: Faculty;
+}
+
+export interface DepartmentAdmin {
+  id: string;
+  User: User;
+  Department: Department;
+}
+
+export interface CourseAdmin {
+  id: string;
+  User: User;
+  Course: Course;
+}

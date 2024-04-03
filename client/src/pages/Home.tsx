@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import { Center, Heading, VStack, useToast } from '@chakra-ui/react';
+import { getToken } from '../services/localTokenService';
 
 interface User {
   firstName: string;
@@ -10,20 +11,20 @@ interface User {
 }
 
 const Home: React.FC = () => {
-  // const navigate = useNavigate();
-  // const toast = useToast();
-  // useEffect(() => {
-  //   if (localStorage.getItem('token') === null) {
-  //     toast({
-  //       title: 'Giriş Yapmalısınız',
-  //       position: 'top',
-  //       status: 'error',
-  //       duration: 1500,
-  //       isClosable: true,
-  //     });
-  //     navigate('/login');
-  //   }
-  // }, []);
+  const navigate = useNavigate();
+  const toast = useToast();
+  useEffect(() => {
+    if (getToken() === null) {
+      toast({
+        title: 'Giriş Yapmalısınız',
+        position: 'top',
+        status: 'error',
+        duration: 1500,
+        isClosable: true,
+      });
+      navigate('/login');
+    }
+  }, []);
 
   return (
     <>

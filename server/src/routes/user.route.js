@@ -19,6 +19,8 @@ router.get(
   userController.getUsersWithoutRole
 );
 
+router.get('/role', verify, allowedRoles([roles.ROOT_ADMIN]), userController.getUsersWithRole);
+
 router.get(
   '/:id',
   verify,

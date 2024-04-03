@@ -54,7 +54,7 @@ const FacultyFeaturesMenu = ({
           title: `Silme İşlemi Başarılı`,
           duration: 1000,
         });
-        setReset({});
+        setReset((prev: boolean) => !prev);
       })
       .catch((error) => {
         toast({

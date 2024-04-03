@@ -1,4 +1,6 @@
 const User = require('../models/user.model');
+const FacultyAdmin = require('../models/facultyAdmin.model');
+const DepartmentAdmin = require('../models/departmentAdmin.model');
 const AppError = require('../utilities/AppError');
 const { hashPassword } = require('../utilities/password');
 
@@ -43,6 +45,30 @@ class UserService {
       where: { role: '' },
       attributes: { exclude: excludeColums },
     });
+  }
+
+  async findUsersWithRole(role) {
+    let data = [];
+    const users = await User.findAll({ where: { role: role } });
+    if (role === 'FACULTY_ADMIN') {
+      for (const user of users) {
+        const facultyAdmin = await FacultyAdmin.findOne({ where: { userId: user.dataValues.id } });
+        if (!facultyAdmin) {
+          data.push(user);
+        }
+      }
+    }
+    if (role === 'DEPARTMENT_ADMIN') {
+      for (const user of users) {
+        const departmentAdmin = await DepartmentAdmin.findOne({
+          where: { userId: user.dataValues.id },
+        });
+        if (!departmentAdmin) {
+          data.push(user);
+        }
+      }
+    }
+    return data;
   }
 
   async updateUser(id, data) {

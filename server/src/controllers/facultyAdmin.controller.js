@@ -1,5 +1,7 @@
 const FacultyAdminService = require('../services/facultyAdmin.service');
 
+const AppError = require('../utilities/AppError');
+
 /** Create */
 exports.create = async (req, res, next) => {
   try {
@@ -22,11 +24,21 @@ exports.getAll = async (req, res, next) => {
   }
 };
 
+exports.getAllWithRole = async (req, res, next) => {
+  try {
+    const facultyAdmins = await FacultyAdminService.findAllFacultyAdminsWithRole(req.query.role);
+    if (!facultyAdmins || facultyAdmins.length === 0)
+      return res.status(404).json({ error: { message: 'Faculty Admins not found' } });
+    return res.status(200).json(facultyAdmins);
+  } catch (error) {
+    next(error);
+  }
+};
+
 exports.getById = async (req, res, next) => {
   try {
     const facultyAdmin = await FacultyAdminService.findFacultyAdminById(req.params.id);
-    if (!facultyAdmin)
-      return res.status(404).json({ error: { message: 'Faculty Admin not found' } });
+    if (!facultyAdmin) throw new AppError(404, 'Faculty Admin not found');
     return res.status(200).json(facultyAdmin);
   } catch (error) {
     next(error);
@@ -49,8 +61,7 @@ exports.update = async (req, res, next) => {
 exports.delete = (req, res, next) => {
   try {
     const facultyAdmin = FacultyAdminService.deleteFacultyAdmin(req.params.id);
-    if (!facultyAdmin)
-      return res.status(404).json({ error: { message: 'Faculty Admin not found' } });
+    if (!facultyAdmin) throw new AppError(401, 'Error! Faculty Admin not deleted');
     return res.status(200).json(facultyAdmin);
   } catch (error) {
     next(error);

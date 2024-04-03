@@ -43,6 +43,16 @@ exports.getUsersWithoutRole = async (req, res, next) => {
   }
 };
 
+exports.getUsersWithRole = async (req, res, next) => {
+  try {
+    const users = await UserService.findUsersWithRole(req.query.role);
+    if (!users || users.length === 0) throw new AppError('Users not found', 404);
+    return res.status(200).json(users);
+  } catch (error) {
+    next(error);
+  }
+};
+
 /** Update */
 exports.update = async (req, res, next) => {
   try {

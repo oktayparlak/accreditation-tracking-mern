@@ -18,6 +18,7 @@ import { useNavigate } from 'react-router-dom';
 import { FieldValues, useForm } from 'react-hook-form';
 
 import apiClient from '../services/api-client';
+import { setToken } from '../services/localTokenService';
 
 interface ErrorProps {
   message: string;
@@ -41,7 +42,7 @@ const Login: React.FC = () => {
       .post('auths/login', data)
       .then((response) => {
         if (response.status === 200) {
-          localStorage.setItem('token', response.data.token);
+          setToken(response.data.token);
           localStorage.setItem('user', JSON.stringify(response.data.user));
           toast({
             position: 'bottom',
@@ -49,7 +50,8 @@ const Login: React.FC = () => {
             title: `Giriş başarılı. Hoşgeldiniz ${response.data.user.firstName} ${response.data.user.lastName}`,
             duration: 1000,
           });
-          return navigate('/');
+          navigate('/');
+          return;
         }
         toast({
           position: 'top',

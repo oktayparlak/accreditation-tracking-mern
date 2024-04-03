@@ -61,9 +61,34 @@ class DepartmentAdminService {
     });
   }
 
+  async findAllDepartmentAdminsWithRole() {
+    const departmentAdmins = await DepartmentAdmin.findAll({
+      include: [
+        {
+          model: User,
+          attributes: { exclude: excludeColums },
+          where: { role: 'DEPARTMENT_ADMIN' },
+        },
+        {
+          model: Department,
+          attributes: { exclude: excludeColums },
+        },
+      ],
+    });
+    return departmentAdmins;
+  }
+
   async updateDepartmentAdmin(id, userId, departmentId) {}
 
-  async deleteDepartmentAdmin(id) {}
+  async deleteDepartmentAdmin(id) {
+    await DepartmentAdmin.destroy({ where: { id } })
+      .then(() => {
+        return true;
+      })
+      .catch(() => {
+        return false;
+      });
+  }
 }
 
 module.exports = new DepartmentAdminService();

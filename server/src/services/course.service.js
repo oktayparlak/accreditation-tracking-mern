@@ -1,4 +1,5 @@
 const Course = require('../models/course.model');
+const Department = require('../models/department.model');
 
 const excludeColums = ['createdAt', 'updatedAt'];
 
@@ -15,6 +16,7 @@ class CourseService {
   async findCourseById(id) {
     return await Course.findOne({
       where: { id },
+      include: [Department],
       attributes: { exclude: excludeColums },
     });
   }
@@ -22,6 +24,7 @@ class CourseService {
   async findAllCourses() {
     return await Course.findAll({
       attributes: { exclude: excludeColums },
+      include: [Department],
     });
   }
 

@@ -147,7 +147,7 @@ const SetFacultyAdmin = () => {
   useEffect(() => {
     setTableLoading(true);
     apiClient
-      .get('/faculty-admins/role?role=FACULTY_ADMIN')
+      .get('/faculty-admins/role')
       .then((response) => {
         const data: DataSource[] = response.data.map(
           (facultyAdmin: FacultyAdmin) => {

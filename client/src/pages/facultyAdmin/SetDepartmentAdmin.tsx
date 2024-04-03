@@ -147,7 +147,7 @@ const SetDepartmentAdmin = () => {
   useEffect(() => {
     setTableLoading(true);
     apiClient
-      .get('/department-admins/role?role=DEPARTMENT_ADMIN')
+      .get('/department-admins/role')
       .then((response) => {
         const data: DataSource[] = response.data.map(
           (departmentAdmin: DepartmentAdmin) => {

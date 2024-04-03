@@ -39,6 +39,9 @@ export interface Course {
   id: string;
   Department: Department;
   name: string;
+  credit: number;
+  ects: number;
+  compulsory: boolean;
 }
 
 export interface FacultyAdmin {

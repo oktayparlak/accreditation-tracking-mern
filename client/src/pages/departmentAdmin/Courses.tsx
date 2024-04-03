@@ -16,25 +16,44 @@ import {
 } from '@chakra-ui/react';
 import { FieldValues, useForm } from 'react-hook-form';
 import apiClient from '../../services/api-client';
-import DepartmentFeaturesMenu from '../../components/DepartmentFeaturesMenu';
-import { Department, Faculty } from '../../interfaces/types';
+import CourseFeaturesMenu from '../../components/CourseFeaturesMenu';
+import { Course, Department } from '../../interfaces/types';
 
 interface DataSource {
   key: string;
+  Department: string;
   name: string;
+  credit: number;
+  ects: number;
+  compulsory: boolean;
   inc: React.ReactNode;
 }
 
 const columns = [
   {
-    title: 'Fakülte Adı',
-    dataIndex: 'Faculty',
-    key: 'Faculty',
+    title: 'Bölüm Adı',
+    dataIndex: 'Department',
+    key: 'Department',
   },
   {
-    title: 'Bölüm Adı',
+    title: 'Ders Adı',
     dataIndex: 'name',
     key: 'name',
+  },
+  {
+    title: 'Kredi',
+    dataIndex: 'credit',
+    key: 'credit',
+  },
+  {
+    title: 'AKTS',
+    dataIndex: 'ects',
+    key: 'ects',
+  },
+  {
+    title: 'Zorunluluk',
+    dataIndex: 'compulsory',
+    key: 'compulsory',
   },
   {
     title: 'İncele',
@@ -47,17 +66,18 @@ const Courses: React.FC = () => {
   const toast = useToast();
   const { register, handleSubmit } = useForm();
 
-  const [departments, setDepartments] = useState<DataSource[]>([]);
-  const [faculties, setFaculties] = useState<Faculty[]>([]);
+  const [courses, setCourses] = useState<DataSource[]>([]);
+  const [departments, setDepartments] = useState<Department[]>([]);
   const [loading, setLoading] = useState(false);
   const [tableLoading, setTableLoading] = useState(false);
   const [reset, setReset] = useState({});
 
+  /* For Form Selection */
   useEffect(() => {
     apiClient
-      .get('/faculties')
+      .get('/departments')
       .then((response) => {
-        setFaculties(response.data);
+        setDepartments(response.data);
       })
       .catch((error) => {
         toast({
@@ -73,29 +93,33 @@ const Courses: React.FC = () => {
       });
   }, []);
 
+  /** Courses */
   useEffect(() => {
     setTableLoading(true);
     apiClient
-      .get('/departments')
+      .get('/courses')
       .then((response) => {
         if (response.status === 200) {
-          const data: DataSource[] = response.data.map(
-            (department: Department) => {
-              return {
-                key: department.id,
-                name: department.name,
-                Faculty: department.Faculty.name,
-                inc: (
-                  <DepartmentFeaturesMenu
-                    dataId={department.id}
-                    dataUrl="/departments"
-                    setReset={setReset}
-                  />
-                ),
-              };
-            }
-          );
-          setDepartments(data);
+          const data: DataSource[] = response.data.map((course: Course) => {
+            return {
+              key: course.id,
+              Department: course.Department.name,
+              name: course.name,
+              credit: course.credit,
+              ects: course.ects,
+              compulsory: course.compulsory ? 'Evet' : 'Hayır',
+              inc: (
+                <CourseFeaturesMenu
+                  dataId={course.id}
+                  dataUrl="/courses"
+                  setReset={setReset}
+                />
+              ),
+            };
+          });
+          console.log(data);
+
+          setCourses(data);
         } else {
           toast({
             position: 'bottom-right',
@@ -125,28 +149,28 @@ const Courses: React.FC = () => {
   const onSubmit = (data: FieldValues) => {
     setLoading(true);
     apiClient
-      .post('/departments', data)
+      .post('/courses', data)
       .then((response) => {
         if (response.status === 201) {
           toast({
             position: 'bottom-left',
             status: 'success',
-            title: `Bölüm başarıyla oluşturuldu.`,
+            title: `Ders başarıyla oluşturuldu.`,
             duration: 1500,
           });
-          setDepartments([
+          setCourses([
             {
               ...response.data,
-              Faculty: response.data.Faculty.name,
+              Department: response.data.Faculty.name,
               inc: (
-                <DepartmentFeaturesMenu
+                <CourseFeaturesMenu
                   dataId={response.data.id}
                   dataUrl="/departments"
                   setReset={setReset}
                 />
               ),
             },
-            ...departments,
+            ...courses,
           ]);
         } else {
           toast({
@@ -181,23 +205,42 @@ const Courses: React.FC = () => {
           <VStack>
             <Center>
               <Heading size="lg" mb={4}>
-                Bölüm Oluştur
+                Ders Oluştur
               </Heading>
             </Center>
             <form onSubmit={handleSubmit(onSubmit)}>
-              <FormControl id="facultyId" mb={3} isRequired>
-                <FormLabel>Fakülte</FormLabel>
-                <Select {...register('facultyId')} bg={'white'}>
-                  {faculties.map((faculty: Faculty) => (
-                    <option key={faculty.id} value={faculty.id}>
-                      {faculty.name}
+              <FormControl id="departmentId" mb={3} isRequired>
+                <FormLabel>Bölüm</FormLabel>
+                <Select {...register('departmentId')} bg={'white'}>
+                  {departments.map((department: Department) => (
+                    <option key={department.id} value={department.id}>
+                      {department.name}
                     </option>
                   ))}
                 </Select>
               </FormControl>
+              <FormControl id="code" mb={3} isRequired>
+                <FormLabel>Kod</FormLabel>
+                <Input {...register('code')} bg={'white'} type="text" />
+              </FormControl>
               <FormControl id="name" mb={3} isRequired>
                 <FormLabel>Ad</FormLabel>
                 <Input {...register('name')} bg={'white'} type="text" />
+              </FormControl>
+              <FormControl id="credit" mb={3} isRequired>
+                <FormLabel>Kredi</FormLabel>
+                <Input {...register('credit')} bg={'white'} type="number" />
+              </FormControl>
+              <FormControl id="ects" mb={3} isRequired>
+                <FormLabel>AKTS</FormLabel>
+                <Input {...register('ects')} bg={'white'} type="number" />
+              </FormControl>
+              <FormControl id="compulsory" mb={3} isRequired>
+                <FormLabel>Zorunlu</FormLabel>
+                <Select {...register('compulsory')} bg={'white'}>
+                  <option value="true">Evet</option>
+                  <option value="false">Hayır</option>
+                </Select>
               </FormControl>
               <Flex justifyContent={'center'}>
                 <Button
@@ -227,12 +270,12 @@ const Courses: React.FC = () => {
           <Box>
             <Center>
               <Heading size={'lg'} mb={4}>
-                Bölümler
+                Dersler
               </Heading>
             </Center>
             <AntTable
               loading={tableLoading}
-              dataSource={departments}
+              dataSource={courses}
               columns={columns}
             ></AntTable>
           </Box>

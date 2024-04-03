@@ -46,13 +46,13 @@ class FacultyAdminService {
     return facultyAdmins;
   }
 
-  async findAllFacultyAdminsWithRole(role) {
+  async findAllFacultyAdminsWithRole() {
     const facultyAdmins = await FacultyAdmin.findAll({
       include: [
         {
           model: User,
           attributes: { exclude: excludeColums },
-          where: { role },
+          where: { role: 'FACULTY_ADMIN' },
         },
         {
           model: Faculty,

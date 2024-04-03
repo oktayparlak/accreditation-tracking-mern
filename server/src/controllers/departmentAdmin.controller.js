@@ -3,9 +3,7 @@ const DepartmentAdminService = require('../services/departmentAdmin.service');
 /** Create */
 exports.create = async (req, res, next) => {
   try {
-    const departmentAdmin = await DepartmentAdminService.createDepartmentAdmin(
-      req.body
-    );
+    const departmentAdmin = await DepartmentAdminService.createDepartmentAdmin(req.body);
     res.status(201).json(departmentAdmin);
   } catch (error) {
     next(error);
@@ -15,9 +13,19 @@ exports.create = async (req, res, next) => {
 /** Read */
 exports.getAll = async (req, res, next) => {
   try {
-    const departmentAdmins =
-      await DepartmentAdminService.findAllDepartmentAdmins();
+    const departmentAdmins = await DepartmentAdminService.findAllDepartmentAdmins();
     res.status(200).json(departmentAdmins);
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.getAllWithRole = async (req, res, next) => {
+  try {
+    const departmentAdmins = await DepartmentAdminService.findAllDepartmentAdminsWithRole();
+    if (!departmentAdmins || departmentAdmins.length === 0)
+      return res.status(404).json({ error: { message: 'Department Admins not found' } });
+    return res.status(200).json(departmentAdmins);
   } catch (error) {
     next(error);
   }
@@ -25,8 +33,7 @@ exports.getAll = async (req, res, next) => {
 
 exports.getById = async (req, res, next) => {
   try {
-    const departmentAdmin =
-      await DepartmentAdminService.findDepartmentAdminById(req.params.id);
+    const departmentAdmin = await DepartmentAdminService.findDepartmentAdminById(req.params.id);
     if (!departmentAdmin) {
       return res.status(404).json({
         error: { message: 'DepartmentAdmin not found' },
@@ -40,10 +47,9 @@ exports.getById = async (req, res, next) => {
 
 exports.getByUserId = async (req, res, next) => {
   try {
-    const departmentAdmin =
-      await DepartmentAdminService.findDepartmentAdminsByUserId(
-        req.params.userId
-      );
+    const departmentAdmin = await DepartmentAdminService.findDepartmentAdminsByUserId(
+      req.params.userId
+    );
     if (!departmentAdmin) {
       return res.status(404).json({
         error: { message: 'DepartmentAdmin not found' },
@@ -57,10 +63,9 @@ exports.getByUserId = async (req, res, next) => {
 
 exports.getByDepartmentId = async (req, res, next) => {
   try {
-    const departmentAdmins =
-      await DepartmentAdminService.findDepartmentAdminsByDepartmentId(
-        req.params.departmentId
-      );
+    const departmentAdmins = await DepartmentAdminService.findDepartmentAdminsByDepartmentId(
+      req.params.departmentId
+    );
     if (!departmentAdmins) {
       return res.status(404).json({
         error: { message: 'DepartmentAdmin not found' },
@@ -76,4 +81,12 @@ exports.getByDepartmentId = async (req, res, next) => {
 exports.update = async (req, res, next) => {};
 
 /** Delete */
-exports.delete = async (req, res, next) => {};
+exports.delete = async (req, res, next) => {
+  try {
+    const departmentAdmin = DepartmentAdminService.deleteDepartmentAdmin(req.params.id);
+    if (!departmentAdmin) throw new AppError(401, 'Error! Department Admin not deleted');
+    return res.status(200).json(departmentAdmin);
+  } catch (error) {
+    next(error);
+  }
+};

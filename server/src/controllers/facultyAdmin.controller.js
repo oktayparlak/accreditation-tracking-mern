@@ -26,7 +26,7 @@ exports.getAll = async (req, res, next) => {
 
 exports.getAllWithRole = async (req, res, next) => {
   try {
-    const facultyAdmins = await FacultyAdminService.findAllFacultyAdminsWithRole(req.query.role);
+    const facultyAdmins = await FacultyAdminService.findAllFacultyAdminsWithRole();
     if (!facultyAdmins || facultyAdmins.length === 0)
       return res.status(404).json({ error: { message: 'Faculty Admins not found' } });
     return res.status(200).json(facultyAdmins);

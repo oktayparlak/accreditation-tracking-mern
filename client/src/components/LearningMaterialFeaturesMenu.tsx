@@ -28,7 +28,7 @@ import {
 import React, { useState } from 'react';
 import apiClient from '../services/api-client';
 import { FieldValues, useForm } from 'react-hook-form';
-import { Course, Department, Faculty } from '../interfaces/types';
+import { Course } from '../interfaces/types';
 
 interface FeaturesMenuProps {
   dataId: string;

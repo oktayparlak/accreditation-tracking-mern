@@ -9,4 +9,5 @@ module.exports = (app) => {
   app.use('/api/faculties', require('./faculty.route'));
   app.use('/api/faculty-admins', require('./facultyAdmin.route'));
   app.use('/api/measuring-tools', require('./measuringTool.route'));
+  app.use('/api/course-supervisors', require('./courseSupervisor.route'));
 };

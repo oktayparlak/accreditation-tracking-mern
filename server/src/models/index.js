@@ -1,6 +1,7 @@
 const Application = require('./application.model');
 const Course = require('./course.model');
 const CourseAdmin = require('./courseAdmin.model');
+const CourseSupervisor = require('./courseSupervisor.model');
 const Department = require('./department.model');
 const DepartmentAdmin = require('./departmentAdmin.model');
 const Faculty = require('./faculty.model');
@@ -60,4 +61,10 @@ module.exports = () => {
 
   LearningMaterial.belongsTo(Course, { foreignKey: 'courseId' });
   Course.hasMany(LearningMaterial, { foreignKey: 'courseId' });
+
+  CourseSupervisor.belongsTo(User, { foreignKey: 'userId' });
+  User.hasOne(CourseSupervisor, { foreignKey: 'userId' });
+
+  CourseSupervisor.belongsTo(Course, { foreignKey: 'courseId' });
+  Course.hasOne(CourseSupervisor, { foreignKey: 'courseId' });
 };

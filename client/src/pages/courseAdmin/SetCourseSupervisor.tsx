@@ -14,13 +14,7 @@ import { Select, Form, Table as AntTable } from 'antd';
 import { FieldValues, useForm } from 'react-hook-form';
 import React, { useEffect, useState } from 'react';
 import apiClient from '../../services/api-client';
-import {
-  Course,
-  CourseAdmin,
-  Department,
-  DepartmentAdmin,
-  User,
-} from '../../interfaces/types';
+import { Course, CourseSupervisor, User } from '../../interfaces/types';
 
 interface DataSource {
   key: string;
@@ -70,7 +64,7 @@ const SetCourseSupervisor = () => {
 
   const [users, setUsers] = useState<User[]>([]);
   const [courses, setCourses] = useState<Course[]>([]);
-  const [courseAdmins, setCourseAdmins] = useState<DataSource[]>([]);
+  const [courseSupervisors, setCourseSupervisors] = useState<DataSource[]>([]);
 
   const toast = useToast();
   const { handleSubmit, setValue } = useForm();
@@ -85,12 +79,12 @@ const SetCourseSupervisor = () => {
 
   const onSubmit = (data: FieldValues) => {
     apiClient
-      .post('/course-admins', data)
+      .post('/course-supervisors', data)
       .then((response) => {
         toast({
           position: 'bottom-right',
           status: 'success',
-          title: 'Bölüm Başkanı Atandı',
+          title: 'Ders Sorumlusu Atandı',
           duration: 1500,
         });
       })
@@ -106,14 +100,14 @@ const SetCourseSupervisor = () => {
       });
   };
 
-  const deleteCourseAdmin = (id: string) => {
+  const deleteCourseSupervisor = (id: string) => {
     apiClient
-      .delete(`/course-admins/${id}`)
+      .delete(`/course-supervisors/${id}`)
       .then(() => {
         toast({
           position: 'bottom-right',
           status: 'success',
-          title: 'Bölüm Başkanı Silindi',
+          title: 'Ders Sorumlusu Silindi',
           duration: 1500,
         });
         setReset({});
@@ -133,10 +127,8 @@ const SetCourseSupervisor = () => {
   /* Users */
   useEffect(() => {
     apiClient
-      .get('/users/role?role=COURSE_ADMIN')
+      .get('/users/role?role=COURSE_SUPERVISOR')
       .then((response) => {
-        console.log(response.data);
-
         setUsers(response.data);
       })
       .catch((error) => {
@@ -151,25 +143,25 @@ const SetCourseSupervisor = () => {
       });
   }, []);
 
-  /* Course Admins Table */
+  /* Course Supervisor Table */
   useEffect(() => {
     setTableLoading(true);
     apiClient
-      .get('/course-admins/role')
+      .get('/course-supervisors/role')
       .then((response) => {
         const data: DataSource[] = response.data.map(
-          (courseAdmin: CourseAdmin) => {
+          (courseSupervisor: CourseSupervisor) => {
             return {
-              key: courseAdmin.id,
-              username: courseAdmin.User.username,
-              firstName: courseAdmin.User.firstName,
-              lastName: courseAdmin.User.lastName,
-              course: courseAdmin.Course.name,
+              key: courseSupervisor.id,
+              username: courseSupervisor.User.username,
+              firstName: courseSupervisor.User.firstName,
+              lastName: courseSupervisor.User.lastName,
+              course: courseSupervisor.Course.name,
               action: (
                 <Button
                   colorScheme="red"
                   borderRadius={'full'}
-                  onClick={() => deleteCourseAdmin(courseAdmin.id)}
+                  onClick={() => deleteCourseSupervisor(courseSupervisor.id)}
                 >
                   Sil
                 </Button>
@@ -177,7 +169,7 @@ const SetCourseSupervisor = () => {
             };
           }
         );
-        setCourseAdmins(data);
+        setCourseSupervisors(data);
       })
       .catch((error) => {
         toast({
@@ -194,7 +186,7 @@ const SetCourseSupervisor = () => {
       });
   }, [reset]);
 
-  /* Departments */
+  /* Courses */
   useEffect(() => {
     apiClient
       .get('/courses')
@@ -249,11 +241,11 @@ const SetCourseSupervisor = () => {
                     }))}
                   />
                 </Form.Item>
-                <FormLabel mt={10}>Ders:</FormLabel>
+                <FormLabel mt={10}>Dersler:</FormLabel>
                 <Form.Item name="department">
                   <Select
                     showSearch
-                    placeholder="Bölüm Seçiniz"
+                    placeholder="Ders Seçiniz"
                     optionFilterProp="children"
                     onChange={onChange}
                     filterOption={filterOption}
@@ -289,7 +281,7 @@ const SetCourseSupervisor = () => {
         </Flex>
         <AntTable
           columns={columns}
-          dataSource={courseAdmins}
+          dataSource={courseSupervisors}
           loading={tableLoading}
         />
       </Box>

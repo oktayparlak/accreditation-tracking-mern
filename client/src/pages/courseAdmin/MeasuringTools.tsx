@@ -117,7 +117,7 @@ const MeasuringTools: React.FC = () => {
               ),
             };
           });
-          setCourses(data);
+          // setCourses(data);
         } else {
           toast({
             position: 'bottom-right',
@@ -202,8 +202,8 @@ const MeasuringTools: React.FC = () => {
         <Box flex={1} bg={'gray.100'} borderRadius={5} margin={4} padding={4}>
           <VStack>
             <Center>
-              <Heading size="lg" mb={4}>
-                Ders Oluştur
+              <Heading fontSize={26} textAlign={'center'} mb={4}>
+                Ölçme Aracı oluştur
               </Heading>
             </Center>
             <form onSubmit={handleSubmit(onSubmit)}>
@@ -268,7 +268,7 @@ const MeasuringTools: React.FC = () => {
           <Box>
             <Center>
               <Heading size={'lg'} mb={4}>
-                Dersler
+                Ölçme Araçları
               </Heading>
             </Center>
             <AntTable

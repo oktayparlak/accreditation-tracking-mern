@@ -62,11 +62,11 @@ export interface CourseAdmin {
   Course: Course;
 }
 
-// export interface CourseSupervisor {
-//   id: string;
-//   User: User;
-//   Course: Course;
-// }
+export interface CourseSupervisor {
+  id: string;
+  User: User;
+  Course: Course;
+}
 
 export interface LearningMaterial {
   id: string;

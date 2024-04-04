@@ -2,6 +2,8 @@ const CourseSupervisor = require('../models/courseSupervisor.model');
 const User = require('../models/user.model');
 const Course = require('../models/course.model');
 
+const excludeColums = ['createdAt', 'updatedAt', 'password'];
+
 class CourseSupervisorService {
   async createCourseSupervisor({ userId, courseId }) {
     const user = await User.findOne({
@@ -78,7 +80,7 @@ class CourseSupervisorService {
   async updateCourseSupervisor(id, userId, courseId) {}
 
   async deleteCourseSupervisor(id) {
-    await DepartmentAdmin.destroy({ where: { id } })
+    await CourseSupervisor.destroy({ where: { id } })
       .then(() => {
         return true;
       })

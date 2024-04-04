@@ -1,6 +1,7 @@
 const User = require('../models/user.model');
 const FacultyAdmin = require('../models/facultyAdmin.model');
 const DepartmentAdmin = require('../models/departmentAdmin.model');
+const CourseSupervisor = require('../models/courseSupervisor.model');
 const AppError = require('../utilities/AppError');
 const { hashPassword } = require('../utilities/password');
 const CourseAdmin = require('../models/courseAdmin.model');
@@ -75,6 +76,16 @@ class UserService {
           where: { userId: user.dataValues.id },
         });
         if (!courseAdmin) {
+          data.push(user);
+        }
+      }
+    }
+    if (role === 'COURSE_SUPERVISOR') {
+      for (const user of users) {
+        const courseSupervisor = await CourseSupervisor.findOne({
+          where: { userId: user.dataValues.id },
+        });
+        if (!courseSupervisor) {
           data.push(user);
         }
       }

@@ -11,7 +11,7 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import { Select, Form, Table as AntTable } from 'antd';
-import { FieldValues, useForm } from 'react-hook-form';
+import { FieldValues, set, useForm } from 'react-hook-form';
 import React, { useEffect, useState } from 'react';
 import apiClient from '../../services/api-client';
 import { Faculty, FacultyAdmin, User } from '../../interfaces/types';
@@ -87,6 +87,7 @@ const SetFacultyAdmin = () => {
           title: 'Fakülte Admini Atandı',
           duration: 1500,
         });
+        setReset({});
       })
       .catch((error) => {
         toast({
@@ -107,7 +108,7 @@ const SetFacultyAdmin = () => {
         toast({
           position: 'bottom-right',
           status: 'success',
-          title: 'Fakülte Admini Silindi',
+          title: 'Fakülte Başkanı Başarıyla Silindi',
           duration: 1500,
         });
         setReset({});
@@ -141,7 +142,7 @@ const SetFacultyAdmin = () => {
           duration: 1500,
         });
       });
-  }, []);
+  }, [reset]);
 
   /* Faculty Admins Table */
   useEffect(() => {
@@ -203,7 +204,7 @@ const SetFacultyAdmin = () => {
           duration: 1500,
         });
       });
-  }, []);
+  }, [reset]);
 
   return (
     <>

@@ -16,6 +16,7 @@ class MeasuringToolService {
   async getMeasuringTools() {
     const measuringTools = await MeasuringTool.findAll({
       attributes: { exclude: excludeColums },
+      include: [Course],
     });
     return measuringTools;
   }
@@ -24,6 +25,7 @@ class MeasuringToolService {
     const measuringTool = await MeasuringTool.findOne({
       where: { id },
       attributes: { exclude: excludeColums },
+      include: [Course],
     });
     return measuringTool;
   }

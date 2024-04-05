@@ -79,3 +79,10 @@ export interface LearningMaterial {
   succesRate?: number;
   succesPoint?: number;
 }
+
+export interface MeasuringTool {
+  id: string;
+  Course: Course;
+  name: string;
+  impactRate: number;
+}

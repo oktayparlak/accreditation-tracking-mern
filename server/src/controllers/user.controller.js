@@ -15,8 +15,6 @@ exports.create = async (req, res, next) => {
 exports.getAll = async (req, res, next) => {
   try {
     const users = await UserService.findAllUsers();
-    if (!users || users.length === 0)
-      return res.status(404).json({ error: { message: 'Users not found' } });
     return res.status(200).json(users);
   } catch (error) {
     next(error);
@@ -36,7 +34,6 @@ exports.getById = async (req, res, next) => {
 exports.getUsersWithoutRole = async (req, res, next) => {
   try {
     const users = await UserService.findUsersWithoutRole();
-    if (!users || users.length === 0) throw new AppError('Users not found', 404);
     return res.status(200).json(users);
   } catch (error) {
     next(error);
@@ -46,7 +43,6 @@ exports.getUsersWithoutRole = async (req, res, next) => {
 exports.getUsersWithRole = async (req, res, next) => {
   try {
     const users = await UserService.findUsersWithRole(req.query.role);
-    if (!users || users.length === 0) throw new AppError('Users not found', 404);
     return res.status(200).json(users);
   } catch (error) {
     next(error);

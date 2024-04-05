@@ -14,7 +14,7 @@ import {
   VStack,
   useToast,
 } from '@chakra-ui/react';
-import { FieldValues, useForm } from 'react-hook-form';
+import { FieldValues, set, useForm } from 'react-hook-form';
 import apiClient from '../../services/api-client';
 import CourseFeaturesMenu from '../../components/CourseFeaturesMenu';
 import { Course, Department } from '../../interfaces/types';
@@ -156,20 +156,21 @@ const Courses: React.FC = () => {
             title: `Ders başarıyla oluşturuldu.`,
             duration: 1500,
           });
-          setCourses([
-            {
-              ...response.data,
-              Department: response.data.Faculty.name,
-              inc: (
-                <CourseFeaturesMenu
-                  dataId={response.data.id}
-                  dataUrl="/departments"
-                  setReset={setReset}
-                />
-              ),
-            },
-            ...courses,
-          ]);
+          // setCourses([
+          //   {
+          //     ...response.data,
+          //     Department: response.data.Faculty.name,
+          //     inc: (
+          //       <CourseFeaturesMenu
+          //         dataId={response.data.id}
+          //         dataUrl="/departments"
+          //         setReset={setReset}
+          //       />
+          //     ),
+          //   },
+          //   ...courses,
+          // ]);
+          setReset({});
         } else {
           toast({
             position: 'bottom-left',

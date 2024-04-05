@@ -10,50 +10,40 @@ import {
   FormLabel,
   Heading,
   Input,
+  InputGroup,
+  InputLeftAddon,
   Select,
   VStack,
   useToast,
 } from '@chakra-ui/react';
 import { FieldValues, useForm } from 'react-hook-form';
 import apiClient from '../../services/api-client';
-import CourseFeaturesMenu from '../../components/CourseFeaturesMenu';
-import { Course, Department } from '../../interfaces/types';
+import { Course, MeasuringTool } from '../../interfaces/types';
+import MeasuringToolsFeaturesMenu from '../../components/MeasuringToolsFeaturesMenu';
 
 interface DataSource {
   key: string;
-  Department: string;
+  Course: string;
   name: string;
-  credit: number;
-  ects: number;
-  compulsory: boolean;
+  impactRate: number;
   inc: React.ReactNode;
 }
 
 const columns = [
   {
-    title: 'Bölüm Adı',
-    dataIndex: 'Department',
-    key: 'Department',
+    title: 'Ders Adı',
+    dataIndex: 'Course',
+    key: 'Course',
   },
   {
-    title: 'Ders Adı',
+    title: 'Adı',
     dataIndex: 'name',
     key: 'name',
   },
   {
-    title: 'Kredi',
-    dataIndex: 'credit',
-    key: 'credit',
-  },
-  {
-    title: 'AKTS',
-    dataIndex: 'ects',
-    key: 'ects',
-  },
-  {
-    title: 'Zorunluluk',
-    dataIndex: 'compulsory',
-    key: 'compulsory',
+    title: 'Etki oranı',
+    dataIndex: 'impactRate',
+    key: 'impactRate',
   },
   {
     title: 'İncele',
@@ -66,8 +56,8 @@ const MeasuringTools: React.FC = () => {
   const toast = useToast();
   const { register, handleSubmit } = useForm();
 
-  const [courses, setCourses] = useState<DataSource[]>([]);
-  const [departments, setDepartments] = useState<Department[]>([]);
+  const [measuringTools, setMeasuringTools] = useState<DataSource[]>([]);
+  const [courses, setCourses] = useState<Course[]>([]);
   const [loading, setLoading] = useState(false);
   const [tableLoading, setTableLoading] = useState(false);
   const [reset, setReset] = useState({});
@@ -75,9 +65,9 @@ const MeasuringTools: React.FC = () => {
   /* For Form Selection */
   useEffect(() => {
     apiClient
-      .get('/departments')
+      .get('/courses')
       .then((response) => {
-        setDepartments(response.data);
+        setCourses(response.data);
       })
       .catch((error) => {
         toast({
@@ -93,31 +83,31 @@ const MeasuringTools: React.FC = () => {
       });
   }, []);
 
-  /** Courses */
+  /** Measuring Tools */
   useEffect(() => {
     setTableLoading(true);
     apiClient
-      .get('/courses')
+      .get('/measuring-tools')
       .then((response) => {
         if (response.status === 200) {
-          const data: DataSource[] = response.data.map((course: Course) => {
-            return {
-              key: course.id,
-              Department: course.Department.name,
-              name: course.name,
-              credit: course.credit,
-              ects: course.ects,
-              compulsory: course.compulsory ? 'Evet' : 'Hayır',
-              inc: (
-                <CourseFeaturesMenu
-                  dataId={course.id}
-                  dataUrl="/courses"
-                  setReset={setReset}
-                />
-              ),
-            };
-          });
-          // setCourses(data);
+          const data: DataSource[] = response.data.map(
+            (measuringTools: MeasuringTool) => {
+              return {
+                key: measuringTools.id,
+                Course: measuringTools.Course.name,
+                name: measuringTools.name,
+                impactRate: `%${measuringTools.impactRate * 100}`,
+                inc: (
+                  <MeasuringToolsFeaturesMenu
+                    dataId={measuringTools.id}
+                    dataUrl="/measuring-tools"
+                    setReset={setReset}
+                  />
+                ),
+              };
+            }
+          );
+          setMeasuringTools(data);
         } else {
           toast({
             position: 'bottom-right',
@@ -147,28 +137,28 @@ const MeasuringTools: React.FC = () => {
   const onSubmit = (data: FieldValues) => {
     setLoading(true);
     apiClient
-      .post('/courses', data)
+      .post('/measuring-tools', { ...data, impactRate: data.impactRate / 100 })
       .then((response) => {
         if (response.status === 201) {
           toast({
             position: 'bottom-left',
             status: 'success',
-            title: `Ders başarıyla oluşturuldu.`,
+            title: `Ölçme Aracı başarıyla oluşturuldu.`,
             duration: 1500,
           });
-          setCourses([
+          setMeasuringTools([
             {
               ...response.data,
-              Department: response.data.Faculty.name,
+              Course: response.data.Course.name,
               inc: (
-                <CourseFeaturesMenu
+                <MeasuringToolsFeaturesMenu
                   dataId={response.data.id}
-                  dataUrl="/departments"
+                  dataUrl="/measuring-tools"
                   setReset={setReset}
                 />
               ),
             },
-            ...courses,
+            ...measuringTools,
           ]);
         } else {
           toast({
@@ -207,38 +197,30 @@ const MeasuringTools: React.FC = () => {
               </Heading>
             </Center>
             <form onSubmit={handleSubmit(onSubmit)}>
-              <FormControl id="departmentId" mb={3} isRequired>
-                <FormLabel>Bölüm</FormLabel>
-                <Select {...register('departmentId')} bg={'white'}>
-                  {departments.map((department: Department) => (
-                    <option key={department.id} value={department.id}>
-                      {department.name}
+              <FormControl id="courseId" mb={3} isRequired>
+                <FormLabel>Ders</FormLabel>
+                <Select {...register('courseId')} bg={'white'}>
+                  {courses.map((courses: Course) => (
+                    <option key={courses.id} value={courses.id}>
+                      {courses.name}
                     </option>
                   ))}
                 </Select>
-              </FormControl>
-              <FormControl id="code" mb={3} isRequired>
-                <FormLabel>Kod</FormLabel>
-                <Input {...register('code')} bg={'white'} type="text" />
               </FormControl>
               <FormControl id="name" mb={3} isRequired>
                 <FormLabel>Ad</FormLabel>
                 <Input {...register('name')} bg={'white'} type="text" />
               </FormControl>
-              <FormControl id="credit" mb={3} isRequired>
-                <FormLabel>Kredi</FormLabel>
-                <Input {...register('credit')} bg={'white'} type="number" />
-              </FormControl>
-              <FormControl id="ects" mb={3} isRequired>
-                <FormLabel>AKTS</FormLabel>
-                <Input {...register('ects')} bg={'white'} type="number" />
-              </FormControl>
-              <FormControl id="compulsory" mb={3} isRequired>
-                <FormLabel>Zorunlu</FormLabel>
-                <Select {...register('compulsory')} bg={'white'}>
-                  <option value="true">Evet</option>
-                  <option value="false">Hayır</option>
-                </Select>
+              <FormControl id="impactRate" mb={3} isRequired>
+                <FormLabel>Etki Oranı</FormLabel>
+                <InputGroup>
+                  <InputLeftAddon bg={'white'}>%</InputLeftAddon>
+                  <Input
+                    {...register('impactRate')}
+                    bg={'white'}
+                    type="number"
+                  />
+                </InputGroup>
               </FormControl>
               <Flex justifyContent={'center'}>
                 <Button
@@ -273,7 +255,7 @@ const MeasuringTools: React.FC = () => {
             </Center>
             <AntTable
               loading={tableLoading}
-              dataSource={courses}
+              dataSource={measuringTools}
               columns={columns}
             ></AntTable>
           </Box>

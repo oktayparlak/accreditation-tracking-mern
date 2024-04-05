@@ -14,8 +14,6 @@ exports.create = async (req, res, next) => {
 exports.getAll = async (req, res, next) => {
   try {
     const departments = await DepartmentService.findAllDepartments();
-    if (!departments || departments.length === 0)
-      return res.status(404).json({ message: 'Departments not found' });
     res.status(200).json(departments);
   } catch (error) {
     next(error);
@@ -24,11 +22,8 @@ exports.getAll = async (req, res, next) => {
 
 exports.getById = async (req, res, next) => {
   try {
-    const department = await DepartmentService.findDepartmentById(
-      req.params.id
-    );
-    if (!department)
-      return res.status(404).json({ message: 'Department not found' });
+    const department = await DepartmentService.findDepartmentById(req.params.id);
+    if (!department) return res.status(404).json({ message: 'Department not found' });
     res.status(200).json(department);
   } catch (error) {
     next(error);
@@ -38,10 +33,7 @@ exports.getById = async (req, res, next) => {
 /** Update */
 exports.update = async (req, res, next) => {
   try {
-    const department = await DepartmentService.updateDepartment(
-      req.params.id,
-      req.body
-    );
+    const department = await DepartmentService.updateDepartment(req.params.id, req.body);
     res.status(200).json(department);
   } catch (error) {
     next(error);

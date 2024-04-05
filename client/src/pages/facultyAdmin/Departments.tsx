@@ -22,6 +22,7 @@ import { Department, Faculty } from '../../interfaces/types';
 interface DataSource {
   key: string;
   name: string;
+  Faculty: string;
   inc: React.ReactNode;
 }
 
@@ -134,20 +135,21 @@ const Departments: React.FC = () => {
             title: `Bölüm başarıyla oluşturuldu.`,
             duration: 1500,
           });
-          setDepartments([
-            {
-              ...response.data,
-              Faculty: response.data.Faculty.name,
-              inc: (
-                <DepartmentFeaturesMenu
-                  dataId={response.data.id}
-                  dataUrl="/departments"
-                  setReset={setReset}
-                />
-              ),
-            },
-            ...departments,
-          ]);
+          // setDepartments([
+          //   {
+          //     ...response.data,
+          //     Faculty: response.data.Faculty.name,
+          //     inc: (
+          //       <DepartmentFeaturesMenu
+          //         dataId={response.data.id}
+          //         dataUrl="/departments"
+          //         setReset={setReset}
+          //       />
+          //     ),
+          //   },
+          //   ...departments,
+          // ]);
+          setReset({});
         } else {
           toast({
             position: 'bottom-left',
@@ -187,7 +189,11 @@ const Departments: React.FC = () => {
             <form onSubmit={handleSubmit(onSubmit)}>
               <FormControl id="facultyId" mb={3} isRequired>
                 <FormLabel>Fakülte</FormLabel>
-                <Select {...register('facultyId')} bg={'white'}>
+                <Select
+                  placeholder="Fakülte Seçiniz"
+                  {...register('facultyId')}
+                  bg={'white'}
+                >
                   {faculties.map((faculty: Faculty) => (
                     <option key={faculty.id} value={faculty.id}>
                       {faculty.name}

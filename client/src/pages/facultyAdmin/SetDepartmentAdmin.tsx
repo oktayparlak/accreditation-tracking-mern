@@ -87,6 +87,7 @@ const SetDepartmentAdmin = () => {
           title: 'Bölüm Başkanı Atandı',
           duration: 1500,
         });
+        setReset({});
       })
       .catch((error) => {
         toast({
@@ -141,7 +142,7 @@ const SetDepartmentAdmin = () => {
           duration: 1500,
         });
       });
-  }, []);
+  }, [reset]);
 
   /* Department Admins Table */
   useEffect(() => {
@@ -203,7 +204,7 @@ const SetDepartmentAdmin = () => {
           duration: 1500,
         });
       });
-  }, []);
+  }, [reset]);
 
   return (
     <>

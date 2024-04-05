@@ -1,5 +1,6 @@
 const Course = require('../models/course.model');
 const Department = require('../models/department.model');
+const MeasuringTool = require('../models/measuringTool.model');
 
 const excludeColums = ['createdAt', 'updatedAt'];
 
@@ -7,6 +8,10 @@ class CourseService {
   async createCourse(data) {
     const course = Course.build(data);
     await course.save();
+    await MeasuringTool.bulkCreate([
+      { courseId: course.id, name: 'Vize', impactRate: 0.4 },
+      { courseId: course.id, name: 'Final', impactRate: 0.6 },
+    ]);
     excludeColums.forEach((column) => {
       course[column] = undefined;
     });

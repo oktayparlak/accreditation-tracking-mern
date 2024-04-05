@@ -9,6 +9,10 @@ const MeasuringTool = sequelize.define('MeasuringTool', {
     primaryKey: true,
     allowNull: false,
   },
+  courseId: {
+    type: DataTypes.UUID,
+    allowNull: false,
+  },
   name: {
     type: DataTypes.STRING,
     allowNull: false,

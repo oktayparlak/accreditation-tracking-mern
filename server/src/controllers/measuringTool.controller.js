@@ -14,8 +14,6 @@ exports.create = async (req, res, next) => {
 exports.getAll = async (req, res, next) => {
   try {
     const measuringTools = await MeasuringToolService.getMeasuringTools();
-    if (!measuringTools || measuringTools.length === 0)
-      return res.status(404).json({ error: { message: 'No measuring tools found' } });
     res.status(200).json(measuringTools);
   } catch (error) {
     next(error);

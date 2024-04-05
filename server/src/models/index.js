@@ -14,57 +14,66 @@ const QuestionLearningMaterial = require('./questionLearningMaterial.model');
 const User = require('./user.model');
 
 module.exports = () => {
-  CourseAdmin.belongsTo(User, { foreignKey: 'userId' });
-  CourseAdmin.belongsTo(Course, { foreignKey: 'courseId' });
+  CourseAdmin.belongsTo(User, { foreignKey: 'userId', onDelete: 'CASCADE' });
+  CourseAdmin.belongsTo(Course, { foreignKey: 'courseId', onDelete: 'CASCADE' });
 
-  DepartmentAdmin.belongsTo(User, { foreignKey: 'userId' });
-  DepartmentAdmin.belongsTo(Department, { foreignKey: 'departmentId' });
+  DepartmentAdmin.belongsTo(User, { foreignKey: 'userId', onDelete: 'CASCADE' });
+  DepartmentAdmin.belongsTo(Department, { foreignKey: 'departmentId', onDelete: 'CASCADE' });
 
-  User.hasOne(CourseAdmin, { foreignKey: 'userId' });
-  User.hasOne(DepartmentAdmin, { foreignKey: 'userId' });
+  User.hasOne(CourseAdmin, { foreignKey: 'userId', onDelete: 'CASCADE' });
+  User.hasOne(DepartmentAdmin, { foreignKey: 'userId', onDelete: 'CASCADE' });
 
-  Course.hasOne(CourseAdmin, { foreignKey: 'courseId' });
-  Department.hasOne(DepartmentAdmin, { foreignKey: 'departmentId' });
+  Course.hasOne(CourseAdmin, { foreignKey: 'courseId', onDelete: 'CASCADE' });
+  Department.hasOne(DepartmentAdmin, { foreignKey: 'departmentId', onDelete: 'CASCADE' });
 
-  LearningMaterial.belongsTo(User, { foreignKey: 'userId' });
-  User.hasMany(LearningMaterial, { foreignKey: 'userId' });
+  LearningMaterial.belongsTo(User, { foreignKey: 'userId', onDelete: 'CASCADE' });
+  User.hasMany(LearningMaterial, { foreignKey: 'userId', onDelete: 'CASCADE' });
 
-  Application.belongsTo(User, { foreignKey: 'userId' });
-  User.hasMany(Application, { foreignKey: 'userId' });
+  Application.belongsTo(User, { foreignKey: 'userId', onDelete: 'CASCADE' });
+  User.hasMany(Application, { foreignKey: 'userId', onDelete: 'CASCADE' });
 
-  Application.belongsTo(Course, { foreignKey: 'courseId' });
-  Course.hasMany(Application, { foreignKey: 'courseId' });
+  Application.belongsTo(Course, { foreignKey: 'courseId', onDelete: 'CASCADE' });
+  Course.hasMany(Application, { foreignKey: 'courseId', onDelete: 'CASCADE' });
 
-  File.belongsTo(Application, { foreignKey: 'applicationId' });
-  Application.hasMany(File, { foreignKey: 'applicationId' });
+  File.belongsTo(Application, { foreignKey: 'applicationId', onDelete: 'CASCADE' });
+  Application.hasMany(File, { foreignKey: 'applicationId', onDelete: 'CASCADE' });
 
-  Question.belongsTo(MeasuringTool, { foreignKey: 'measuringToolId' });
-  MeasuringTool.hasMany(Question, { foreignKey: 'measuringToolId' });
+  Question.belongsTo(MeasuringTool, { foreignKey: 'measuringToolId', onDelete: 'CASCADE' });
+  MeasuringTool.hasMany(Question, { foreignKey: 'measuringToolId', onDelete: 'CASCADE' });
 
-  QuestionLearningMaterial.belongsTo(Question, { foreignKey: 'questionId' });
-  Question.hasMany(QuestionLearningMaterial, { foreignKey: 'questionId' });
+  QuestionLearningMaterial.belongsTo(Question, { foreignKey: 'questionId', onDelete: 'CASCADE' });
+  Question.hasMany(QuestionLearningMaterial, { foreignKey: 'questionId', onDelete: 'CASCADE' });
 
-  QuestionLearningMaterial.belongsTo(LearningMaterial, { foreignKey: 'learningMaterialId' });
-  LearningMaterial.hasMany(QuestionLearningMaterial, { foreignKey: 'learningMaterialId' });
+  QuestionLearningMaterial.belongsTo(LearningMaterial, {
+    foreignKey: 'learningMaterialId',
+    onDelete: 'CASCADE',
+  });
+  LearningMaterial.hasMany(QuestionLearningMaterial, {
+    foreignKey: 'learningMaterialId',
+    onDelete: 'CASCADE',
+  });
 
-  FacultyAdmin.belongsTo(User, { foreignKey: 'userId' });
-  User.hasOne(FacultyAdmin, { foreignKey: 'userId' });
+  FacultyAdmin.belongsTo(User, { foreignKey: 'userId', onDelete: 'CASCADE' });
+  User.hasOne(FacultyAdmin, { foreignKey: 'userId', onDelete: 'CASCADE' });
 
-  FacultyAdmin.belongsTo(Faculty, { foreignKey: 'facultyId' });
-  Faculty.hasOne(FacultyAdmin, { foreignKey: 'facultyId' });
+  FacultyAdmin.belongsTo(Faculty, { foreignKey: 'facultyId', onDelete: 'CASCADE' });
+  Faculty.hasOne(FacultyAdmin, { foreignKey: 'facultyId', onDelete: 'CASCADE' });
 
-  Department.belongsTo(Faculty, { foreignKey: 'facultyId' });
-  Faculty.hasMany(Department, { foreignKey: 'facultyId' });
+  Department.belongsTo(Faculty, { foreignKey: 'facultyId', onDelete: 'CASCADE' });
+  Faculty.hasMany(Department, { foreignKey: 'facultyId', onDelete: 'CASCADE' });
 
-  Course.belongsTo(Department, { foreignKey: 'departmentId' });
-  Department.hasMany(Course, { foreignKey: 'departmentId' });
+  Course.belongsTo(Department, { foreignKey: 'departmentId', onDelete: 'CASCADE' });
+  Department.hasMany(Course, { foreignKey: 'departmentId', onDelete: 'CASCADE' });
 
-  LearningMaterial.belongsTo(Course, { foreignKey: 'courseId' });
-  Course.hasMany(LearningMaterial, { foreignKey: 'courseId' });
+  LearningMaterial.belongsTo(Course, { foreignKey: 'courseId', onDelete: 'CASCADE' });
+  Course.hasMany(LearningMaterial, { foreignKey: 'courseId', onDelete: 'CASCADE' });
 
-  CourseSupervisor.belongsTo(User, { foreignKey: 'userId' });
-  User.hasOne(CourseSupervisor, { foreignKey: 'userId' });
+  CourseSupervisor.belongsTo(User, { foreignKey: 'userId', onDelete: 'CASCADE' });
+  User.hasOne(CourseSupervisor, { foreignKey: 'userId', onDelete: 'CASCADE' });
 
-  CourseSupervisor.belongsTo(Course, { foreignKey: 'courseId' });
-  Course.hasOne(CourseSupervisor, { foreignKey: 'courseId' });
+  CourseSupervisor.belongsTo(Course, { foreignKey: 'courseId', onDelete: 'CASCADE' });
+  Course.hasOne(CourseSupervisor, { foreignKey: 'courseId', onDelete: 'CASCADE' });
+
+  MeasuringTool.belongsTo(Course, { foreignKey: 'courseId', onDelete: 'CASCADE' });
+  Course.hasMany(MeasuringTool, { foreignKey: 'courseId', onDelete: 'CASCADE' });
 };

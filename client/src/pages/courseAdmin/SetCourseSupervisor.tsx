@@ -87,6 +87,7 @@ const SetCourseSupervisor = () => {
           title: 'Ders Sorumlusu Atandı',
           duration: 1500,
         });
+        setReset({});
       })
       .catch((error) => {
         toast({
@@ -141,7 +142,7 @@ const SetCourseSupervisor = () => {
           duration: 1500,
         });
       });
-  }, []);
+  }, [reset]);
 
   /* Course Supervisor Table */
   useEffect(() => {
@@ -203,7 +204,7 @@ const SetCourseSupervisor = () => {
           duration: 1500,
         });
       });
-  }, []);
+  }, [reset]);
 
   return (
     <>

@@ -23,8 +23,6 @@ exports.getAll = async (req, res, next) => {
 exports.getAllWithRole = async (req, res, next) => {
   try {
     const courseAdmins = await CourseAdminService.findAllCourseAdminsWithRole();
-    if (!courseAdmins || courseAdmins.length === 0)
-      return res.status(404).json({ error: { message: 'Course Admins not found' } });
     return res.status(200).json(courseAdmins);
   } catch (error) {
     next(error);

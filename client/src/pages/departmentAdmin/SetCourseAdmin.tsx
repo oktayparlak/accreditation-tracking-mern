@@ -11,7 +11,7 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import { Select, Form, Table as AntTable } from 'antd';
-import { FieldValues, useForm } from 'react-hook-form';
+import { FieldValues, set, useForm } from 'react-hook-form';
 import React, { useEffect, useState } from 'react';
 import apiClient from '../../services/api-client';
 import {
@@ -90,9 +90,10 @@ const SetCourseAdmin = () => {
         toast({
           position: 'bottom-right',
           status: 'success',
-          title: 'Bölüm Başkanı Atandı',
+          title: 'Ders Yöneticisi Atandı',
           duration: 1500,
         });
+        setReset({});
       })
       .catch((error) => {
         toast({
@@ -113,7 +114,7 @@ const SetCourseAdmin = () => {
         toast({
           position: 'bottom-right',
           status: 'success',
-          title: 'Bölüm Başkanı Silindi',
+          title: 'Ders Yöneticisi Silindi',
           duration: 1500,
         });
         setReset({});
@@ -149,7 +150,7 @@ const SetCourseAdmin = () => {
           duration: 1500,
         });
       });
-  }, []);
+  }, [reset]);
 
   /* Course Admins Table */
   useEffect(() => {
@@ -211,7 +212,7 @@ const SetCourseAdmin = () => {
           duration: 1500,
         });
       });
-  }, []);
+  }, [reset]);
 
   return (
     <>

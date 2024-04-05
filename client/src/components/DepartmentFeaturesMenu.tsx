@@ -71,37 +71,35 @@ const DepartmentFeaturesMenu = ({
   };
 
   const updateData = (newData: FieldValues) => {
-    console.log(faculties);
-
-    // apiClient
-    //   .patch(`${dataUrl}/${dataId}`, newData)
-    //   .then(() => {
-    //     toast({
-    //       position: 'top',
-    //       status: 'success',
-    //       title: `Güncelleme İşlemi Başarılı`,
-    //       duration: 1000,
-    //     });
-    //     setReset({});
-    //     onClose();
-    //   })
-    //   .catch((error) => {
-    //     toast({
-    //       position: 'top',
-    //       status: 'error',
-    //       title: `${
-    //         error.response ? error.response.data.error.message : 'Sunucu Hatası'
-    //       }`,
-    //       duration: 1500,
-    //     });
-    //   });
+    apiClient
+      .patch(`${dataUrl}/${dataId}`, newData)
+      .then(() => {
+        toast({
+          position: 'top',
+          status: 'success',
+          title: `Güncelleme İşlemi Başarılı`,
+          duration: 1000,
+        });
+        setReset({});
+        onClose();
+      })
+      .catch((error) => {
+        toast({
+          position: 'top',
+          status: 'error',
+          title: `${
+            error.response ? error.response.data.error.message : 'Sunucu Hatası'
+          }`,
+          duration: 1500,
+        });
+      });
   };
 
   const fetchData = () => {
     apiClient
       .get(`${dataUrl}/${dataId}`)
       .then((response) => {
-        setValue('faculty', response.data.facultyId);
+        setValue('facultyId', response.data.facultyId);
         setValue('name', response.data.name);
       })
       .catch((error) => {
@@ -171,9 +169,9 @@ const DepartmentFeaturesMenu = ({
             <ModalCloseButton />
             <ModalBody pb={6}>
               <Box>
-                <FormControl id="faculty" mb={3}>
+                <FormControl id="facultyId" mb={3}>
                   <FormLabel>Fakülte</FormLabel>
-                  <Select {...register('faculty')} bg={'white'}>
+                  <Select {...register('facultyId')} bg={'white'}>
                     {faculties.map((faculty: Faculty) => (
                       <option key={faculty.id} value={faculty.id}>
                         {faculty.name}

@@ -27,7 +27,7 @@ import {
 } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import apiClient from '../services/api-client';
-import { FieldValues, useForm } from 'react-hook-form';
+import { FieldValues, set, useForm } from 'react-hook-form';
 import { Course } from '../interfaces/types';
 
 interface FeaturesMenuProps {
@@ -36,7 +36,7 @@ interface FeaturesMenuProps {
   setReset: React.Dispatch<React.SetStateAction<any>>;
 }
 
-const LearningMaterialFeaturesMenu = ({
+const MeasuringToolsFeaturesMenu = ({
   dataId,
   dataUrl,
   setReset,
@@ -77,7 +77,10 @@ const LearningMaterialFeaturesMenu = ({
 
   const updateData = (newData: FieldValues) => {
     apiClient
-      .patch(`${dataUrl}/${dataId}`, newData)
+      .patch(`${dataUrl}/${dataId}`, {
+        ...newData,
+        impactRate: newData.impactRate / 100,
+      })
       .then(() => {
         toast({
           position: 'top',
@@ -104,10 +107,9 @@ const LearningMaterialFeaturesMenu = ({
     apiClient
       .get(`${dataUrl}/${dataId}`)
       .then((response) => {
-        setValue('number', response.data.number);
-        setValue('content', response.data.content);
-        setValue('contributionLevel', response.data.contributionLevel);
         setValue('courseId', response.data.courseId);
+        setValue('name', response.data.name);
+        setValue('impactRate', response.data.impactRate * 100);
       })
       .catch((error) => {
         toast({
@@ -186,23 +188,17 @@ const LearningMaterialFeaturesMenu = ({
                     ))}
                   </Select>
                 </FormControl>
-                <FormControl id="number" mb={3} isRequired>
-                  <FormLabel>Numara</FormLabel>
-                  <Input {...register('number')} type="number" bg={'white'} />
+                <FormControl id="name" mb={3} isRequired>
+                  <FormLabel>Ad</FormLabel>
+                  <Input {...register('name')} type="text" bg={'white'} />
                 </FormControl>
-                <FormControl id="content" mb={3} isRequired>
-                  <FormLabel>İçerik</FormLabel>
-                  <Input {...register('content')} type="text" bg={'white'} />
-                </FormControl>
-                <FormControl id="contributionLevel" mb={3} isRequired>
-                  <FormLabel>Katkı Düzeyi</FormLabel>
-                  <NumberInput defaultValue={1} min={1} max={5} bg={'white'}>
-                    <NumberInputField {...register('contributionLevel')} />
-                    <NumberInputStepper>
-                      <NumberIncrementStepper />
-                      <NumberDecrementStepper />
-                    </NumberInputStepper>
-                  </NumberInput>
+                <FormControl id="impactRate" mb={3} isRequired>
+                  <FormLabel>Etki oranı</FormLabel>
+                  <Input
+                    {...register('impactRate')}
+                    type="number"
+                    bg={'white'}
+                  />
                 </FormControl>
               </Box>
             </ModalBody>
@@ -219,4 +215,4 @@ const LearningMaterialFeaturesMenu = ({
   );
 };
 
-export default LearningMaterialFeaturesMenu;
+export default MeasuringToolsFeaturesMenu;

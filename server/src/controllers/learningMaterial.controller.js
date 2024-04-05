@@ -17,8 +17,6 @@ exports.create = async (req, res, next) => {
 exports.getAll = async (req, res, next) => {
   try {
     const learningMaterials = await LearningMaterialService.findAllLearningMaterials();
-    if (!learningMaterials || learningMaterials.length === 0)
-      return res.status(404).json({ error: { message: 'Learning materials not found' } });
     return res.status(200).json(learningMaterials);
   } catch (error) {
     next(error);
@@ -39,8 +37,6 @@ exports.getById = async (req, res, next) => {
 exports.getMyLearningMaterials = async (req, res, next) => {
   try {
     const learningMaterials = await LearningMaterialService.findMyLearningMaterials(req.user.id);
-    if (!learningMaterials || learningMaterials.length === 0)
-      return res.status(404).json({ error: { message: 'Learning materials not found' } });
     return res.status(200).json(learningMaterials);
   } catch (error) {
     next(error);

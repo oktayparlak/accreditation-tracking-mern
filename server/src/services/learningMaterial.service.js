@@ -11,7 +11,7 @@ class LearningMaterialService {
     });
     const learningMaterial = LearningMaterial.build({
       ...data,
-      number: learningMaterialsCount.number + 1,
+      number: (learningMaterialsCount ? learningMaterialsCount.number : 0) + 1,
     });
     await learningMaterial.save();
     excludeColums.forEach((column) => {

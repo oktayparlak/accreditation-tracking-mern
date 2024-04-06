@@ -15,7 +15,7 @@ router.get(
   '/course/:courseId',
   verify,
   allowedRoles([roles.ROOT_ADMIN, roles.COURSE_ADMIN, roles.COURSE_SUPERVISOR]),
-  measuringToolController.getByCourseId
+  measuringToolController.getAllByCourseId
 );
 
 router.get(

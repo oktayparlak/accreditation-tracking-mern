@@ -31,8 +31,8 @@ class MeasuringToolService {
     return measuringTool;
   }
 
-  async getMeasuringToolByCourseId(courseId) {
-    const measuringTool = await MeasuringTool.findOne({
+  async getAllMeasuringToolByCourseId(courseId) {
+    const measuringTool = await MeasuringTool.findAll({
       where: { courseId },
       attributes: { exclude: excludeColums },
       include: [Course],

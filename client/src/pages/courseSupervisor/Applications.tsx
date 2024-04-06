@@ -13,6 +13,7 @@ import {
 } from '@chakra-ui/react';
 import { Select, Form, Upload, Button as AntButton, Input } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
+import apiClient from '../../services/api-client';
 
 interface Questions {
   Vize: string[];
@@ -27,6 +28,8 @@ export const Applications = () => {
   const toast = useToast();
   const [isFirstFormSelected, setIsFirstFormSelected] = useState(true);
   const [selectedCourse, setSelectedCourse] = useState<string>('');
+
+  const submitForm = (values: any) => {};
 
   const handleUploadChange = async (info: any) => {
     const { status } = info.file;

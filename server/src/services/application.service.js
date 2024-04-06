@@ -14,6 +14,11 @@ class ApplicationService {
     for (let file of files) {
       await File.create({ applicationId: application.id, name: file.name, url: file.url });
     }
+    for (const measuringTools of data.measuringTools) {
+      const measuringTool = await MeasuringTool.findByPk(measuringTools.id);
+      if (!measuringTool) {
+      }
+    }
   }
 
   async findApplicationById(id) {}

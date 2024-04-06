@@ -108,7 +108,8 @@ class UserService {
 
   async deleteUser(id) {
     const user = await User.findOne({ where: { id } });
-    if (!user) throw new AppError('User not found', 404);
+    if (!user) throw new AppError('Kullanıcı Bulunamadı!', 404);
+    if (user.role === 'ROOT_ADMIN') throw new AppError('Sistem Yöneticisi Silinemez!', 400);
     await user.destroy();
     return user;
   }

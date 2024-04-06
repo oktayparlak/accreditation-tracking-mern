@@ -31,9 +31,9 @@ exports.getById = async (req, res, next) => {
   }
 };
 
-exports.getByCourseId = async (req, res, next) => {
+exports.getAllByCourseId = async (req, res, next) => {
   try {
-    const measuringTool = await MeasuringToolService.getMeasuringToolByCourseId(
+    const measuringTool = await MeasuringToolService.getAllMeasuringToolByCourseId(
       req.params.courseId
     );
     return res.status(200).json(measuringTool);

@@ -57,7 +57,6 @@ exports.update = async (req, res, next) => {
 exports.delete = (req, res, next) => {
   try {
     const facultyAdmin = FacultyAdminService.deleteFacultyAdmin(req.params.id);
-    if (!facultyAdmin) throw new AppError(401, 'Error! Faculty Admin not deleted');
     return res.status(200).json(facultyAdmin);
   } catch (error) {
     next(error);

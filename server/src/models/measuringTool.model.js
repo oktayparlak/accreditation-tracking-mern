@@ -21,6 +21,10 @@ const MeasuringTool = sequelize.define('MeasuringTool', {
     type: DataTypes.DECIMAL(10, 2),
     allowNull: false,
   },
+  questionCount: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
 });
 
 module.exports = MeasuringTool;

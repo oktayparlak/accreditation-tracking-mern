@@ -25,6 +25,8 @@ interface DataSource {
   name: string;
   credit: number;
   ects: number;
+  academicYear: string;
+  studentCount: number;
   compulsory: boolean;
   inc: React.ReactNode;
 }
@@ -49,6 +51,16 @@ const columns = [
     title: 'AKTS',
     dataIndex: 'ects',
     key: 'ects',
+  },
+  {
+    title: 'Akademik Yıl',
+    dataIndex: 'academicYear',
+    key: 'academicYear',
+  },
+  {
+    title: 'Öğrenci Sayısı',
+    dataIndex: 'studentCount',
+    key: 'studentCount',
   },
   {
     title: 'Zorunluluk',
@@ -107,6 +119,8 @@ const Courses: React.FC = () => {
               name: course.name,
               credit: course.credit,
               ects: course.ects,
+              academicYear: course.academicYear,
+              studentCount: course.studentCount,
               compulsory: course.compulsory ? 'Evet' : 'Hayır',
               inc: (
                 <CourseFeaturesMenu
@@ -156,20 +170,6 @@ const Courses: React.FC = () => {
             title: `Ders başarıyla oluşturuldu.`,
             duration: 1500,
           });
-          // setCourses([
-          //   {
-          //     ...response.data,
-          //     Department: response.data.Faculty.name,
-          //     inc: (
-          //       <CourseFeaturesMenu
-          //         dataId={response.data.id}
-          //         dataUrl="/departments"
-          //         setReset={setReset}
-          //       />
-          //     ),
-          //   },
-          //   ...courses,
-          // ]);
           setReset({});
         } else {
           toast({
@@ -210,7 +210,11 @@ const Courses: React.FC = () => {
             <form onSubmit={handleSubmit(onSubmit)}>
               <FormControl id="departmentId" mb={3} isRequired>
                 <FormLabel>Bölüm</FormLabel>
-                <Select {...register('departmentId')} bg={'white'}>
+                <Select
+                  placeholder="Bölüm Seçiniz"
+                  {...register('departmentId')}
+                  bg={'white'}
+                >
                   {departments.map((department: Department) => (
                     <option key={department.id} value={department.id}>
                       {department.name}
@@ -233,6 +237,22 @@ const Courses: React.FC = () => {
               <FormControl id="ects" mb={3} isRequired>
                 <FormLabel>AKTS</FormLabel>
                 <Input {...register('ects')} bg={'white'} type="number" />
+              </FormControl>
+              <FormControl id="academicYear" mb={3} isRequired>
+                <FormLabel>Akademik Yıl</FormLabel>
+                <Input
+                  {...register('academicYear')}
+                  bg={'white'}
+                  type="number"
+                />
+              </FormControl>
+              <FormControl id="studentCount" mb={3} isRequired>
+                <FormLabel>Öğrenci Sayısı</FormLabel>
+                <Input
+                  {...register('studentCount')}
+                  bg={'white'}
+                  type="number"
+                />
               </FormControl>
               <FormControl id="compulsory" mb={3} isRequired>
                 <FormLabel>Zorunlu</FormLabel>

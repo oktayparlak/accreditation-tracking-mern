@@ -20,7 +20,7 @@ const User = sequelize.define(
       type: DataTypes.STRING(30),
       allowNull: false,
     },
-    username: {
+    email: {
       type: DataTypes.STRING(60),
       allowNull: false,
       unique: true,
@@ -44,10 +44,10 @@ const User = sequelize.define(
   {
     hooks: {
       afterSync: async () => {
-        const user = await User.findOne({ where: { username: 'oktayparlak' } });
+        const user = await User.findOne({ where: { email: 'oktay@mail.com' } });
         if (!user) {
           await User.create({
-            username: 'oktayparlak',
+            email: 'oktay@mail.com',
             firstName: 'Oktay',
             lastName: 'Parlak',
             role: roles.ROOT_ADMIN,

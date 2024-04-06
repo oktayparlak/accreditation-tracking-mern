@@ -26,6 +26,7 @@ interface DataSource {
   Course: string;
   name: string;
   impactRate: number;
+  questionCount: number;
   inc: React.ReactNode;
 }
 
@@ -44,6 +45,11 @@ const columns = [
     title: 'Etki oranı',
     dataIndex: 'impactRate',
     key: 'impactRate',
+  },
+  {
+    title: 'Soru Sayısı',
+    dataIndex: 'questionCount',
+    key: 'questionCount',
   },
   {
     title: 'İncele',
@@ -97,6 +103,7 @@ const MeasuringTools: React.FC = () => {
                 Course: measuringTools.Course.name,
                 name: measuringTools.name,
                 impactRate: `%${measuringTools.impactRate * 100}`,
+                questionCount: measuringTools.questionCount,
                 inc: (
                   <MeasuringToolsFeaturesMenu
                     dataId={measuringTools.id}

@@ -96,7 +96,7 @@ const UserFeaturesMenu = ({ dataId, dataUrl, setReset }: FeaturesMenuProps) => {
         setValue('role', response.data.role);
         setValue('firstName', response.data.firstName);
         setValue('lastName', response.data.lastName);
-        setValue('username', response.data.username);
+        setValue('email', response.data.email);
       })
       .catch((error) => {
         toast({
@@ -171,9 +171,9 @@ const UserFeaturesMenu = ({ dataId, dataUrl, setReset }: FeaturesMenuProps) => {
                     <FormLabel>Soyad</FormLabel>
                     <Input {...register('lastName')} bg={'white'} type="text" />
                   </FormControl>
-                  <FormControl id="username" mb={3}>
-                    <FormLabel>Kullanıcı Adı</FormLabel>
-                    <Input {...register('username')} bg={'white'} type="text" />
+                  <FormControl id="email" mb={3}>
+                    <FormLabel>E-Posta</FormLabel>
+                    <Input {...register('email')} bg={'white'} type="text" />
                   </FormControl>
                   <FormControl id="password" mb={1}>
                     <FormLabel>Şifre</FormLabel>

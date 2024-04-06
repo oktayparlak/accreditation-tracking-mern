@@ -59,12 +59,10 @@ exports.update = async (req, res, next) => {
 };
 
 /** Delete */
-exports.delete = (req, res, next) => {
+exports.delete = async (req, res, next) => {
   try {
-    const learningMaterial = LearningMaterialService.deleteLearningMaterial(req.params.id);
-    if (!learningMaterial)
-      return res.status(404).json({ error: { message: 'Learning material not found' } });
-    return res.status(200).json({ message: 'Learning material deleted' });
+    const learningMaterial = await LearningMaterialService.deleteLearningMaterial(req.params.id);
+    return res.status(200).json(learningMaterial);
   } catch (error) {
     next(error);
   }

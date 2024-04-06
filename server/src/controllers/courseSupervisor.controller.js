@@ -43,7 +43,21 @@ exports.getById = async (req, res, next) => {
   }
 };
 
-exports.getByUserId = async (req, res, next) => {};
+exports.getByUserId = async (req, res, next) => {
+  try {
+    const courseSupervisor = await CourseSupervisorService.findAllCourseSupervisorsByUserId(
+      req.params.userId
+    );
+    if (!courseSupervisor) {
+      return res.status(404).json({
+        error: { message: 'CourseSupervisor not found' },
+      });
+    }
+    res.status(200).json(courseSupervisor);
+  } catch (error) {
+    next(error);
+  }
+};
 
 exports.getByCourseId = async (req, res, next) => {};
 
@@ -54,11 +68,6 @@ exports.update = async (req, res, next) => {};
 exports.delete = async (req, res, next) => {
   try {
     const courseSupervisor = await CourseSupervisorService.deleteCourseSupervisor(req.params.id);
-    if (!courseSupervisor) {
-      return res.status(404).json({
-        error: { message: 'CourseSupervisor not found' },
-      });
-    }
     res.status(200).json(courseSupervisor);
   } catch (error) {
     next(error);

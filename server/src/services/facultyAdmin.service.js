@@ -2,6 +2,7 @@ const FacultyAdmin = require('../models/facultyAdmin.model');
 const Faculty = require('../models/faculty.model');
 const User = require('../models/user.model');
 
+const AppError = require('../utilities/AppError');
 const excludeColums = ['createdAt', 'updatedAt', 'password'];
 
 class FacultyAdminService {
@@ -66,13 +67,12 @@ class FacultyAdminService {
   async updateFacultyAdmin(id, data) {}
 
   async deleteFacultyAdmin(id) {
-    await FacultyAdmin.destroy({ where: { id } })
-      .then(() => {
-        return true;
-      })
-      .catch(() => {
-        return false;
-      });
+    const facultyAdmin = await FacultyAdmin.findByPk(id);
+    if (!facultyAdmin) {
+      throw new AppError('Faculty Admin not found', 404);
+    }
+    await facultyAdmin.destroy();
+    return facultyAdmin;
   }
 }
 

@@ -24,7 +24,7 @@ interface DataSource {
   role: string;
   firstName: string;
   lastName: string;
-  username: string;
+  email: string;
   inc: React.ReactNode;
 }
 
@@ -45,9 +45,9 @@ const columns = [
     key: 'lastName',
   },
   {
-    title: 'Kullanıcı Adı',
-    dataIndex: 'username',
-    key: 'username',
+    title: 'E-Posta',
+    dataIndex: 'email',
+    key: 'email',
   },
   {
     title: 'İncele',
@@ -77,7 +77,7 @@ const Users: React.FC = () => {
               role: roles[`${user.role}`] || '-',
               firstName: user.firstName,
               lastName: user.lastName,
-              username: user.username,
+              email: user.email,
               inc: (
                 <UserFeaturesMenu
                   dataId={user.id}
@@ -195,9 +195,9 @@ const Users: React.FC = () => {
                 <FormLabel>Soyad</FormLabel>
                 <Input {...register('lastName')} bg={'white'} type="text" />
               </FormControl>
-              <FormControl id="username" mb={3} isRequired>
-                <FormLabel>Kullanıcı Adı</FormLabel>
-                <Input {...register('username')} bg={'white'} type="text" />
+              <FormControl id="email" mb={3} isRequired>
+                <FormLabel>E-Posta</FormLabel>
+                <Input {...register('email')} bg={'white'} type="text" />
               </FormControl>
               <FormControl id="password" mb={3} isRequired>
                 <FormLabel>Şifre</FormLabel>

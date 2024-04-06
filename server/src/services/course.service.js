@@ -2,6 +2,8 @@ const Course = require('../models/course.model');
 const Department = require('../models/department.model');
 const MeasuringTool = require('../models/measuringTool.model');
 
+const AppError = require('../utilities/AppError');
+
 const excludeColums = ['createdAt', 'updatedAt'];
 
 class CourseService {
@@ -9,8 +11,8 @@ class CourseService {
     const course = Course.build(data);
     await course.save();
     await MeasuringTool.bulkCreate([
-      { courseId: course.id, name: 'Vize', impactRate: 0.4 },
-      { courseId: course.id, name: 'Final', impactRate: 0.6 },
+      { courseId: course.id, name: 'Vize', impactRate: 0.4, questionCount: 0 },
+      { courseId: course.id, name: 'Final', impactRate: 0.6, questionCount: 0 },
     ]);
     excludeColums.forEach((column) => {
       course[column] = undefined;
@@ -41,14 +43,11 @@ class CourseService {
     return course;
   }
 
-  deleteCourse(id) {
-    Course.destroy({ where: { id } })
-      .then(() => {
-        return true;
-      })
-      .catch((error) => {
-        throw error;
-      });
+  async deleteCourse(id) {
+    const course = await Course.findOne({ where: { id } });
+    if (!course) throw new AppError('Course not found', 404);
+    await course.destroy();
+    return course;
   }
 }
 

@@ -86,7 +86,7 @@ const SetAdmin = () => {
                     options={users.map((user) => ({
                       value: user.id,
                       label: `${
-                        user.username
+                        user.email
                       } (${user.firstName.toLocaleUpperCase()} ${user.lastName.toLocaleUpperCase()})`,
                     }))}
                   />

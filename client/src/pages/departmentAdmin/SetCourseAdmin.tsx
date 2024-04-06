@@ -24,7 +24,7 @@ import {
 
 interface DataSource {
   key: string;
-  username: string;
+  email: string;
   firstName: string;
   lastName: string;
   course: string;
@@ -33,9 +33,9 @@ interface DataSource {
 
 const columns = [
   {
-    title: 'Kullanıcı Adı',
-    dataIndex: 'username',
-    key: 'username',
+    title: 'E-posta',
+    dataIndex: 'email',
+    key: 'email',
   },
   {
     title: 'Ad',
@@ -162,7 +162,7 @@ const SetCourseAdmin = () => {
           (courseAdmin: CourseAdmin) => {
             return {
               key: courseAdmin.id,
-              username: courseAdmin.User.username,
+              email: courseAdmin.User.email,
               firstName: courseAdmin.User.firstName,
               lastName: courseAdmin.User.lastName,
               course: courseAdmin.Course.name,
@@ -245,7 +245,7 @@ const SetCourseAdmin = () => {
                     options={users.map((user) => ({
                       value: user.id,
                       label: `${
-                        user.username
+                        user.email
                       } (${user.firstName.toLocaleUpperCase()} ${user.lastName.toLocaleUpperCase()})`,
                     }))}
                   />

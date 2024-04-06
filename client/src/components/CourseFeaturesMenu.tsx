@@ -104,6 +104,8 @@ const CourseFeaturesMenu = ({
         setValue('name', response.data.name);
         setValue('credit', response.data.credit);
         setValue('ects', response.data.ects);
+        setValue('academicYear', response.data.academicYear);
+        setValue('studentCount', response.data.studentCount);
         setValue('compulsory', response.data.compulsory);
       })
       .catch((error) => {
@@ -198,6 +200,22 @@ const CourseFeaturesMenu = ({
                 <FormControl id="ects" mb={3}>
                   <FormLabel>AKTS</FormLabel>
                   <Input {...register('ects')} bg={'white'} type="number" />
+                </FormControl>
+                <FormControl id="academicYear" mb={3}>
+                  <FormLabel>Akademik Yıl</FormLabel>
+                  <Input
+                    {...register('academicYear')}
+                    bg={'white'}
+                    type="number"
+                  />
+                </FormControl>
+                <FormControl id="studentCount" mb={3}>
+                  <FormLabel>Öğreci Sayısı</FormLabel>
+                  <Input
+                    {...register('studentCount')}
+                    bg={'white'}
+                    type="number"
+                  />
                 </FormControl>
                 <FormControl id="compulsory" mb={3}>
                   <FormLabel>Zorunlu</FormLabel>

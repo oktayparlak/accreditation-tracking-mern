@@ -71,10 +71,9 @@ exports.setAdminRole = async (req, res, next) => {
 };
 
 /** Delete */
-exports.delete = (req, res, next) => {
+exports.delete = async (req, res, next) => {
   try {
-    const user = UserService.deleteUser(req.params.id);
-    if (!user) return res.status(404).json({ error: { message: 'User not found' } });
+    const user = await UserService.deleteUser(req.params.id);
     return res.status(200).json(user);
   } catch (error) {
     next(error);

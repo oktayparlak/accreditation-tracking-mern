@@ -6,6 +6,8 @@ const create = Joi.object({
   name: Joi.string().required(),
   credit: Joi.number().required(),
   ects: Joi.number().required(),
+  academicYear: Joi.string().required(),
+  studentCount: Joi.number().required(),
   compulsory: Joi.boolean().required(),
 });
 
@@ -15,6 +17,8 @@ const update = Joi.object({
   name: Joi.string().required(),
   credit: Joi.number().required(),
   ects: Joi.number().required(),
+  academicYear: Joi.string().required(),
+  studentCount: Joi.number().required(),
   compulsory: Joi.boolean().required(),
 });
 

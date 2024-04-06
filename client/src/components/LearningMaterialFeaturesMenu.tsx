@@ -188,7 +188,12 @@ const LearningMaterialFeaturesMenu = ({
                 </FormControl>
                 <FormControl id="number" mb={3} isRequired>
                   <FormLabel>Numara</FormLabel>
-                  <Input {...register('number')} type="number" bg={'white'} />
+                  <Input
+                    isDisabled
+                    {...register('number')}
+                    type="number"
+                    bg={'white'}
+                  />
                 </FormControl>
                 <FormControl id="content" mb={3} isRequired>
                   <FormLabel>İçerik</FormLabel>

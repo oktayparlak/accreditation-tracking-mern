@@ -81,13 +81,10 @@ class CourseAdminService {
   async updateCourseAdmin(id, userId, courseId) {}
 
   async deleteCourseAdmin(id) {
-    await CourseAdmin.destroy({ where: { id } })
-      .then(() => {
-        return true;
-      })
-      .catch(() => {
-        return false;
-      });
+    const courseAdmin = await CourseAdmin.findOne({ where: { id } });
+    if (!courseAdmin) throw new AppError('Course Admin not found', 404);
+    await courseAdmin.destroy();
+    return courseAdmin;
   }
 }
 

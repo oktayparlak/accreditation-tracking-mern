@@ -21,7 +21,7 @@ export interface User {
   ];
   firstName: string;
   lastName: string;
-  username: string;
+  email: string;
 }
 
 export interface Faculty {
@@ -41,6 +41,8 @@ export interface Course {
   name: string;
   credit: number;
   ects: number;
+  academicYear: string;
+  studentCount: number;
   compulsory: boolean;
 }
 
@@ -85,4 +87,5 @@ export interface MeasuringTool {
   Course: Course;
   name: string;
   impactRate: number;
+  questionCount: number;
 }

@@ -81,13 +81,10 @@ class DepartmentAdminService {
   async updateDepartmentAdmin(id, userId, departmentId) {}
 
   async deleteDepartmentAdmin(id) {
-    await DepartmentAdmin.destroy({ where: { id } })
-      .then(() => {
-        return true;
-      })
-      .catch(() => {
-        return false;
-      });
+    const departmentAdmin = await DepartmentAdmin.findOne({ where: { id } });
+    if (!departmentAdmin) throw new AppError('Department Admin not found', 404);
+    await departmentAdmin.destroy();
+    return departmentAdmin;
   }
 }
 

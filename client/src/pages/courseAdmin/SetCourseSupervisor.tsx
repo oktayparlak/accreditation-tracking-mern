@@ -18,7 +18,7 @@ import { Course, CourseSupervisor, User } from '../../interfaces/types';
 
 interface DataSource {
   key: string;
-  username: string;
+  email: string;
   firstName: string;
   lastName: string;
   course: string;
@@ -27,9 +27,9 @@ interface DataSource {
 
 const columns = [
   {
-    title: 'Kullanıcı Adı',
-    dataIndex: 'username',
-    key: 'username',
+    title: 'E-posta',
+    dataIndex: 'email',
+    key: 'email',
   },
   {
     title: 'Ad',
@@ -154,7 +154,7 @@ const SetCourseSupervisor = () => {
           (courseSupervisor: CourseSupervisor) => {
             return {
               key: courseSupervisor.id,
-              username: courseSupervisor.User.username,
+              email: courseSupervisor.User.email,
               firstName: courseSupervisor.User.firstName,
               lastName: courseSupervisor.User.lastName,
               course: courseSupervisor.Course.name,
@@ -237,7 +237,7 @@ const SetCourseSupervisor = () => {
                     options={users.map((user) => ({
                       value: user.id,
                       label: `${
-                        user.username
+                        user.email
                       } (${user.firstName.toLocaleUpperCase()} ${user.lastName.toLocaleUpperCase()})`,
                     }))}
                   />

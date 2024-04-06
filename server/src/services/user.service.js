@@ -28,9 +28,9 @@ class UserService {
     });
   }
 
-  async findUserByUsername(username, role) {
+  async findUserByEmail(email, role) {
     return await User.findOne({
-      where: { username, role },
+      where: { email, role },
       attributes: { exclude: [excludeColums - 'password'] },
     });
   }
@@ -107,13 +107,10 @@ class UserService {
   }
 
   async deleteUser(id) {
-    await User.destroy({ where: { id } })
-      .then(() => {
-        return true;
-      })
-      .catch((error) => {
-        throw error;
-      });
+    const user = await User.findOne({ where: { id } });
+    if (!user) throw new AppError('User not found', 404);
+    await user.destroy();
+    return user;
   }
 }
 

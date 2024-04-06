@@ -30,6 +30,14 @@ const Course = sequelize.define('Course', {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
+  academicYear: {
+    type: DataTypes.STRING(9),
+    allowNull: false,
+  },
+  studentCount: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
   compulsory: {
     type: DataTypes.BOOLEAN,
     defaultValue: true,

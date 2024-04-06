@@ -1,6 +1,7 @@
 const Department = require('../models/department.model');
 const Faculty = require('../models/faculty.model');
 
+const AppError = require('../utilities/AppError');
 const excludeColums = ['createdAt', 'updatedAt'];
 
 class DepartmentService {
@@ -37,14 +38,11 @@ class DepartmentService {
     return department;
   }
 
-  deleteDepartment(id) {
-    Department.destroy({ where: { id } })
-      .then(() => {
-        return true;
-      })
-      .catch((error) => {
-        throw error;
-      });
+  async deleteDepartment(id) {
+    const department = await Department.findOne({ where: { id } });
+    if (!department) throw new AppError('Department not found', 404);
+    await department.destroy();
+    return department;
   }
 }
 

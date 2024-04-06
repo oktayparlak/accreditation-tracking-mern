@@ -12,6 +12,13 @@ const roles = require('../helpers/roles');
 
 /** Get */
 router.get(
+  '/course/:courseId',
+  verify,
+  allowedRoles([roles.ROOT_ADMIN, roles.COURSE_ADMIN, roles.COURSE_SUPERVISOR]),
+  measuringToolController.getByCourseId
+);
+
+router.get(
   '/',
   verify,
   allowedRoles([roles.ROOT_ADMIN, roles.COURSE_ADMIN, roles.COURSE_SUPERVISOR]),

@@ -2,6 +2,7 @@ const CourseSupervisor = require('../models/courseSupervisor.model');
 const User = require('../models/user.model');
 const Course = require('../models/course.model');
 
+const AppError = require('../utilities/AppError');
 const excludeColums = ['createdAt', 'updatedAt', 'password'];
 
 class CourseSupervisorService {
@@ -28,8 +29,8 @@ class CourseSupervisorService {
     });
   }
 
-  async findCourseSupervisorsByUserId(userId) {
-    return await CourseSupervisor.findOne({
+  async findAllCourseSupervisorsByUserId(userId) {
+    const courseSupervisorUserCourse = await CourseSupervisor.findAll({
       where: { userId },
       attributes: { exclude: excludeColums },
       include: [
@@ -37,6 +38,7 @@ class CourseSupervisorService {
         { model: Course, attributes: { exclude: excludeColums } },
       ],
     });
+    return courseSupervisorUserCourse;
   }
 
   async findCourseSupervisorsByCourseId(courseId) {
@@ -80,13 +82,10 @@ class CourseSupervisorService {
   async updateCourseSupervisor(id, userId, courseId) {}
 
   async deleteCourseSupervisor(id) {
-    await CourseSupervisor.destroy({ where: { id } })
-      .then(() => {
-        return true;
-      })
-      .catch(() => {
-        return false;
-      });
+    const courseSupervisor = await CourseSupervisor.findOne({ where: { id } });
+    if (!courseSupervisor) throw new AppError('Course Supervisor not found', 404);
+    await courseSupervisor.destroy();
+    return courseSupervisor;
   }
 }
 

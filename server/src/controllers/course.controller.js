@@ -42,10 +42,9 @@ exports.update = async (req, res, next) => {
 };
 
 /** Delete */
-exports.delete = (req, res, next) => {
+exports.delete = async (req, res, next) => {
   try {
-    const course = CourseService.deleteCourse(req.params.id);
-    if (!course) return res.status(404).json({ error: { message: 'Course not found' } });
+    const course = await CourseService.deleteCourse(req.params.id);
     return res.status(200).json(course);
   } catch (error) {
     next(error);

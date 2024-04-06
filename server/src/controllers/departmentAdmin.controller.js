@@ -64,11 +64,6 @@ exports.getByDepartmentId = async (req, res, next) => {
     const departmentAdmins = await DepartmentAdminService.findDepartmentAdminsByDepartmentId(
       req.params.departmentId
     );
-    if (!departmentAdmins) {
-      return res.status(404).json({
-        error: { message: 'DepartmentAdmin not found' },
-      });
-    }
     res.status(200).json(departmentAdmins);
   } catch (error) {
     next(error);

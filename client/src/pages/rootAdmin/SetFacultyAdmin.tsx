@@ -18,7 +18,7 @@ import { Faculty, FacultyAdmin, User } from '../../interfaces/types';
 
 interface DataSource {
   key: string;
-  username: string;
+  email: string;
   firstName: string;
   lastName: string;
   faculty: string;
@@ -27,9 +27,9 @@ interface DataSource {
 
 const columns = [
   {
-    title: 'Kullanıcı Adı',
-    dataIndex: 'username',
-    key: 'username',
+    title: 'E-Posta',
+    dataIndex: 'email',
+    key: 'email',
   },
   {
     title: 'Ad',
@@ -154,7 +154,7 @@ const SetFacultyAdmin = () => {
           (facultyAdmin: FacultyAdmin) => {
             return {
               key: facultyAdmin.id,
-              username: facultyAdmin.User.username,
+              email: facultyAdmin.User.email,
               firstName: facultyAdmin.User.firstName,
               lastName: facultyAdmin.User.lastName,
               faculty: facultyAdmin.Faculty.name,
@@ -237,7 +237,7 @@ const SetFacultyAdmin = () => {
                     options={users.map((user) => ({
                       value: user.id,
                       label: `${
-                        user.username
+                        user.email
                       } (${user.firstName.toLocaleUpperCase()} ${user.lastName.toLocaleUpperCase()})`,
                     }))}
                   />

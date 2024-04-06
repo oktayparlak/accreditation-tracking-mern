@@ -48,7 +48,6 @@ exports.update = async (req, res, next) => {
 exports.delete = (req, res, next) => {
   try {
     const faculty = FacultyService.deleteFaculty(req.params.id);
-    if (!faculty) return res.status(404).json({ error: { message: 'Faculty not found' } });
     return res.status(200).json(faculty);
   } catch (error) {
     next(error);

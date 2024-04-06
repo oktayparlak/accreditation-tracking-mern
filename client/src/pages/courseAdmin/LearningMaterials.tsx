@@ -89,9 +89,9 @@ const LearningMaterials: React.FC = () => {
           duration: 1500,
         });
       });
-  }, []);
+  }, [reset]);
 
-  /** Learning Materials */
+  /** Learning Materials Table*/
   useEffect(() => {
     setTableLoading(true);
     apiClient
@@ -155,20 +155,7 @@ const LearningMaterials: React.FC = () => {
             title: `Öğrenim Çıktısı oluşturuldu.`,
             duration: 1500,
           });
-          setLearningMaterials([
-            {
-              ...response.data,
-              Course: response.data.Course.name,
-              inc: (
-                <LearningMaterialFeaturesMenu
-                  dataId={response.data.id}
-                  dataUrl="/learning-materials"
-                  setReset={setReset}
-                />
-              ),
-            },
-            ...learningMaterials,
-          ]);
+          setReset({});
         } else {
           toast({
             position: 'bottom-left',
@@ -215,10 +202,6 @@ const LearningMaterials: React.FC = () => {
                     </option>
                   ))}
                 </Select>
-              </FormControl>
-              <FormControl id="number" mb={3} isRequired>
-                <FormLabel>Numara</FormLabel>
-                <Input {...register('number')} type="number" bg={'white'} />
               </FormControl>
               <FormControl id="content" mb={3} isRequired>
                 <FormLabel>İçerik</FormLabel>

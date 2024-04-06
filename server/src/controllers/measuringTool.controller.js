@@ -31,6 +31,17 @@ exports.getById = async (req, res, next) => {
   }
 };
 
+exports.getByCourseId = async (req, res, next) => {
+  try {
+    const measuringTool = await MeasuringToolService.getMeasuringToolByCourseId(
+      req.params.courseId
+    );
+    return res.status(200).json(measuringTool);
+  } catch (error) {
+    next(error);
+  }
+};
+
 /** Update */
 exports.update = async (req, res, next) => {
   try {

@@ -110,6 +110,7 @@ const MeasuringToolsFeaturesMenu = ({
         setValue('courseId', response.data.courseId);
         setValue('name', response.data.name);
         setValue('impactRate', response.data.impactRate * 100);
+        setValue('questionCount', response.data.questionCount);
       })
       .catch((error) => {
         toast({
@@ -196,6 +197,14 @@ const MeasuringToolsFeaturesMenu = ({
                   <FormLabel>Etki oranı</FormLabel>
                   <Input
                     {...register('impactRate')}
+                    type="number"
+                    bg={'white'}
+                  />
+                </FormControl>
+                <FormControl id="questionCount" mb={3} isRequired>
+                  <FormLabel>Soru Sayısı</FormLabel>
+                  <Input
+                    {...register('questionCount')}
                     type="number"
                     bg={'white'}
                   />

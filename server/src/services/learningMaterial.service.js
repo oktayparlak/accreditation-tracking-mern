@@ -1,12 +1,18 @@
 const LearningMaterial = require('../models/learningMaterial.model');
 const Course = require('../models/course.model');
 
+const AppError = require('../utilities/AppError');
 const excludeColums = ['createdAt', 'updatedAt'];
 
 class LearningMaterialService {
   async createLearningMaterial(data) {
-    console.log(data);
-    const learningMaterial = LearningMaterial.build(data);
+    const learningMaterialsCount = await LearningMaterial.findOne({
+      order: [['number', 'DESC']],
+    });
+    const learningMaterial = LearningMaterial.build({
+      ...data,
+      number: learningMaterialsCount.number + 1,
+    });
     await learningMaterial.save();
     excludeColums.forEach((column) => {
       learningMaterial[column] = undefined;
@@ -38,21 +44,21 @@ class LearningMaterialService {
   }
 
   async updateLearningMaterial(id, data) {
-    const learningMaterial = await LearningMaterial.update(data, { where: { id } });
+    const learningMaterial = await LearningMaterial.update(
+      { content: data.content, contributionLevel: data.contributionLevel },
+      { where: { id } }
+    );
     excludeColums.forEach((column) => {
       learningMaterial[column] = undefined;
     });
     return learningMaterial;
   }
 
-  deleteLearningMaterial(id) {
-    LearningMaterial.destroy({ where: { id } })
-      .then(() => {
-        return true;
-      })
-      .catch((error) => {
-        throw error;
-      });
+  async deleteLearningMaterial(id) {
+    const learningMaterial = await LearningMaterial.findOne({ where: { id } });
+    if (!learningMaterial) throw new AppError('Learning Material not found', 404);
+    await learningMaterial.destroy();
+    return learningMaterial;
   }
 }
 

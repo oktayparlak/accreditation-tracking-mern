@@ -34,13 +34,10 @@ class FacultyService {
   }
 
   async deleteFaculty(id) {
-    await Faculty.destroy({ where: { id } })
-      .then(() => {
-        return true;
-      })
-      .catch((error) => {
-        throw error;
-      });
+    const faculty = await Faculty.findOne({ where: { id } });
+    if (!faculty) throw new AppError('Faculty not found', 404);
+    await faculty.destroy();
+    return faculty;
   }
 }
 

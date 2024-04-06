@@ -9,10 +9,10 @@ require('dotenv').config();
 
 exports.login = async (req, res, next) => {
   try {
-    const user = await UserService.findUserByUsername(req.body.username, req.body.role);
+    const user = await UserService.findUserByEmail(req.body.email, req.body.role);
     if (!user) throw new AppError('Kullanıcı bulunamadı', 404);
     const valid = comparePassword(req.body.password, user.password);
-    if (!valid) throw new AppError('Geçersiz Şifre veya Kullanıcı Adı', 400);
+    if (!valid) throw new AppError('Geçersiz Şifre veya E-Posta', 400);
     user.password = undefined;
     return res.status(200).json({ token: generateLoginToken(user), user });
   } catch (error) {

@@ -1,6 +1,7 @@
 const Course = require('../models/course.model');
 const MeasuringTool = require('../models/measuringTool.model');
 
+const AppError = require('../utilities/AppError');
 const excludeColums = ['createdAt', 'updatedAt'];
 
 class MeasuringToolService {
@@ -30,6 +31,15 @@ class MeasuringToolService {
     return measuringTool;
   }
 
+  async getMeasuringToolByCourseId(courseId) {
+    const measuringTool = await MeasuringTool.findOne({
+      where: { courseId },
+      attributes: { exclude: excludeColums },
+      include: [Course],
+    });
+    return measuringTool;
+  }
+
   async updateMeasuringTool(id, data) {
     const measuringTool = await MeasuringTool.findOne({
       where: { id },
@@ -41,14 +51,11 @@ class MeasuringToolService {
     return measuringTool;
   }
 
-  deleteMeasuringTool(id) {
-    MeasuringTool.destroy({ where: { id } })
-      .then(() => {
-        return true;
-      })
-      .catch((error) => {
-        throw error;
-      });
+  async deleteMeasuringTool(id) {
+    const measuringTool = await MeasuringTool.findOne({ where: { id } });
+    if (!measuringTool) throw new AppError('Measuring Tool not found', 404);
+    await measuringTool.destroy();
+    return measuringTool;
   }
 }
 

@@ -78,7 +78,6 @@ exports.update = async (req, res, next) => {};
 exports.delete = async (req, res, next) => {
   try {
     const courseAdmin = CourseAdminService.deleteCourseAdmin(req.params.id);
-    if (!courseAdmin) throw new AppError(401, 'Error! Course Admin not deleted');
     return res.status(200).json(courseAdmin);
   } catch (error) {
     next(error);

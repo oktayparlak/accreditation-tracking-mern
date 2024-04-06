@@ -4,7 +4,7 @@ const roles = require('../helpers/roles');
 const create = Joi.object({
   firstName: Joi.string().required(),
   lastName: Joi.string().required(),
-  username: Joi.string().required(),
+  email: Joi.string().email().required(),
   password: Joi.string().required(),
   role: Joi.string()
     .valid(
@@ -20,7 +20,7 @@ const create = Joi.object({
 const update = Joi.object({
   firstName: Joi.string(),
   lastName: Joi.string(),
-  username: Joi.string(),
+  email: Joi.string().email(),
   password: Joi.string().allow(''),
   role: Joi.string().valid(
     roles.FACULTY_ADMIN,

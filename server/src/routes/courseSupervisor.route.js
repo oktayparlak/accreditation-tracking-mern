@@ -12,6 +12,13 @@ const roles = require('../helpers/roles');
 
 /** Get */
 router.get(
+  '/my',
+  verify,
+  allowedRoles([roles.ROOT_ADMIN, roles.FACULTY_ADMIN, roles.DEPARTMENT_ADMIN]),
+  courseSupervisorController.getMyCoursesSupervisor
+);
+
+router.get(
   '/role',
   verify,
   allowedRoles([roles.ROOT_ADMIN]),

@@ -79,6 +79,18 @@ class CourseSupervisorService {
     return courseSupervisors;
   }
 
+  async findAllMyCoursesSupervisor(userId) {
+    const courseSupervisor = await CourseSupervisor.findAll({
+      where: { userId },
+      attributes: { exclude: excludeColums },
+      include: [
+        { model: User, attributes: { exclude: excludeColums } },
+        { model: Course, attributes: { exclude: excludeColums } },
+      ],
+    });
+    return courseSupervisor;
+  }
+
   async updateCourseSupervisor(id, userId, courseId) {}
 
   async deleteCourseSupervisor(id) {

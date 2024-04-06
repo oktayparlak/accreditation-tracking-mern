@@ -12,6 +12,13 @@ const roles = require('../helpers/roles');
 
 /** Get */
 router.get(
+  '/course/:courseId',
+  verify,
+  allowedRoles([roles.ROOT_ADMIN, roles.FACULTY_ADMIN, roles.DEPARTMENT_ADMIN, roles.COURSE_ADMIN]),
+  learningMaterialController.getByCourseId
+);
+
+router.get(
   '/',
   verify,
   allowedRoles([roles.ROOT_ADMIN, roles.FACULTY_ADMIN, roles.DEPARTMENT_ADMIN, roles.COURSE_ADMIN]),

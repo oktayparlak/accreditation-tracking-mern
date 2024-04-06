@@ -34,6 +34,17 @@ exports.getById = async (req, res, next) => {
   }
 };
 
+exports.getByCourseId = async (req, res, next) => {
+  try {
+    const learningMaterials = await LearningMaterialService.findLearningMaterialsByCourseId(
+      req.params.courseId
+    );
+    return res.status(200).json(learningMaterials);
+  } catch (error) {
+    next(error);
+  }
+};
+
 exports.getMyLearningMaterials = async (req, res, next) => {
   try {
     const learningMaterials = await LearningMaterialService.findMyLearningMaterials(req.user.id);

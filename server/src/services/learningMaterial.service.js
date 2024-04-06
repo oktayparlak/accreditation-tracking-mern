@@ -37,7 +37,15 @@ class LearningMaterialService {
 
   async findMyLearningMaterials(userId) {
     return await LearningMaterial.findAll({
-      where: { userId },
+      where: { userId, courseId },
+      attributes: { exclude: excludeColums },
+      include: [Course],
+    });
+  }
+
+  async findLearningMaterialsByCourseId(courseId) {
+    return await LearningMaterial.findAll({
+      where: { courseId },
       attributes: { exclude: excludeColums },
       include: [Course],
     });

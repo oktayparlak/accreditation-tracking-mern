@@ -59,6 +59,15 @@ exports.getByUserId = async (req, res, next) => {
   }
 };
 
+exports.getMyCoursesSupervisor = async (req, res, next) => {
+  try {
+    const courseSupervisor = await CourseSupervisorService.findAllMyCoursesSupervisor(req.user.id);
+    res.status(200).json(courseSupervisor);
+  } catch (error) {
+    next(error);
+  }
+};
+
 exports.getByCourseId = async (req, res, next) => {};
 
 /** Update */

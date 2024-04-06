@@ -16,7 +16,23 @@ class ApplicationService {
     }
     for (const measuringTools of data.measuringTools) {
       const measuringTool = await MeasuringTool.findByPk(measuringTools.id);
-      if (!measuringTool) {
+      if (!measuringTool) throw new AppError('Measuring Tool not found', 404);
+      for (const question of measuringTool.questions) {
+        const newQuestion = Question.build({
+          measuringToolId: measuringTool.id,
+          number: question.number,
+          avarage: question.avarage,
+          fullPoint: question.fullPoint,
+        });
+        await newQuestion.save();
+        for (const learningMaterialId of question.relatedItems) {
+          const learningMaterial = await LearningMaterial.findByPk(learningMaterialId);
+          if (!learningMaterial) throw new AppError('Learning Material not found', 404);
+          await QuestionLearningMaterial.create({
+            questionId: newQuestion.id,
+            learningMaterialId: learningMaterial.id,
+          });
+        }
       }
     }
   }

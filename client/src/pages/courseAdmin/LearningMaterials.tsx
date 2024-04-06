@@ -195,7 +195,11 @@ const LearningMaterials: React.FC = () => {
             <form onSubmit={handleSubmit(onSubmit)}>
               <FormControl id="courseId" mb={3} isRequired>
                 <FormLabel>Ders</FormLabel>
-                <Select {...register('courseId')} bg={'white'}>
+                <Select
+                  placeholder="Ders Seçiniz"
+                  {...register('courseId')}
+                  bg={'white'}
+                >
                   {courses.map((courses: Course) => (
                     <option key={courses.id} value={courses.id}>
                       {courses.name}

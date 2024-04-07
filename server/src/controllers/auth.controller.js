@@ -19,21 +19,3 @@ exports.login = async (req, res, next) => {
     next(error);
   }
 };
-
-exports.checkToken = async (req, res, next) => {
-  try {
-    let { token } = req.body;
-    if (!token) {
-      throw new AppError('Token bulunamadı', 401);
-    }
-    if (token.startsWith('Bearer ')) {
-      token = token.slice(7, token.length).trimLeft();
-    }
-    console.log(token);
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    if (!decoded) throw new AppError('Token geçersiz', 400);
-    return res.status(200).json({ message: 'Token geçerli' });
-  } catch (error) {
-    next(error);
-  }
-};

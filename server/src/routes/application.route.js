@@ -15,14 +15,14 @@ const roles = require('../helpers/roles');
 router.get(
   '/',
   verify,
-  allowedRoles([roles.ROOT_ADMIN, roles.FACULTY_ADMIN, roles.DEPARTMENT_ADMIN, roles.COURSE_ADMIN]),
+  allowedRoles([roles.ROOT_ADMIN, roles.FACULTY_ADMIN]),
   applicationController.getAll
 );
 
 router.get(
   '/:id',
   verify,
-  allowedRoles([roles.ROOT_ADMIN, roles.FACULTY_ADMIN, roles.DEPARTMENT_ADMIN, roles.COURSE_ADMIN]),
+  allowedRoles([roles.ROOT_ADMIN, roles.FACULTY_ADMIN]),
   validateId,
   applicationController.getById
 );
@@ -31,7 +31,7 @@ router.get(
 router.post(
   '/',
   verify,
-  allowedRoles([roles.ROOT_ADMIN, roles.FACULTY_ADMIN, roles.DEPARTMENT_ADMIN, roles.COURSE_ADMIN]),
+  allowedRoles([roles.ROOT_ADMIN, roles.COURSE_SUPERVISOR]),
   validate(applicationSchema.create),
   upload.array('files', 6),
   applicationController.create
@@ -43,7 +43,7 @@ router.post(
 router.delete(
   '/:id',
   verify,
-  allowedRoles([roles.ROOT_ADMIN, roles.FACULTY_ADMIN, roles.DEPARTMENT_ADMIN, roles.COURSE_ADMIN]),
+  allowedRoles([roles.ROOT_ADMIN]),
   validateId,
   applicationController.delete
 );

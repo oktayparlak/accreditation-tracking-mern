@@ -3,12 +3,20 @@ const ApplicationService = require('../services/application.service');
 /** Create */
 exports.create = async (req, res, next) => {
   try {
-    const application = await ApplicationService.createApplication(
-      req.user.id,
-      req.body,
-      req.files
-    );
+    const data = JSON.parse(req.body.data);
+    const reports = req.files;
+    console.log(reports);
+    const application = await ApplicationService.createApplication(req.user.id, data, reports);
     res.status(201).json(application);
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.downloadFile = async (req, res, next) => {
+  try {
+    const file = await ApplicationService.downloadFile(req.params.id);
+    return res.download(file.url);
   } catch (error) {
     next(error);
   }

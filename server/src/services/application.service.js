@@ -7,36 +7,45 @@ const QuestionLearningMaterial = require('../models/questionLearningMaterial.mod
 const LearningMaterial = require('../models/learningMaterial.model');
 const MeasuringTool = require('../models/measuringTool.model');
 
+const AppError = require('../utilities/AppError');
 const excludeColums = ['createdAt', 'updatedAt'];
 
 class ApplicationService {
   async createApplication(userId, data, files) {
     const application = Application.build({ userId, courseId: data.courseId });
     await application.save();
-    // for (let file of files) {
-    //   await File.create({ applicationId: application.id, name: file.name, url: file.url });
-    // }
-    for (const measuringTools of data.measuringTools) {
-      const measuringTool = await MeasuringTool.findByPk(measuringTools.id);
+    for (let file of files) {
+      await File.create({ applicationId: application.id, name: file.originalname, url: file.path });
+    }
+    for (const tool of data.measuringTools) {
+      const measuringTool = await MeasuringTool.findByPk(tool.id);
       if (!measuringTool) throw new AppError('Measuring Tool not found', 404);
-      for (const question of measuringTool.questions) {
+      for (const question of tool.questions) {
         const newQuestion = Question.build({
-          measuringToolId: measuringTool.id,
+          measuringToolId: tool.id,
           number: question.number,
-          avarage: question.avarage,
+          average: question.average,
           fullPoint: question.fullPoint,
         });
         await newQuestion.save();
-        for (const learningMaterialId of question.relatedItems) {
+        for (const learningMaterialId of question.releatedItems) {
           const learningMaterial = await LearningMaterial.findByPk(learningMaterialId);
           if (!learningMaterial) throw new AppError('Learning Material not found', 404);
-          await QuestionLearningMaterial.create({
+          const questionLearningMaterial = QuestionLearningMaterial.build({
             questionId: newQuestion.id,
             learningMaterialId: learningMaterial.id,
           });
+          await questionLearningMaterial.save();
         }
       }
     }
+    return application;
+  }
+
+  async downloadFile(id) {
+    const file = await File.findByPk(id);
+    if (!file) throw new AppError('File not found', 404);
+    return file;
   }
 
   async findApplicationById(id) {

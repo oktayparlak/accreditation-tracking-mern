@@ -13,6 +13,14 @@ const roles = require('../helpers/roles');
 
 /** Get */
 router.get(
+  '/download/:id',
+  verify,
+  allowedRoles([roles.ROOT_ADMIN, roles.FACULTY_ADMIN]),
+  validateId,
+  applicationController.downloadFile
+);
+
+router.get(
   '/',
   verify,
   allowedRoles([roles.ROOT_ADMIN, roles.FACULTY_ADMIN]),
@@ -33,7 +41,7 @@ router.post(
   verify,
   allowedRoles([roles.ROOT_ADMIN, roles.COURSE_SUPERVISOR]),
   validate(applicationSchema.create),
-  upload.array('files', 6),
+  upload.array('reports', 7),
   applicationController.create
 );
 

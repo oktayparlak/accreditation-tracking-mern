@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Navbar from '../../components/Navbar';
 import {
   Box,
@@ -18,11 +18,6 @@ import apiClient from '../../services/api-client';
 import { FieldValues, useForm } from 'react-hook-form';
 import FormItem from 'antd/es/form/FormItem';
 
-interface Questions {
-  Vize: string[];
-  Final: string[];
-}
-
 interface Course {
   Course: any;
   id: string;
@@ -30,6 +25,7 @@ interface Course {
 }
 
 export const Applications = () => {
+  const count = useRef(0);
   const toast = useToast();
   const [isFirstFormSelected, setIsFirstFormSelected] = useState(true);
   const [selectedCourse, setSelectedCourse] = useState<string>('');
@@ -107,7 +103,67 @@ export const Applications = () => {
   };
 
   const onSubmit = (data: FieldValues) => {
-    console.log(data);
+    const affectedMaterialsFields = Object.keys(data).filter((key) =>
+      key.includes('affectedMaterials')
+    );
+    const hasEmptyAffectedMaterials = affectedMaterialsFields.some(
+      (field) => !data[field] || data[field].length === 0
+    );
+
+    if (hasEmptyAffectedMaterials) {
+      toast({
+        title: 'Etkilediği Madde alanı boş bırakılamaz!',
+        status: 'error',
+        duration: 1500,
+        isClosable: true,
+      });
+      return;
+    }
+
+    const transformedData = {
+      courseId: selectedCourseId,
+      measuringTools: measuringTools.map((tool) => ({
+        id: tool.id,
+        questions: Array.from({ length: tool.questionCount }, (_, i) => ({
+          number: i + 1,
+          average: data[`measuringTools[${i}, ${tool.name}].averageScore`],
+          fullPoint: data[`measuringTools[${i}, ${tool.name}].totalScore`],
+          releatedItems:
+            data[`measuringTools[${i}, ${tool.name}].affectedMaterials`],
+        })),
+      })),
+    };
+    const formData = new FormData();
+
+    data.files.fileList.forEach((fileData: any, index: number) => {
+      formData.append(`reports`, fileData.originFileObj);
+    });
+    formData.append('data', JSON.stringify(transformedData));
+
+    apiClient
+      .post('/applications', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      })
+      .then((response) => {
+        toast({
+          title: 'Başvuru başarıyla oluşturuldu!',
+          status: 'success',
+          duration: 1500,
+          isClosable: true,
+        });
+      })
+      .catch((error) => {
+        toast({
+          position: 'bottom-right',
+          status: 'error',
+          title: `${
+            error.response
+              ? error.response.data?.error.message
+              : 'Sunucu Hatası'
+          }`,
+          duration: 1500,
+        });
+      });
   };
 
   return (
@@ -125,16 +181,6 @@ export const Applications = () => {
             <VStack>
               <Heading mb={4}>Başvuru Oluştur</Heading>
               <VStack spacing={4} align="center">
-                <Upload
-                  action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
-                  listType="text"
-                  maxCount={6}
-                  onChange={handleUploadChange}
-                >
-                  <AntButton icon={<UploadOutlined />}>
-                    Dosya Yükle (Maksimum: 6)
-                  </AntButton>
-                </Upload>
                 <Text style={{ fontWeight: 'bold' }}>Ders Seçim:</Text>
                 <Select
                   showSearch
@@ -159,25 +205,41 @@ export const Applications = () => {
                 )}
                 {!isFirstFormSelected && selectedCourse && (
                   <Box width="500px">
-                    <Center>
-                      <Heading size="md" mb={3}>
-                        Ölçme Aracı
-                      </Heading>
-                    </Center>
                     <Form onFinish={onSubmit}>
+                      <Flex justifyContent={'center'}>
+                        <VStack>
+                          <Heading mt={4} size="md" mb={3}>
+                            Ölçme Araçları
+                          </Heading>
+                        </VStack>
+                      </Flex>
+                      <Flex justify={'center'}>
+                        <FormItem name="files">
+                          <Upload
+                            beforeUpload={() => false}
+                            listType="text"
+                            onChange={handleUploadChange}
+                            key={count.current++}
+                          >
+                            <AntButton icon={<UploadOutlined />}>
+                              Dosya Yükle
+                            </AntButton>
+                          </Upload>
+                        </FormItem>
+                      </Flex>
                       {measuringTools.map((material, index) => (
                         <Center>
                           <Box key={index}>
-                            <Heading size="sm" mt={3}>
-                              Adı: {material.name}
-                            </Heading>
-                            <VStack spacing={2} align="start">
+                            <VStack spacing={2}>
+                              <Heading size="sm" mt={3}>
+                                Ölçme Aracı Adı: {material.name}
+                              </Heading>
                               {Array.from(
                                 { length: material.questionCount },
                                 (_, i) => (
                                   <>
-                                    <Text style={{ marginTop: '3px' }} key={i}>
-                                      Soru {i + 1}
+                                    <Text mt={2} key={i}>
+                                      Soru: {i + 1}
                                     </Text>
                                     <div
                                       style={{
@@ -189,15 +251,17 @@ export const Applications = () => {
                                       <div style={{ marginRight: '10px' }}>
                                         <Text>Tam Puan</Text>
                                         <FormItem
-                                          name={`measuringTools[${i},${material.name}].totalScore`}
+                                          name={`measuringTools[${i}, ${material.name}].totalScore`}
                                         >
                                           <Input
+                                            type="number"
                                             {...register(
                                               `measuringTools[${i}].totalScore`,
                                               { required: true }
                                             )}
                                             placeholder="Puan giriniz."
                                             style={{ width: '100px' }}
+                                            required
                                           />
                                         </FormItem>
                                       </div>
@@ -212,12 +276,17 @@ export const Applications = () => {
                                           name={`measuringTools[${i}, ${material.name}].averageScore`}
                                         >
                                           <Input
+                                            type="number"
                                             {...register(
                                               `measuringTools[${i}].averageScore`,
-                                              { required: true }
+                                              {
+                                                required:
+                                                  'Ortalama Puan alanı boş bıraklamaz!  ',
+                                              }
                                             )}
                                             placeholder="Puan giriniz."
                                             style={{ width: '100px' }}
+                                            required
                                           />
                                         </FormItem>
                                       </div>
@@ -270,7 +339,7 @@ export const Applications = () => {
                           type="submit"
                           colorScheme="blue"
                         >
-                          Ata
+                          Gönder
                         </Button>
                       </Center>
                     </Form>

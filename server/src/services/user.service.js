@@ -85,9 +85,7 @@ class UserService {
         const courseSupervisor = await CourseSupervisor.findOne({
           where: { userId: user.dataValues.id },
         });
-        if (!courseSupervisor) {
-          data.push(user);
-        }
+        data.push(user);
       }
     }
     return data;

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Table as AntTable } from 'antd';
 import Navbar from '../../components/Navbar';
 import {
@@ -61,6 +61,7 @@ const columns = [
 const MeasuringTools: React.FC = () => {
   const toast = useToast();
   const { register, handleSubmit } = useForm();
+  const formRef = useRef(null);
 
   const [measuringTools, setMeasuringTools] = useState<DataSource[]>([]);
   const [courses, setCourses] = useState<Course[]>([]);
@@ -87,7 +88,7 @@ const MeasuringTools: React.FC = () => {
           duration: 1500,
         });
       });
-  }, []);
+  }, [reset]);
 
   /** Measuring Tools */
   useEffect(() => {
@@ -153,20 +154,10 @@ const MeasuringTools: React.FC = () => {
             title: `Ölçme Aracı başarıyla oluşturuldu.`,
             duration: 1500,
           });
-          setMeasuringTools([
-            {
-              ...response.data,
-              Course: response.data.Course.name,
-              inc: (
-                <MeasuringToolsFeaturesMenu
-                  dataId={response.data.id}
-                  dataUrl="/measuring-tools"
-                  setReset={setReset}
-                />
-              ),
-            },
-            ...measuringTools,
-          ]);
+          if (formRef.current) {
+            (formRef.current as any).reset();
+          }
+          setReset({});
         } else {
           toast({
             position: 'bottom-left',
@@ -203,7 +194,7 @@ const MeasuringTools: React.FC = () => {
                 Ölçme Aracı oluştur
               </Heading>
             </Center>
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <form ref={formRef} onSubmit={handleSubmit(onSubmit)}>
               <FormControl id="courseId" mb={3} isRequired>
                 <FormLabel>Ders</FormLabel>
                 <Select

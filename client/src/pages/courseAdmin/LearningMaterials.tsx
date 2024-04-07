@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Table as AntTable } from 'antd';
 import Navbar from '../../components/Navbar';
 import {
@@ -63,6 +63,7 @@ const columns = [
 const LearningMaterials: React.FC = () => {
   const toast = useToast();
   const { register, handleSubmit } = useForm();
+  const formRef = useRef(null);
 
   const [learningMaterials, setLearningMaterials] = useState<DataSource[]>([]);
   const [courses, setCourses] = useState<Course[]>([]);
@@ -155,6 +156,9 @@ const LearningMaterials: React.FC = () => {
             title: `Öğrenim Çıktısı oluşturuldu.`,
             duration: 1500,
           });
+          if (formRef.current) {
+            (formRef.current as any).reset();
+          }
           setReset({});
         } else {
           toast({
@@ -192,7 +196,7 @@ const LearningMaterials: React.FC = () => {
                 Öğrenim Çıktısı Oluştur
               </Heading>
             </Center>
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <form ref={formRef} onSubmit={handleSubmit(onSubmit)}>
               <FormControl id="courseId" mb={3} isRequired>
                 <FormLabel>Ders</FormLabel>
                 <Select

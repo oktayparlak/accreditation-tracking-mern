@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Table as AntTable } from 'antd';
 import Navbar from '../../components/Navbar';
 import {
@@ -47,6 +47,7 @@ const columns = [
 const Departments: React.FC = () => {
   const toast = useToast();
   const { register, handleSubmit } = useForm();
+  const formRef = useRef(null);
 
   const [departments, setDepartments] = useState<DataSource[]>([]);
   const [faculties, setFaculties] = useState<Faculty[]>([]);
@@ -72,7 +73,7 @@ const Departments: React.FC = () => {
           duration: 1500,
         });
       });
-  }, []);
+  }, [reset]);
 
   useEffect(() => {
     setTableLoading(true);
@@ -135,20 +136,9 @@ const Departments: React.FC = () => {
             title: `Bölüm başarıyla oluşturuldu.`,
             duration: 1500,
           });
-          // setDepartments([
-          //   {
-          //     ...response.data,
-          //     Faculty: response.data.Faculty.name,
-          //     inc: (
-          //       <DepartmentFeaturesMenu
-          //         dataId={response.data.id}
-          //         dataUrl="/departments"
-          //         setReset={setReset}
-          //       />
-          //     ),
-          //   },
-          //   ...departments,
-          // ]);
+          if (formRef.current) {
+            (formRef.current as any).reset();
+          }
           setReset({});
         } else {
           toast({
@@ -186,7 +176,7 @@ const Departments: React.FC = () => {
                 Bölüm Oluştur
               </Heading>
             </Center>
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <form ref={formRef} onSubmit={handleSubmit(onSubmit)}>
               <FormControl id="facultyId" mb={3} isRequired>
                 <FormLabel>Fakülte</FormLabel>
                 <Select

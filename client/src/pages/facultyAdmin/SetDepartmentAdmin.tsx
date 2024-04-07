@@ -12,7 +12,7 @@ import {
 } from '@chakra-ui/react';
 import { Select, Form, Table as AntTable } from 'antd';
 import { FieldValues, useForm } from 'react-hook-form';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import apiClient from '../../services/api-client';
 import { Department, DepartmentAdmin, User } from '../../interfaces/types';
 
@@ -68,6 +68,7 @@ const SetDepartmentAdmin = () => {
 
   const toast = useToast();
   const { handleSubmit, setValue } = useForm();
+  const formRef = useRef(null);
 
   const onChange = (value: string) => {
     setValue('departmentId', value);
@@ -87,6 +88,9 @@ const SetDepartmentAdmin = () => {
           title: 'Bölüm Başkanı Atandı',
           duration: 1500,
         });
+        if (formRef.current) {
+          (formRef.current as any).resetFields();
+        }
         setReset({});
       })
       .catch((error) => {
@@ -111,6 +115,9 @@ const SetDepartmentAdmin = () => {
           title: 'Bölüm Başkanı Silindi',
           duration: 1500,
         });
+        if (formRef.current) {
+          (formRef.current as any).resetFields();
+        }
         setReset({});
       })
       .catch((error) => {
@@ -221,6 +228,7 @@ const SetDepartmentAdmin = () => {
             <VStack>
               <Heading mb={4}>Bölüm Başkanı Belirle</Heading>
               <Form
+                ref={formRef}
                 onFinish={handleSubmit(onSubmit)}
                 layout="vertical"
                 style={{ width: 300 }}

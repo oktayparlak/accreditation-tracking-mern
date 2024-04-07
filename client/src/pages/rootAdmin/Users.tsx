@@ -59,6 +59,7 @@ const columns = [
 const Users: React.FC = () => {
   const toast = useToast();
   const { register, handleSubmit } = useForm();
+  const formRef = useRef(null);
 
   const [users, setUsers] = useState<DataSource[]>([]);
   const [loading, setLoading] = useState(false);
@@ -124,20 +125,10 @@ const Users: React.FC = () => {
             title: `Kullanıcı başarıyla oluşturuldu.`,
             duration: 1500,
           });
-          setUsers([
-            {
-              ...response.data,
-              inc: (
-                <UserFeaturesMenu
-                  dataId={response.data.id}
-                  dataUrl="/users"
-                  setReset={setReset}
-                />
-              ),
-              role: roles[`${response.data.role}`] || '-',
-            },
-            ...users,
-          ]);
+          if (formRef.current) {
+            (formRef.current as any).reset();
+          }
+          setReset({});
         } else {
           toast({
             position: 'bottom-left',
@@ -172,7 +163,7 @@ const Users: React.FC = () => {
                 Kullanıcı Oluştur
               </Heading>
             </Center>
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <form ref={formRef} onSubmit={handleSubmit(onSubmit)}>
               <FormControl id="role" mb={3} isRequired>
                 <FormLabel>Rol</FormLabel>
                 <Select

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Table as AntTable } from 'antd';
 import Navbar from '../../components/Navbar';
 import {
@@ -77,6 +77,7 @@ const columns = [
 const Courses: React.FC = () => {
   const toast = useToast();
   const { register, handleSubmit } = useForm();
+  const formRef = useRef(null);
 
   const [courses, setCourses] = useState<DataSource[]>([]);
   const [departments, setDepartments] = useState<Department[]>([]);
@@ -103,7 +104,7 @@ const Courses: React.FC = () => {
           duration: 1500,
         });
       });
-  }, []);
+  }, [reset]);
 
   /** Courses */
   useEffect(() => {
@@ -170,6 +171,9 @@ const Courses: React.FC = () => {
             title: `Ders başarıyla oluşturuldu.`,
             duration: 1500,
           });
+          if (formRef.current) {
+            (formRef.current as any).reset();
+          }
           setReset({});
         } else {
           toast({
@@ -207,7 +211,7 @@ const Courses: React.FC = () => {
                 Ders Oluştur
               </Heading>
             </Center>
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <form ref={formRef} onSubmit={handleSubmit(onSubmit)}>
               <FormControl id="departmentId" mb={3} isRequired>
                 <FormLabel>Bölüm</FormLabel>
                 <Select

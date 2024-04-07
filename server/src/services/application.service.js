@@ -28,7 +28,7 @@ class ApplicationService {
           fullPoint: question.fullPoint,
         });
         await newQuestion.save();
-        for (const learningMaterialId of question.releatedItems) {
+        for (const learningMaterialId of question.relatedItems) {
           const learningMaterial = await LearningMaterial.findByPk(learningMaterialId);
           if (!learningMaterial) throw new AppError('Learning Material not found', 404);
           const questionLearningMaterial = QuestionLearningMaterial.build({

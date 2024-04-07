@@ -9,9 +9,9 @@ const create = Joi.object({
         questions: Joi.array()
           .items({
             number: Joi.number().required(),
-            avarage: Joi.number().required(),
+            average: Joi.number().required(),
             fullPoint: Joi.number().required(),
-            releatedItems: Joi.array().items(Joi.string()).required(),
+            relatedItems: Joi.array().items(Joi.string()).required(),
           })
           .required(),
       })

@@ -15,6 +15,7 @@ import LearningMaterials from './pages/courseAdmin/LearningMaterials';
 import MeasuringTools from './pages/courseAdmin/MeasuringTools';
 import SetCourseSupervisor from './pages/courseAdmin/SetCourseSupervisor';
 import { Applications } from './pages/courseSupervisor/Applications';
+import AllApplications from './pages/courseSupervisor/AllApplications';
 
 const App = () => {
   return (
@@ -122,6 +123,14 @@ const App = () => {
           element={
             <AuthGuard>
               <Applications />
+            </AuthGuard>
+          }
+        />
+        <Route
+          path="/all-applications"
+          element={
+            <AuthGuard>
+              <AllApplications />
             </AuthGuard>
           }
         />

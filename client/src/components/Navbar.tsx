@@ -154,7 +154,7 @@ const RootAdminMenu: React.FC = () => {
             <MenuItem
               as={'a'}
               cursor={'pointer'}
-              onClick={() => navigate('/measuring-tools')}
+              onClick={() => navigate('/all-applications')}
             >
               Başvurular
             </MenuItem>
@@ -319,7 +319,7 @@ const CourseSupervisorMenu: React.FC = () => {
             <MenuItem
               as={'a'}
               cursor={'pointer'}
-              onClick={() => navigate('/measuring-tools')}
+              onClick={() => navigate('/all-applications')}
             >
               Başvurular
             </MenuItem>

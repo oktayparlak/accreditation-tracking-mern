@@ -128,7 +128,7 @@ export const Applications = () => {
           number: i + 1,
           average: data[`measuringTools[${i}, ${tool.name}].averageScore`],
           fullPoint: data[`measuringTools[${i}, ${tool.name}].totalScore`],
-          releatedItems:
+          relatedItems:
             data[`measuringTools[${i}, ${tool.name}].affectedMaterials`],
         })),
       })),

@@ -76,7 +76,7 @@ class ApplicationService {
 
   async findAllApplications() {
     return await Application.findAll({
-      include: [User],
+      include: [User, Course],
       attributes: { exclude: excludeColums },
     });
   }

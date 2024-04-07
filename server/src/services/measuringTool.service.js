@@ -6,7 +6,7 @@ const excludeColums = ['createdAt', 'updatedAt'];
 
 class MeasuringToolService {
   async createMeasuringTool(data) {
-    const measuringTool = MeasuringTool.build(data, { include: [Course] });
+    const measuringTool = MeasuringTool.build({ ...data, questionCount: 0 }, { include: [Course] });
     await measuringTool.save();
     excludeColums.forEach((column) => {
       measuringTool[column] = undefined;

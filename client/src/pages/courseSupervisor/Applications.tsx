@@ -233,7 +233,7 @@ export const Applications = () => {
                                             placeholder="Seçiniz"
                                             style={{ width: '200px' }}
                                             mode="multiple"
-                                            maxTagCount={3}
+                                            maxCount={3}
                                             onChange={(value) =>
                                               setValue(
                                                 `measuringTools[${i}].affectedMaterials`,

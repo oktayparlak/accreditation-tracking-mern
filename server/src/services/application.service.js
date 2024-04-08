@@ -63,20 +63,21 @@ class ApplicationService {
       attributes: { exclude: excludeColums },
     });
     for (const measuringTool of measuringTools) {
-      measuringTool.questions = await Question.findAll({
+      const questions = await Question.findAll({
         where: { measuringToolId: measuringTool.id },
         attributes: { exclude: excludeColums },
       });
-      for (const question of measuringTool.questions) {
-        question.relatedItems = await QuestionLearningMaterial.findAll({
+      measuringTool.dataValues.questions = questions;
+      for (const question of measuringTool.dataValues.questions) {
+        question.dataValues.relatedItems = await QuestionLearningMaterial.findAll({
           where: { questionId: question.id },
           include: [{ model: LearningMaterial, attributes: { exclude: excludeColums } }],
           attributes: { exclude: excludeColums },
         });
       }
     }
-    application.measuringTools = measuringTools;
-    application.files = await File.findAll({
+    application.dataValues.MeasuringTools = measuringTools;
+    application.dataValues.Files = await File.findAll({
       where: { applicationId: application.id },
       attributes: { exclude: excludeColums },
     });

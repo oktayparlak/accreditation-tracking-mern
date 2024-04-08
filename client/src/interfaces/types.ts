@@ -39,6 +39,7 @@ export interface Course {
   id: string;
   Department: Department;
   name: string;
+  code: string;
   credit: number;
   ects: number;
   academicYear: string;
@@ -82,10 +83,35 @@ export interface LearningMaterial {
   succesPoint?: number;
 }
 
+export interface Question {
+  id: string;
+  measuringToolId: string;
+  number: number;
+  average: number;
+  fullPoint: number;
+  relatedItems: string[];
+}
+
 export interface MeasuringTool {
   id: string;
-  Course: Course;
+  Course?: Course;
   name: string;
   impactRate: number;
   questionCount: number;
+  questions?: Question[];
+}
+
+export interface File {
+  id: string;
+  name: string;
+  url: string;
+}
+export interface Application {
+  id: string;
+  userId: string;
+  courseId: string;
+  Course: Course;
+  User: User;
+  MeasuringTools: MeasuringTool[];
+  Files: File[];
 }

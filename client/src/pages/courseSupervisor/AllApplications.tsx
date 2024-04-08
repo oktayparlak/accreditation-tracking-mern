@@ -14,10 +14,11 @@ import {
   VStack,
   useToast,
 } from '@chakra-ui/react';
-import { FieldValues, useForm } from 'react-hook-form';
+import { FieldValues, set, useForm } from 'react-hook-form';
 import apiClient from '../../services/api-client';
 import UserFeaturesMenu from '../../components/UserFeaturesMenu';
-import { roles, User } from '../../interfaces/types';
+import { Application, roles, User } from '../../interfaces/types';
+import { ApplicationDetails } from '../../components/ApplicationDetails';
 
 interface DataSource {
   key: string;
@@ -58,44 +59,33 @@ const columns = [
 
 const AllApplications: React.FC = () => {
   const toast = useToast();
-  const { register, handleSubmit } = useForm();
-  const [users, setUsers] = useState<DataSource[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [applications, setApplications] = useState<DataSource[]>([]);
   const [tableLoading, setTableLoading] = useState(false);
-  const [reset, setReset] = useState({});
-
-  const data = [
-    {
-      key: '1',
-      email: 'oktay@mail.com',
-      firstName: 'Oktay',
-      lastName: 'Parlak',
-      courseName: 'Yazılım Mühendisliği',
-      inc: (
-        <UserFeaturesMenu dataId={'1'} dataUrl={'/users'} setReset={setReset} />
-      ),
-    },
-    {
-      key: '2',
-      email: 'fatih@mail.com',
-      firstName: 'Fatih',
-      lastName: 'Taner',
-      courseName: 'Bilgisayar Mühendisliği',
-      inc: (
-        <UserFeaturesMenu dataId={'1'} dataUrl={'/users'} setReset={setReset} />
-      ),
-    },
-  ];
 
   useEffect(() => {
-    //setTableLoading(true);
+    setTableLoading(true);
     apiClient
       .get('/applications')
       .then((response) => {
-        console.log(response.data);
+        const data: DataSource[] = response.data.map(
+          (application: Application) => {
+            return {
+              key: application.id,
+              email: application.User.email,
+              firstName: application.User.firstName,
+              lastName: application.User.lastName,
+              courseName: application.Course.name,
+              inc: <ApplicationDetails dataId={application.id} />,
+            };
+          }
+        );
+        setApplications(data);
       })
       .catch((error) => {
         console.log(error);
+      })
+      .finally(() => {
+        setTableLoading(false);
       });
   }, []);
 
@@ -121,7 +111,7 @@ const AllApplications: React.FC = () => {
             </Center>
             <AntTable
               loading={tableLoading}
-              dataSource={data}
+              dataSource={applications}
               columns={columns}
             ></AntTable>
           </Box>

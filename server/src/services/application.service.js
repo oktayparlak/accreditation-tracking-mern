@@ -8,7 +8,7 @@ const LearningMaterial = require('../models/learningMaterial.model');
 const MeasuringTool = require('../models/measuringTool.model');
 
 const AppError = require('../utilities/AppError');
-const excludeColums = ['createdAt', 'updatedAt'];
+const excludeColums = ['updatedAt'];
 
 class ApplicationService {
   async createApplication(userId, data, files) {
@@ -88,6 +88,7 @@ class ApplicationService {
     return await Application.findAll({
       include: [User, Course],
       attributes: { exclude: excludeColums },
+      order: [['createdAt', 'DESC']],
     });
   }
 

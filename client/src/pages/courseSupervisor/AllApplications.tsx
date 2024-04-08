@@ -26,6 +26,7 @@ interface DataSource {
   firstName: string;
   lastName: string;
   courseName: string;
+  createdAt: string;
   inc: React.ReactNode;
 }
 
@@ -49,6 +50,11 @@ const columns = [
     title: 'Ders Adı',
     dataIndex: 'courseName',
     key: 'courseName',
+  },
+  {
+    title: 'Başvuru Tarihi',
+    dataIndex: 'createdAt',
+    key: 'createdAt',
   },
   {
     title: 'İncele',
@@ -75,6 +81,11 @@ const AllApplications: React.FC = () => {
               firstName: application.User.firstName,
               lastName: application.User.lastName,
               courseName: application.Course.name,
+              createdAt: new Date(
+                new Date(application.createdAt).getTime() + 24 * 60 * 60 * 1000
+              )
+                .toISOString()
+                .split('T')[0],
               inc: <ApplicationDetails dataId={application.id} />,
             };
           }

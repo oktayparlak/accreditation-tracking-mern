@@ -114,4 +114,5 @@ export interface Application {
   User: User;
   MeasuringTools: MeasuringTool[];
   Files: File[];
+  createdAt: string;
 }

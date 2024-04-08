@@ -41,14 +41,17 @@ export const ApplicationDetails = ({ dataId }: ApplicationDetailsProps) => {
       });
   };
 
-  const handleClick = (data: any) => {
+  const handleClick = (data: any, name: string) => {
     apiClient
-      .get(`applications/download/${data}`)
+      .get(`applications/download/${data}`, {
+        responseType: 'blob',
+      })
       .then((response) => {
+        /** download file */
         const url = window.URL.createObjectURL(new Blob([response.data]));
         const link = document.createElement('a');
         link.href = url;
-        link.setAttribute('download', 'file.pdf');
+        link.setAttribute('download', name);
         document.body.appendChild(link);
         link.click();
       })
@@ -95,7 +98,7 @@ export const ApplicationDetails = ({ dataId }: ApplicationDetailsProps) => {
                   {details?.Files.map((file) => (
                     <Box key={`file-${file.id}`} mb={4}>
                       <Button
-                        onClick={() => handleClick(file.id)}
+                        onClick={() => handleClick(file.id, file.name)}
                         variant="link"
                         colorScheme="blue"
                       >
@@ -132,11 +135,8 @@ export const ApplicationDetails = ({ dataId }: ApplicationDetailsProps) => {
                       Ölçme Aracı: {tool.name}
                     </Heading>
                     <Text mb={4}>Etki Oranı: {tool.impactRate}</Text>
-                    {tool.questions?.map((question) => (
-                      <Box
-                        key={`question-${tool.id}-${question.number}`}
-                        mb={4}
-                      >
+                    {tool.questions?.map((question, index) => (
+                      <Box key={`question-${tool.id}-${index}`} mb={4}>
                         <Text fontWeight="bold" mb={2}>
                           Soru {question.number}
                         </Text>

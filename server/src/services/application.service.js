@@ -12,6 +12,12 @@ const excludeColums = ['updatedAt'];
 
 class ApplicationService {
   async createApplication(userId, data, files) {
+    let x = 0,
+      y = 0,
+      z = 0,
+      t = 0,
+      f = 0,
+      r = 0;
     const application = Application.build({ userId, courseId: data.courseId });
     await application.save();
     for (let file of files) {
@@ -20,7 +26,13 @@ class ApplicationService {
     for (const tool of data.measuringTools) {
       const measuringTool = await MeasuringTool.findByPk(tool.id);
       if (!measuringTool) throw new AppError('Measuring Tool not found', 404);
+      x = measuringTool.impactRate / 100;
       for (const question of tool.questions) {
+        y = question.average / 100;
+        z = question.average / question.fullPoints;
+        f = question.fullPoints / 100;
+        t = x * z * f;
+        r = x * f;
         const newQuestion = Question.build({
           measuringToolId: tool.id,
           number: question.number,
@@ -31,6 +43,9 @@ class ApplicationService {
         for (const learningMaterialId of question.relatedItems) {
           const learningMaterial = await LearningMaterial.findByPk(learningMaterialId);
           if (!learningMaterial) throw new AppError('Learning Material not found', 404);
+          learningMaterial.impactSum += t;
+          learningMaterial.impactTotal += r;
+          await learningMaterial.save();
           const questionLearningMaterial = QuestionLearningMaterial.build({
             questionId: newQuestion.id,
             learningMaterialId: learningMaterial.id,

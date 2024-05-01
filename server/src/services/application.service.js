@@ -29,8 +29,8 @@ class ApplicationService {
       x = measuringTool.impactRate / 100;
       for (const question of tool.questions) {
         y = question.average / 100;
-        z = question.average / question.fullPoints;
-        f = question.fullPoints / 100;
+        z = question.average / question.fullPoint;
+        f = question.fullPoint / 100;
         t = x * z * f;
         r = x * f;
         const newQuestion = Question.build({
@@ -43,8 +43,8 @@ class ApplicationService {
         for (const learningMaterialId of question.relatedItems) {
           const learningMaterial = await LearningMaterial.findByPk(learningMaterialId);
           if (!learningMaterial) throw new AppError('Learning Material not found', 404);
-          learningMaterial.impactSum += t;
-          learningMaterial.impactTotal += r;
+          learningMaterial.impactSum = parseFloat(learningMaterial.impactSum) + t;
+          learningMaterial.impactTotal = parseFloat(learningMaterial.impactTotal) + r;
           await learningMaterial.save();
           const questionLearningMaterial = QuestionLearningMaterial.build({
             questionId: newQuestion.id,
@@ -53,6 +53,27 @@ class ApplicationService {
           await questionLearningMaterial.save();
         }
       }
+    }
+    const learningMaterials = await LearningMaterial.findAll({
+      where: { courseId: data.courseId },
+    });
+    console.log(learningMaterials);
+    for (const learningMaterial of learningMaterials) {
+      let result = (learningMaterial.impactSum / learningMaterial.impactTotal) * 100;
+      learningMaterial.succesRate = result;
+
+      if (result >= 80) {
+        learningMaterial.succesPoint = 5;
+      } else if (result >= 60 && result < 80) {
+        learningMaterial.succesPoint = 4;
+      } else if (result >= 45 && result < 60) {
+        learningMaterial.succesPoint = 3;
+      } else if (result >= 35 && result < 45) {
+        learningMaterial.succesPoint = 2;
+      } else {
+        learningMaterial.succesPoint = 1;
+      }
+      await learningMaterial.save();
     }
     return application;
   }

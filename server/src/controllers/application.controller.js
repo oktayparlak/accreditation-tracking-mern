@@ -5,7 +5,6 @@ exports.create = async (req, res, next) => {
   try {
     const data = JSON.parse(req.body.data);
     const reports = req.files;
-    console.log(reports);
     const application = await ApplicationService.createApplication(req.user.id, data, reports);
     res.status(201).json(application);
   } catch (error) {

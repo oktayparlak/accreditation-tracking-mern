@@ -44,14 +44,14 @@ const User = sequelize.define(
   {
     hooks: {
       afterSync: async () => {
-        const user = await User.findOne({ where: { email: 'oktay@mail.com' } });
+        const user = await User.findOne({ where: { email: 'admin@mail.com' } });
         if (!user) {
           await User.create({
-            email: 'oktay@mail.com',
-            firstName: 'Oktay',
-            lastName: 'Parlak',
+            email: 'admin@mail.com',
+            firstName: 'Root',
+            lastName: 'Admin',
             role: roles.ROOT_ADMIN,
-            password: '$2a$10$A.PBdzyO.JWayCnV1CRWhur/r/jHJ6W6CllMBLVminMKozVEyOQe.',
+            password: '$2a$10$Mg0hiIFO9yy5htTzhE2RDu3qTpBMPXmzjl3b9/ca4BuA0CD8Rz16G',
           });
         }
       },

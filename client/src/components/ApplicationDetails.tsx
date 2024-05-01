@@ -16,6 +16,7 @@ import {
   Heading,
   Grid,
   useColorModeValue,
+  Container,
 } from '@chakra-ui/react';
 import { Flex } from 'antd';
 import { Application } from '../interfaces/types';
@@ -154,7 +155,7 @@ export const ApplicationDetails = ({ dataId }: ApplicationDetailsProps) => {
                               bg="#EDF2F7"
                             >
                               <Text>
-                                Number: {item.LearningMaterial?.number}
+                                Numara: {item.LearningMaterial?.number}
                               </Text>
                               <Text>
                                 Etkilediği Madde:{' '}
@@ -165,17 +166,18 @@ export const ApplicationDetails = ({ dataId }: ApplicationDetailsProps) => {
                                 {item.LearningMaterial?.contributionLevel}
                               </Text>
                               <Text>
-                                impactSum: {item.LearningMaterial?.impactSum}
+                                Etki Toplamı: {item.LearningMaterial?.impactSum}
                               </Text>
                               <Text>
-                                impactTotal:{' '}
+                                Etki Puanı :{' '}
                                 {item.LearningMaterial?.impactTotal}
                               </Text>
                               <Text>
-                                successRate: {item.LearningMaterial?.succesRate}
+                                Başarı Yüzdesi:{' '}
+                                {item.LearningMaterial?.succesRate.toFixed(2)}
                               </Text>
                               <Text>
-                                successPoint:{' '}
+                                Başarı Puanı:{' '}
                                 {item.LearningMaterial?.succesPoint}
                               </Text>
                             </Box>

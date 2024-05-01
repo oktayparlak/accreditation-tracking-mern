@@ -30,22 +30,22 @@ const LearningMaterial = sequelize.define('LearningMaterial', {
     allowNull: false,
   },
   impactSum: {
-    type: DataTypes.DECIMAL(10, 2),
+    type: DataTypes.FLOAT,
     allowNull: false,
     defaultValue: 0.0,
   },
   impactTotal: {
-    type: DataTypes.DECIMAL(10, 2),
+    type: DataTypes.FLOAT,
     allowNull: false,
     defaultValue: 0.0,
   },
   succesRate: {
-    type: DataTypes.DECIMAL(10, 2),
+    type: DataTypes.FLOAT,
     allowNull: false,
     defaultValue: 0.0,
   },
   succesPoint: {
-    type: DataTypes.DECIMAL(10, 2),
+    type: DataTypes.FLOAT,
     allowNull: false,
     defaultValue: 0.0,
   },

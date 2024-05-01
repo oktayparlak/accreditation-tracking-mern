@@ -231,6 +231,21 @@ const DepartmentAdminMenu: React.FC = () => {
             </MenuItem>
           </MenuList>
         </Menu>
+        {/* Başvuru */}
+        <Menu isLazy>
+          <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
+            Başvuru
+          </MenuButton>
+          <MenuList>
+            <MenuItem
+              as={'a'}
+              cursor={'pointer'}
+              onClick={() => navigate('/all-applications')}
+            >
+              Başvurular
+            </MenuItem>
+          </MenuList>
+        </Menu>
       </Stack>
     </>
   );
@@ -316,13 +331,6 @@ const CourseSupervisorMenu: React.FC = () => {
             Başvuru
           </MenuButton>
           <MenuList>
-            <MenuItem
-              as={'a'}
-              cursor={'pointer'}
-              onClick={() => navigate('/all-applications')}
-            >
-              Başvurular
-            </MenuItem>
             <MenuItem
               as={'a'}
               cursor={'pointer'}

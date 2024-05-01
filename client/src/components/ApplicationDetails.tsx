@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import apiClient from '../services/api-client';
 import {
   Modal,
@@ -20,6 +20,7 @@ import {
 } from '@chakra-ui/react';
 import { Flex } from 'antd';
 import { Application } from '../interfaces/types';
+import html2pdf from 'html2pdf.js';
 
 interface ApplicationDetailsProps {
   dataId: string;
@@ -28,6 +29,12 @@ interface ApplicationDetailsProps {
 export const ApplicationDetails = ({ dataId }: ApplicationDetailsProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [details, setDetails] = useState<Application | null>(null);
+  const pdfRef = useRef<HTMLDivElement>(null);
+
+  const generatePdf = () => {
+    const element = pdfRef.current;
+    html2pdf().from(element).save();
+  };
 
   const triggerModal = () => {
     onOpen();
@@ -82,7 +89,7 @@ export const ApplicationDetails = ({ dataId }: ApplicationDetailsProps) => {
         size={'4xl'}
       >
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent ref={pdfRef}>
           <ModalHeader>Başvuru Detayları</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
@@ -192,6 +199,9 @@ export const ApplicationDetails = ({ dataId }: ApplicationDetailsProps) => {
           </ModalBody>
           <ModalFooter>
             <Button onClick={onClose}>Close</Button>
+            <Button bg={'green'} onClick={generatePdf}>
+              PDF Oluştur
+            </Button>
           </ModalFooter>
         </ModalContent>
       </Modal>

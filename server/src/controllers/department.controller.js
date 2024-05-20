@@ -30,6 +30,15 @@ exports.getById = async (req, res, next) => {
   }
 };
 
+exports.getByFacultyId = async (req, res, next) => {
+  try {
+    const departments = await DepartmentService.findDepartmentsByFacultyId(req.params.facultyId);
+    res.status(200).json(departments);
+  } catch (error) {
+    next(error);
+  }
+};
+
 /** Update */
 exports.update = async (req, res, next) => {
   try {

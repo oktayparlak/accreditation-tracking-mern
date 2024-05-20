@@ -4,6 +4,7 @@ const CourseAdmin = require('./courseAdmin.model');
 const CourseSupervisor = require('./courseSupervisor.model');
 const Department = require('./department.model');
 const DepartmentAdmin = require('./departmentAdmin.model');
+const DepartmentMaterial = require('./departmentMaterial.model');
 const Faculty = require('./faculty.model');
 const FacultyAdmin = require('./facultyAdmin.model');
 const File = require('./file.model');
@@ -76,4 +77,7 @@ module.exports = () => {
 
   MeasuringTool.belongsTo(Course, { foreignKey: 'courseId', onDelete: 'CASCADE' });
   Course.hasMany(MeasuringTool, { foreignKey: 'courseId', onDelete: 'CASCADE' });
+
+  DepartmentMaterial.belongsTo(Department, { foreignKey: 'departmentId', onDelete: 'CASCADE' });
+  Department.hasMany(DepartmentMaterial, { foreignKey: 'departmentId', onDelete: 'CASCADE' });
 };

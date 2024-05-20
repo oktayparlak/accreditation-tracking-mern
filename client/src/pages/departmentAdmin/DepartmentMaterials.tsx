@@ -10,27 +10,33 @@ import {
   FormLabel,
   Heading,
   Input,
+  NumberDecrementStepper,
+  NumberIncrementStepper,
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
   Select,
   VStack,
   useToast,
 } from '@chakra-ui/react';
-import { FieldValues, set, useForm } from 'react-hook-form';
+import { FieldValues, useForm } from 'react-hook-form';
 import apiClient from '../../services/api-client';
-import CourseFeaturesMenu from '../../components/CourseFeaturesMenu';
-import { Course, Department, Faculty } from '../../interfaces/types';
+import {
+  Course,
+  Department,
+  DepartmentMaterial,
+  Faculty,
+  LearningMaterial,
+} from '../../interfaces/types';
+import DepartmentMaterialFeaturesMenu from '../../components/DepartmentMaterialFeaturesMenu';
 
 interface DataSource {
   key: string;
   Department: string;
-  code: string;
-  name: string;
-  credit: number;
-  ects: number;
-  academicYear: string;
-  term: string;
-  studentCount: number;
-  compulsory: boolean;
-  inc: React.ReactNode;
+  Faculty: string;
+  number: number;
+  content: string;
+  contributionLevel: number;
 }
 
 const columns = [
@@ -45,44 +51,19 @@ const columns = [
     key: 'Department',
   },
   {
-    title: 'Kod',
-    dataIndex: 'code',
-    key: 'code',
+    title: 'Numara',
+    dataIndex: 'number',
+    key: 'number',
   },
   {
-    title: 'Ders Adı',
-    dataIndex: 'name',
-    key: 'name',
+    title: 'İçerik',
+    dataIndex: 'content',
+    key: 'content',
   },
   {
-    title: 'Kredi',
-    dataIndex: 'credit',
-    key: 'credit',
-  },
-  {
-    title: 'AKTS',
-    dataIndex: 'ects',
-    key: 'ects',
-  },
-  {
-    title: 'Akademik Yıl',
-    dataIndex: 'academicYear',
-    key: 'academicYear',
-  },
-  {
-    title: 'Dönem',
-    dataIndex: 'term',
-    key: 'term',
-  },
-  {
-    title: 'Öğrenci Sayısı',
-    dataIndex: 'studentCount',
-    key: 'studentCount',
-  },
-  {
-    title: 'Zorunluluk',
-    dataIndex: 'compulsory',
-    key: 'compulsory',
+    title: 'Katkı Düzeyi',
+    dataIndex: 'contributionLevel',
+    key: 'contributionLevel',
   },
   {
     title: 'İncele',
@@ -91,20 +72,22 @@ const columns = [
   },
 ];
 
-const Courses: React.FC = () => {
+const DepartmentMaterials: React.FC = () => {
   const toast = useToast();
   const { register, handleSubmit } = useForm();
   const formRef = useRef(null);
 
-  const [courses, setCourses] = useState<DataSource[]>([]);
-  const [faculties, setFaculties] = useState<Faculty[]>([]);
+  const [departmentMaterials, setDepartmentMaterials] = useState<DataSource[]>(
+    []
+  );
   const [departments, setDepartments] = useState<Department[]>([]);
+  const [faculties, setFaculties] = useState<Faculty[]>([]);
   const [loading, setLoading] = useState(false);
   const [tableLoading, setTableLoading] = useState(false);
   const [reset, setReset] = useState({});
 
   /* For Form Selection */
-
+  /** Faculties */
   useEffect(() => {
     apiClient
       .get('/faculties')
@@ -125,36 +108,33 @@ const Courses: React.FC = () => {
       });
   }, [reset]);
 
-  /** Courses */
+  /** Department Materials Table */
   useEffect(() => {
     setTableLoading(true);
     apiClient
-      .get('/courses')
+      .get('/department-materials')
       .then((response) => {
         if (response.status === 200) {
-          const data: DataSource[] = response.data.map((course: Course) => {
-            return {
-              Faculty: course.Department.Faculty.name,
-              key: course.id,
-              Department: course.Department.name,
-              code: course.code,
-              name: course.name,
-              credit: course.credit,
-              ects: course.ects,
-              academicYear: course.academicYear,
-              term: course.term == 'FALL' ? 'Güz' : 'Bahar',
-              studentCount: course.studentCount,
-              compulsory: course.compulsory ? 'Evet' : 'Hayır',
-              inc: (
-                <CourseFeaturesMenu
-                  dataId={course.id}
-                  dataUrl="/courses"
-                  setReset={setReset}
-                />
-              ),
-            };
-          });
-          setCourses(data);
+          const data: DataSource[] = response.data.map(
+            (departmentMaterial: DepartmentMaterial) => {
+              return {
+                key: departmentMaterial.id,
+                Faculty: departmentMaterial.Department.Faculty.name,
+                Department: departmentMaterial.Department.name,
+                number: departmentMaterial.number,
+                content: departmentMaterial.content,
+                contributionLevel: departmentMaterial.contributionLevel,
+                inc: (
+                  <DepartmentMaterialFeaturesMenu
+                    dataId={departmentMaterial.id}
+                    dataUrl="/department-materials"
+                    setReset={setReset}
+                  />
+                ),
+              };
+            }
+          );
+          setDepartmentMaterials(data);
         } else {
           toast({
             position: 'bottom-right',
@@ -184,13 +164,13 @@ const Courses: React.FC = () => {
   const onSubmit = (data: FieldValues) => {
     setLoading(true);
     apiClient
-      .post('/courses', data)
-      .then((response: any) => {
+      .post('/department-materials', data)
+      .then((response) => {
         if (response.status === 201) {
           toast({
             position: 'bottom-left',
             status: 'success',
-            title: `Ders başarıyla oluşturuldu.`,
+            title: `Öğrenim Çıktısı oluşturuldu.`,
             duration: 1500,
           });
           if (formRef.current) {
@@ -201,13 +181,12 @@ const Courses: React.FC = () => {
           toast({
             position: 'bottom-left',
             status: 'error',
-            title: `${response.response.data.error.message}`,
+            title: `${response.data.details.message}`,
             duration: 1500,
           });
         }
       })
       .catch((error) => {
-        console.log(error);
         toast({
           position: 'bottom-left',
           status: 'error',
@@ -252,8 +231,8 @@ const Courses: React.FC = () => {
         <Box flex={1} bg={'gray.100'} borderRadius={5} margin={4} padding={4}>
           <VStack>
             <Center>
-              <Heading size="lg" mb={4}>
-                Ders Oluştur
+              <Heading fontSize={26} textAlign={'center'} mb={4}>
+                Bölüm Çıktısı Oluştur
               </Heading>
             </Center>
             <form ref={formRef} onSubmit={handleSubmit(onSubmit)}>
@@ -281,59 +260,26 @@ const Courses: React.FC = () => {
                   {...register('departmentId')}
                   bg={'white'}
                 >
-                  {departments &&
-                    departments.map((department: Department) => (
-                      <option key={department.id} value={department.id}>
-                        {department.name}
-                      </option>
-                    ))}
+                  {departments.map((department: Department) => (
+                    <option key={department.id} value={department.id}>
+                      {department.name}
+                    </option>
+                  ))}
                 </Select>
               </FormControl>
-              <FormControl id="code" mb={3} isRequired>
-                <FormLabel>Kod</FormLabel>
-                <Input {...register('code')} bg={'white'} type="text" />
+              <FormControl id="content" mb={3} isRequired>
+                <FormLabel>Bölüm Çıktısı İçeriği</FormLabel>
+                <Input {...register('content')} type="text" bg={'white'} />
               </FormControl>
-              <FormControl id="name" mb={3} isRequired>
-                <FormLabel>Ad</FormLabel>
-                <Input {...register('name')} bg={'white'} type="text" />
-              </FormControl>
-              <FormControl id="credit" mb={3} isRequired>
-                <FormLabel>Kredi</FormLabel>
-                <Input {...register('credit')} bg={'white'} type="number" />
-              </FormControl>
-              <FormControl id="ects" mb={3} isRequired>
-                <FormLabel>AKTS</FormLabel>
-                <Input {...register('ects')} bg={'white'} type="number" />
-              </FormControl>
-              <FormControl id="academicYear" mb={3} isRequired>
-                <FormLabel>Akademik Yıl</FormLabel>
-                <Input
-                  {...register('academicYear')}
-                  bg={'white'}
-                  type="number"
-                />
-              </FormControl>
-              <FormControl id="term" mb={3} isRequired>
-                <FormLabel>Dönem</FormLabel>
-                <Select {...register('term')} bg={'white'}>
-                  <option value="FALL">Güz</option>
-                  <option value="SPRING">Bahar</option>
-                </Select>
-              </FormControl>
-              <FormControl id="studentCount" mb={3} isRequired>
-                <FormLabel>Öğrenci Sayısı</FormLabel>
-                <Input
-                  {...register('studentCount')}
-                  bg={'white'}
-                  type="number"
-                />
-              </FormControl>
-              <FormControl id="compulsory" mb={3} isRequired>
-                <FormLabel>Zorunlu</FormLabel>
-                <Select {...register('compulsory')} bg={'white'}>
-                  <option value="true">Evet</option>
-                  <option value="false">Hayır</option>
-                </Select>
+              <FormControl id="contributionLevel" mb={3} isRequired>
+                <FormLabel>Katkı Düzeyi</FormLabel>
+                <NumberInput defaultValue={1} min={1} max={5} bg={'white'}>
+                  <NumberInputField {...register('contributionLevel')} />
+                  <NumberInputStepper>
+                    <NumberIncrementStepper />
+                    <NumberDecrementStepper />
+                  </NumberInputStepper>
+                </NumberInput>
               </FormControl>
               <Flex justifyContent={'center'}>
                 <Button
@@ -363,12 +309,12 @@ const Courses: React.FC = () => {
           <Box>
             <Center>
               <Heading size={'lg'} mb={4}>
-                Dersler
+                Bölüm Çıktıları
               </Heading>
             </Center>
             <AntTable
               loading={tableLoading}
-              dataSource={courses}
+              dataSource={departmentMaterials}
               columns={columns}
             ></AntTable>
           </Box>
@@ -378,4 +324,4 @@ const Courses: React.FC = () => {
   );
 };
 
-export default Courses;
+export default DepartmentMaterials;

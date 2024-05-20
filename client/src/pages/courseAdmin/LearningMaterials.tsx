@@ -21,12 +21,19 @@ import {
 } from '@chakra-ui/react';
 import { FieldValues, useForm } from 'react-hook-form';
 import apiClient from '../../services/api-client';
-import { Course, LearningMaterial } from '../../interfaces/types';
+import {
+  Course,
+  DepartmentMaterial,
+  LearningMaterial,
+} from '../../interfaces/types';
 import LearningMaterialFeaturesMenu from '../../components/LearningMaterialFeaturesMenu';
+import FormItem from 'antd/es/form/FormItem';
+import { Select as AntSelect } from 'antd';
 
 interface DataSource {
   key: string;
   courseId: string;
+  departmentMaterials: number[];
   number: number;
   content: string;
   contributionLevel: number;
@@ -37,6 +44,11 @@ const columns = [
     title: 'Ders Adı',
     dataIndex: 'Course',
     key: 'Course',
+  },
+  {
+    title: 'Bölüm Çıktısı Numaraları',
+    dataIndex: 'departmentMaterials',
+    key: 'departmentMaterials',
   },
   {
     title: 'Numara',
@@ -62,11 +74,14 @@ const columns = [
 
 const LearningMaterials: React.FC = () => {
   const toast = useToast();
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, setValue } = useForm();
   const formRef = useRef(null);
 
   const [learningMaterials, setLearningMaterials] = useState<DataSource[]>([]);
   const [courses, setCourses] = useState<Course[]>([]);
+  const [departmentMaterials, setDepartmentMaterials] = useState<
+    DepartmentMaterial[]
+  >([]);
   const [loading, setLoading] = useState(false);
   const [tableLoading, setTableLoading] = useState(false);
   const [reset, setReset] = useState({});
@@ -104,6 +119,11 @@ const LearningMaterials: React.FC = () => {
               return {
                 key: learningMaterial.id,
                 Course: learningMaterial.Course.name,
+                departmentMaterials: learningMaterial.departmentMaterials?.map(
+                  (number: number, index: number, array: number[]) => {
+                    return index === array.length - 1 ? number : `${number}, `;
+                  }
+                ),
                 number: learningMaterial.number,
                 content: learningMaterial.content,
                 contributionLevel: learningMaterial.contributionLevel,
@@ -145,9 +165,14 @@ const LearningMaterials: React.FC = () => {
   }, [reset]);
 
   const onSubmit = (data: FieldValues) => {
+    const departmentMaterials = data.departmentMaterialIds;
+    data.departmentMaterialIds = undefined;
     setLoading(true);
     apiClient
-      .post('/learning-materials', data)
+      .post('/learning-materials', {
+        ...data,
+        departmentMaterials,
+      })
       .then((response) => {
         if (response.status === 201) {
           toast({
@@ -185,6 +210,29 @@ const LearningMaterials: React.FC = () => {
         setLoading(false);
       });
   };
+
+  const fetchDepartmentMaterials = (courseId: string) => {
+    apiClient
+      .get(`/department-materials/course/${courseId}`)
+      .then((response) => {
+        console.log(response.data);
+
+        setDepartmentMaterials(response.data);
+      })
+      .catch((error) => {
+        toast({
+          position: 'bottom-right',
+          status: 'error',
+          title: `${
+            error.response
+              ? error.response.data?.error?.message
+              : 'Sunucu Hatası'
+          }`,
+          duration: 1500,
+        });
+      });
+  };
+
   return (
     <>
       <Navbar />
@@ -197,7 +245,14 @@ const LearningMaterials: React.FC = () => {
               </Heading>
             </Center>
             <form ref={formRef} onSubmit={handleSubmit(onSubmit)}>
-              <FormControl id="courseId" mb={3} isRequired>
+              <FormControl
+                id="courseId"
+                mb={3}
+                isRequired
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  fetchDepartmentMaterials(e.target.value)
+                }
+              >
                 <FormLabel>Ders</FormLabel>
                 <Select
                   placeholder="Ders Seçiniz"
@@ -211,8 +266,25 @@ const LearningMaterials: React.FC = () => {
                   ))}
                 </Select>
               </FormControl>
-              <FormControl id="content" mb={3} isRequired>
-                <FormLabel>İçerik</FormLabel>
+              <FormItem name="Bölüm çıktıları">
+                <AntSelect
+                  onChange={(value) => setValue('departmentMaterialIds', value)}
+                  mode="multiple"
+                  maxCount={4}
+                >
+                  {departmentMaterials &&
+                    departmentMaterials.map((departmentMaterial) => (
+                      <AntSelect.Option
+                        key={departmentMaterial.id}
+                        value={departmentMaterial.number}
+                      >
+                        {departmentMaterial.number} {departmentMaterial.content}
+                      </AntSelect.Option>
+                    ))}
+                </AntSelect>
+              </FormItem>
+              <FormControl id="content" mb={4} isRequired>
+                <FormLabel>Öğrenme Çıktısı İçeriği</FormLabel>
                 <Input {...register('content')} type="text" bg={'white'} />
               </FormControl>
               <FormControl id="contributionLevel" mb={3} isRequired>

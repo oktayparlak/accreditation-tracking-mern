@@ -1,8 +1,6 @@
 import { useToast } from '@chakra-ui/react';
 import { Navigate } from 'react-router-dom';
 import { getToken } from '../../services/localTokenService';
-import apiClient from '../../services/api-client';
-import { isAxiosError } from 'axios';
 
 interface AuthGuardProps {
   children: JSX.Element;

@@ -16,7 +16,6 @@ const Course = sequelize.define('Course', {
   code: {
     type: DataTypes.STRING(30),
     allowNull: false,
-    unique: true,
   },
   name: {
     type: DataTypes.STRING(50),
@@ -32,6 +31,10 @@ const Course = sequelize.define('Course', {
   },
   academicYear: {
     type: DataTypes.STRING(9),
+    allowNull: false,
+  },
+  term: {
+    type: DataTypes.ENUM('FALL', 'SPRING'),
     allowNull: false,
   },
   studentCount: {

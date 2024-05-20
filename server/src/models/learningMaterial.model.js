@@ -1,4 +1,5 @@
 const { DataTypes } = require('sequelize');
+const DepartmentMaterial = require('./departmentMaterial.model');
 
 const sequelize = require('../configs/database');
 
@@ -11,6 +12,10 @@ const LearningMaterial = sequelize.define('LearningMaterial', {
   },
   userId: {
     type: DataTypes.UUID,
+    allowNull: false,
+  },
+  departmentMaterials: {
+    type: DataTypes.ARRAY(DataTypes.INTEGER),
     allowNull: false,
   },
   courseId: {

@@ -106,6 +106,13 @@ const RootAdminMenu: React.FC = () => {
             >
               Ders Yöneticisi Belirle
             </MenuItem>
+            <MenuItem
+              as={'a'}
+              cursor={'pointer'}
+              onClick={() => navigate('/department-materials')}
+            >
+              Bölüm Çıktısı Oluştur
+            </MenuItem>
           </MenuList>
         </Menu>
         {/* Öğrenim Çıktısı */}
@@ -275,6 +282,13 @@ const CourseAdminMenu: React.FC = () => {
               onClick={() => navigate('/users')}
             >
               Ders Yöneticisi Belirle
+            </MenuItem>
+            <MenuItem
+              as={'a'}
+              cursor={'pointer'}
+              onClick={() => navigate('/department-materials')}
+            >
+              Bölüm Çıktısı Oluştur
             </MenuItem>
           </MenuList>
         </Menu>

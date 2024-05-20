@@ -2,6 +2,7 @@ const Joi = require('joi');
 
 const create = Joi.object({
   courseId: Joi.string().uuid().required(),
+  departmentMaterials: Joi.array().items(Joi.number()).required(),
   content: Joi.string().required(),
   contributionLevel: Joi.string().valid('1', '2', '3', '4', '5').required(),
   impactSum: Joi.number().precision(2),
@@ -12,6 +13,7 @@ const create = Joi.object({
 
 const update = Joi.object({
   courseId: Joi.string().uuid(),
+  departmentMaterials: Joi.array().items(Joi.number()).required(),
   content: Joi.string(),
   contributionLevel: Joi.string().valid('1', '2', '3', '4', '5'),
   number: Joi.number().integer(),

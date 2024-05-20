@@ -101,7 +101,7 @@ const MeasuringTools: React.FC = () => {
             (measuringTools: MeasuringTool) => {
               return {
                 key: measuringTools.id,
-                Course: measuringTools.Course.name,
+                Course: measuringTools.Course?.name,
                 name: measuringTools.name,
                 impactRate: `%${measuringTools.impactRate * 100}`,
                 questionCount: measuringTools.questionCount,

@@ -42,6 +42,7 @@ export interface Course {
   code: string;
   credit: number;
   ects: number;
+  term: string;
   academicYear: string;
   studentCount: number;
   compulsory: boolean;
@@ -77,6 +78,7 @@ export interface LearningMaterial {
   number: number;
   content: string;
   contributionLevel: number;
+  departmentMaterials?: number[];
   impactSum?: number;
   impactTotal?: number;
   succesRate?: number;
@@ -115,4 +117,12 @@ export interface Application {
   MeasuringTools: MeasuringTool[];
   Files: File[];
   createdAt: string;
+}
+
+export interface DepartmentMaterial {
+  id: string;
+  Department: Department;
+  number: number;
+  content: string;
+  contributionLevel: number;
 }

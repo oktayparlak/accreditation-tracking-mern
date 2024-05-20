@@ -1,6 +1,7 @@
 const Course = require('../models/course.model');
 const Department = require('../models/department.model');
 const MeasuringTool = require('../models/measuringTool.model');
+const Faculty = require('../models/faculty.model');
 
 const AppError = require('../utilities/AppError');
 
@@ -8,6 +9,8 @@ const excludeColums = ['createdAt', 'updatedAt'];
 
 class CourseService {
   async createCourse(data) {
+    const c = await Course.findOne({ where: { code: data.code, term: data.term } });
+    if (c) throw new AppError('Ders kodu ve dönemi aynı olamaz', 400);
     const course = Course.build(data);
     await course.save();
     await MeasuringTool.bulkCreate([
@@ -23,7 +26,7 @@ class CourseService {
   async findCourseById(id) {
     return await Course.findOne({
       where: { id },
-      include: [Department],
+      include: [{ model: Department, attributes: { exclude: excludeColums }, include: [Faculty] }],
       attributes: { exclude: excludeColums },
     });
   }
@@ -31,7 +34,7 @@ class CourseService {
   async findAllCourses() {
     return await Course.findAll({
       attributes: { exclude: excludeColums },
-      include: [Department],
+      include: [{ model: Department, attributes: { exclude: excludeColums }, include: [Faculty] }],
     });
   }
 

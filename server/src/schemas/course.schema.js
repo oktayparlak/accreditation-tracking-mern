@@ -9,6 +9,7 @@ const create = Joi.object({
   academicYear: Joi.string().required(),
   studentCount: Joi.number().required(),
   compulsory: Joi.boolean().required(),
+  term: Joi.string().required(),
 });
 
 const update = Joi.object({
@@ -20,6 +21,7 @@ const update = Joi.object({
   academicYear: Joi.string().required(),
   studentCount: Joi.number().required(),
   compulsory: Joi.boolean().required(),
+  term: Joi.string().required(),
 });
 
 module.exports = { create, update };

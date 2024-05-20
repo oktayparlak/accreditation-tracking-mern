@@ -19,3 +19,16 @@ exports.login = async (req, res, next) => {
     next(error);
   }
 };
+
+exports.validateToken = async (req, res, next) => {
+  try {
+    const { token } = req.body;
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await UserService.findUserByEmail(decoded.email, decoded.role);
+    if (!user) throw new AppError('Kullanıcı bulunamadı', 404);
+    user.password = undefined;
+    return res.status(200).json({ user });
+  } catch (error) {
+    next(error);
+  }
+};

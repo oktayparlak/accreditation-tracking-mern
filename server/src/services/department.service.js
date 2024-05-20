@@ -30,6 +30,14 @@ class DepartmentService {
     });
   }
 
+  async findDepartmentsByFacultyId(facultyId) {
+    return await Department.findAll({
+      where: { facultyId },
+      include: [{ model: Faculty, attributes: { exclude: excludeColums } }],
+      attributes: { exclude: excludeColums },
+    });
+  }
+
   async updateDepartment(id, data) {
     const department = await Department.update(data, { where: { id } });
     excludeColums.map((column) => {

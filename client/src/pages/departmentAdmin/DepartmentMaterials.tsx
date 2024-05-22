@@ -36,7 +36,6 @@ interface DataSource {
   Faculty: string;
   number: number;
   content: string;
-  contributionLevel: number;
 }
 
 const columns = [
@@ -59,11 +58,6 @@ const columns = [
     title: 'İçerik',
     dataIndex: 'content',
     key: 'content',
-  },
-  {
-    title: 'Katkı Düzeyi',
-    dataIndex: 'contributionLevel',
-    key: 'contributionLevel',
   },
   {
     title: 'İncele',
@@ -123,7 +117,6 @@ const DepartmentMaterials: React.FC = () => {
                 Department: departmentMaterial.Department.name,
                 number: departmentMaterial.number,
                 content: departmentMaterial.content,
-                contributionLevel: departmentMaterial.contributionLevel,
                 inc: (
                   <DepartmentMaterialFeaturesMenu
                     dataId={departmentMaterial.id}
@@ -270,16 +263,6 @@ const DepartmentMaterials: React.FC = () => {
               <FormControl id="content" mb={3} isRequired>
                 <FormLabel>Bölüm Çıktısı İçeriği</FormLabel>
                 <Input {...register('content')} type="text" bg={'white'} />
-              </FormControl>
-              <FormControl id="contributionLevel" mb={3} isRequired>
-                <FormLabel>Katkı Düzeyi</FormLabel>
-                <NumberInput defaultValue={1} min={1} max={5} bg={'white'}>
-                  <NumberInputField {...register('contributionLevel')} />
-                  <NumberInputStepper>
-                    <NumberIncrementStepper />
-                    <NumberDecrementStepper />
-                  </NumberInputStepper>
-                </NumberInput>
               </FormControl>
               <Flex justifyContent={'center'}>
                 <Button

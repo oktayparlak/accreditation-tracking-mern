@@ -27,7 +27,7 @@ import {
 } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import apiClient from '../services/api-client';
-import { FieldValues, useForm } from 'react-hook-form';
+import { FieldValues, set, useForm } from 'react-hook-form';
 import { Course } from '../interfaces/types';
 
 interface FeaturesMenuProps {
@@ -107,6 +107,7 @@ const LearningMaterialFeaturesMenu = ({
         setValue('number', response.data.number);
         setValue('content', response.data.content);
         setValue('contributionLevel', response.data.contributionLevel);
+        setValue('departmentMaterials', response.data.departmentMaterials);
         setValue('courseId', response.data.courseId);
       })
       .catch((error) => {
@@ -192,6 +193,15 @@ const LearningMaterialFeaturesMenu = ({
                     isDisabled
                     {...register('number')}
                     type="number"
+                    bg={'white'}
+                  />
+                </FormControl>
+                <FormControl id="departmentMaterials" mb={3} isRequired>
+                  <FormLabel>Bölüm Çıktıları Numaraları</FormLabel>
+                  <Input
+                    disabled
+                    {...register('departmentMaterials')}
+                    type="text"
                     bg={'white'}
                   />
                 </FormControl>

@@ -124,5 +124,4 @@ export interface DepartmentMaterial {
   Department: Department;
   number: number;
   content: string;
-  contributionLevel: number;
 }

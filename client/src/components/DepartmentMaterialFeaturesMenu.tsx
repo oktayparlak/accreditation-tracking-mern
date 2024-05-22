@@ -110,7 +110,6 @@ const DepartmentMaterialFeaturesMenu = ({
         setValue('departmentName', data.Department.name);
         setValue('number', data.number);
         setValue('content', data.content);
-        setValue('contributionLevel', data.contributionLevel);
         setValue('facultyId', data.Department.Faculty.id);
         setValue('facultyName', data.Department.Faculty.name);
         setValue('departmentId', data.departmentId);
@@ -207,16 +206,6 @@ const DepartmentMaterialFeaturesMenu = ({
                 <FormControl id="content" mb={3} isRequired>
                   <FormLabel>İçerik</FormLabel>
                   <Input {...register('content')} type="text" bg={'white'} />
-                </FormControl>
-                <FormControl id="contributionLevel" mb={3} isRequired>
-                  <FormLabel>Katkı Düzeyi</FormLabel>
-                  <NumberInput defaultValue={1} min={1} max={5} bg={'white'}>
-                    <NumberInputField {...register('contributionLevel')} />
-                    <NumberInputStepper>
-                      <NumberIncrementStepper />
-                      <NumberDecrementStepper />
-                    </NumberInputStepper>
-                  </NumberInput>
                 </FormControl>
               </Box>
             </ModalBody>

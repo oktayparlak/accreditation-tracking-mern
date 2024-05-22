@@ -56,6 +56,7 @@ exports.getMyLearningMaterials = async (req, res, next) => {
 
 /** Update */
 exports.update = async (req, res, next) => {
+  console.log(req.body);
   try {
     const learningMaterial = await LearningMaterialService.updateLearningMaterial(
       req.params.id,

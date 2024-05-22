@@ -21,10 +21,6 @@ const DepartmentMaterial = sequelize.define('DepartmentMaterial', {
     type: DataTypes.TEXT,
     allowNull: false,
   },
-  contributionLevel: {
-    type: DataTypes.ENUM('1', '2', '3', '4', '5'),
-    allowNull: false,
-  },
 });
 
 module.exports = DepartmentMaterial;

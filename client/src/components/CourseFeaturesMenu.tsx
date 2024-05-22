@@ -107,6 +107,7 @@ const CourseFeaturesMenu = ({
         setValue('academicYear', response.data.academicYear);
         setValue('studentCount', response.data.studentCount);
         setValue('compulsory', response.data.compulsory);
+        setValue('term', response.data.term);
       })
       .catch((error) => {
         toast({
@@ -208,6 +209,13 @@ const CourseFeaturesMenu = ({
                     bg={'white'}
                     type="number"
                   />
+                </FormControl>
+                <FormControl id="term" mb={3} isRequired>
+                  <FormLabel>Dönem</FormLabel>
+                  <Select {...register('term')} bg={'white'}>
+                    <option value="FALL">Güz</option>
+                    <option value="SPRING">Bahar</option>
+                  </Select>
                 </FormControl>
                 <FormControl id="studentCount" mb={3}>
                   <FormLabel>Öğreci Sayısı</FormLabel>
